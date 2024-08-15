@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "Panton";
+  src: url("./Panton-Trial-Black.ttf");
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* @font-face {
+  font-family: "Panton";
+  src: url("./Panton-Trial-Thin.ttf");
+  font-weight: thin;
+  font-style: normal;
+} */
