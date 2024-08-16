@@ -8,6 +8,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import SearchBar from "./components/SearchBar";
 import { useState } from "react";
+import Guess from "./components/Guess";
 
 function App() {
   const [displayData, setDisplayData] = useState<any[]>([]);
@@ -48,6 +49,8 @@ function App() {
           return <p key={index}>{data.title}</p>;
         })}
       </div>
+
+      <Guess />
     </>
   );
 }
