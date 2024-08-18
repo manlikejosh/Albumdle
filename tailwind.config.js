@@ -5,6 +5,7 @@ export default {
     extend: {
       fontFamily: {
         panton: ["Panton", "sans-serif"],
+        pantonT: ["Panton-Trial", "sans-serif"],
       },
     },
     plugins: [],

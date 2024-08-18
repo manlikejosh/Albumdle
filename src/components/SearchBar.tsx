@@ -22,14 +22,11 @@ interface Props {
 }
 
 const SearchBar = ({ placeholder, onButtonClick }: Props) => {
-  const object = (obj: {} | undefined) => {
-    return obj;
-  };
   const [search, setSearch] = useState(""); // set the initial state of the searchbar value
   const [searchData, setSearchData] = useState<Album[]>([]); // Use the Album type here
   const [selectedItem, setSelectedItem] = useState(-1);
 
-  const handleKeyDown = (e: KeyboardEvent) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (selectedItem < searchData.length) {
       if (e.key === "ArrowUp" && selectedItem > 0) {
         setSelectedItem((prev) => prev - 1);
@@ -51,8 +48,11 @@ const SearchBar = ({ placeholder, onButtonClick }: Props) => {
     setSearch(e.target.value);
   };
 
-  const handleClick = (e: { target: { innerText: any } }) => {
-    setSearch(e.target.innerText);
+  const handleClick = (e: React.MouseEvent<HTMLParagraphElement>) => {
+    const target = e.target as HTMLParagraphElement;
+
+    setSearch(target.innerText);
+    console.log(target.innerText);
   };
 
   // this function will be called whenever the search array is updated (when you start typing in the input field)
@@ -80,40 +80,45 @@ const SearchBar = ({ placeholder, onButtonClick }: Props) => {
 
   return (
     <>
-      <div className="flex text-center font-panton font-thin z-10">
-        <input
-          className="bg-white outline-none py-6 px-2 pl-4 h-[30px] w-5/6 border-4 border-black rounded-b-none rounded-l-lg font-light"
-          type="text"
-          placeholder={placeholder}
-          value={search}
-          onChange={handleChange}
-          onKeyDown={handleKeyDown}
-        />
+      <div className="flex text-center font-pantonT font-medium  mx-auto z-50">
+        <div className="w-[60vw] max-w-[530px]">
+          <input
+            className="bg-white outline-none h-fit border-2 border-black px-2 py-3  w-full font-medium "
+            type="text"
+            placeholder={placeholder}
+            value={search}
+            onChange={handleChange}
+            onKeyDown={handleKeyDown}
+          />
+          <div className="w-full relative">
+            <div
+              className={`bg-white border-2 z-50 border-black border-t-0 rounded-b-md  w-full overflow-scroll absolute text-start scroll-smooth max-h-[130px] ${
+                search === "" || searchData.length === 0 ? "hidden" : "show"
+              } `}
+            >
+              {searchData.slice(0, 10).map((data, index) => {
+                return (
+                  <p
+                    className={`p-1 font-panto font-medium hover:bg-gray-200 focus:bg-gray-200 ${
+                      selectedItem === index ? "bg-gray-200" : ""
+                    }`}
+                    key={index}
+                    onClick={handleClick}
+                  >
+                    {data.title}
+                  </p>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
         <button
-          className="border-black border-l-0 border-4 align-middle px-8 rounded-b-none rounded-r-lg bg-blue-400 w-1/6"
+          className="border-2 border-black px-2 border-l-0 bg-blue-200 h-[52px]"
           onClick={handleBtnClick}
         >
           GUESS
         </button>
-      </div>
-      <div
-        className={`bg-white border-black border-4 border-t-0 relative w-5/6 rounded-b-lg max-h-[10rem] overflow-scroll ${
-          search === "" || searchData.length === 0 ? "hidden" : "show"
-        } `}
-      >
-        {searchData.slice(0, 10).map((data, index) => {
-          return (
-            <p
-              className={`p-2 font-panto font-thin hover:bg-gray-200 focus:bg-gray-200 ${
-                selectedItem === index ? "bg-gray-200" : ""
-              }`}
-              key={index}
-              onClick={handleClick}
-            >
-              {data.title}
-            </p>
-          );
-        })}
       </div>
     </>
   );

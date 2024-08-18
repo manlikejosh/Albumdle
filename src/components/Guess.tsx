@@ -1,3 +1,8 @@
+// RANK IS THE ARRAY INDEX FROM THE JSON FILE
+// alt will be the title
+// only take the first entry of the genre --- everything before the first comma, if there is no comman take the entire thing
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUpLong } from "@fortawesome/free-solid-svg-icons";
 const Guess = () => {
   interface Album {
     title: string;
@@ -125,7 +130,64 @@ const Guess = () => {
     return colors;
   };
 
-  return <div className="w-1/3 border-2 border-black "></div>;
+  return (
+    <>
+      <div className="w-2/3 min-w-fit max-w-[500px] gap-2 grid grid-cols-6 my-3 justify-items-center font-panton text-sm">
+        <div className="aspect-square min-h-fit  w-full max-w-[82px]   content-center text-center rounded-lg">
+          <img
+            className="rounded-lg border-2  border-black"
+            src="https://upload.wikimedia.org/wikipedia/en/3/3c/NickDrakePinkMoon.jpg"
+            alt="Pink Moon"
+          />
+        </div>
+        <div className="aspect-square text-[.55rem] bg-green-300 min-h-fit p-1 w-full max-w-[82px] border-2 border-black content-center text-center rounded-lg ">
+          Contemporary Folk
+        </div>
+        <div className="aspect-square  bg-green-300 min-h-fit p-1 w-full max-w-[82px] border-2 border-black content-center text-center rounded-lg">
+          1972
+        </div>
+        <div className="aspect-square  bg-green-300 min-h-fit p-1 w-full max-w-[82px] border-2 border-black content-center text-center rounded-lg">
+          Nick Drake
+        </div>
+        <div className="aspect-square  bg-green-300 min-h-fit p-1 w-full max-w-[82px] border-2 border-black content-center text-center rounded-lg">
+          Folk Baroque
+        </div>
+        <div className="relative aspect-square bg-green-300 min-h-fit p-1 w-full max-w-[82px] border-2 border-black text-center rounded-lg flex items-center justify-center">
+          <div className="absolute inset-0 flex items-center justify-center z-0 opacity-0">
+            <FontAwesomeIcon icon={faUpLong} className="text-white text-7xl" />
+          </div>
+          <div className="relative z-10 text-black text-2xl font-bold">31</div>
+        </div>
+      </div>
+      <div className="w-2/3 min-w-fit max-w-[500px] gap-2 grid grid-cols-6 my-3 justify-items-center font-panton text-sm">
+        <div className="aspect-square  min-h-fit  w-full max-w-[82px]  content-center text-center rounded-lg">
+          <img
+            className="rounded-lg border-2  border-black"
+            src="https://upload.wikimedia.org/wikipedia/en/0/01/ZiggyStardust.jpg"
+            alt="The Rise and Fall of Ziggy Stardust"
+          />
+        </div>
+        <div className="aspect-square bg-red-300 min-h-fit p-1 w-full max-w-[82px] border-2 border-black content-center text-center rounded-lg">
+          Glam Rock
+        </div>
+        <div className="aspect-square  bg-green-300 min-h-fit p-1 w-full max-w-[82px] border-2 border-black content-center text-center rounded-lg">
+          1972
+        </div>
+        <div className="aspect-square  bg-red-300 min-h-fit p-1 w-full max-w-[82px] border-2 border-black content-center text-center rounded-lg">
+          David Bowie
+        </div>
+        <div className="aspect-square  bg-red-300 min-h-fit p-1 w-full max-w-[82px] border-2 border-black content-center text-center rounded-lg">
+          Art Rock Rock Opera
+        </div>
+        <div className="relative aspect-square bg-red-300 min-h-fit p-1 w-full max-w-[82px] border-2 border-black text-center rounded-lg flex items-center justify-center">
+          <div className="absolute inset-0 flex items-center justify-center z-0 opacity-70">
+            <FontAwesomeIcon icon={faUpLong} className="text-white text-7xl" />
+          </div>
+          <div className="relative z-10 text-black text-2xl font-bold">13</div>
+        </div>
+      </div>
+    </>
+  );
 };
 
 export default Guess;

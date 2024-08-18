@@ -40,8 +40,8 @@ const Timer = () => {
   };
 
   return (
-    <div id="timer" className=" text-center text-md">
-      <p>Next puzzle in:</p>
+    <div id="timer" className="">
+      <p>Next:</p>
       <p>{formatTime(timeRemaining)}</p>
     </div>
   );
