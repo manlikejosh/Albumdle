@@ -9,6 +9,8 @@ import {
 import SearchBar from "./components/SearchBar";
 import { useState } from "react";
 import Guess from "./components/Guess";
+import Modal from "./components/Modal";
+import SettingsModal from "./components/SettingsModal";
 
 const clampTimer = {
   fontSize: "clamp(.75rem, 2.4vw, 1.2rem)",
@@ -21,10 +23,13 @@ const clampIcons = {
 const clampHead = {
   fontSize: "clamp(2rem, 8vw, 4.5rem)",
 };
+
 function App() {
   const [displayData, setDisplayData] = useState<any[]>([]);
+  const [showHelpModal, setShowHelpModal] = useState(false);
+  const [showSettingsModal, setShowSettingModal] = useState(false);
 
-  const handleBtnClick = (data: any) => {
+  const handleBtnClick = (data: string) => {
     setDisplayData([...displayData, data]);
 
     console.log("displaying data:");
@@ -33,7 +38,7 @@ function App() {
 
   return (
     <>
-      <header className=" font-panton font-thin   grid grid-cols-5 my-5 w-fit">
+      <header className=" font-panton font-thin   grid grid-cols-5 my-5 w-fit ">
         <div className="  col-span-1  my-auto text-left" style={clampTimer}>
           <Timer />
         </div>
@@ -48,26 +53,56 @@ function App() {
           style={clampIcons}
           className="    col-span-1 my-auto text-right"
         >
-          <FontAwesomeIcon icon={faQuestion} className=" p-1" />
-          <FontAwesomeIcon icon={faGear} className=" p-1" />
+          <button
+            onClick={() => {
+              setShowHelpModal(true);
+            }}
+          >
+            <FontAwesomeIcon icon={faQuestion} className=" p-1" />
+          </button>
+          <button
+            onClick={() => {
+              setShowSettingModal(true);
+            }}
+          >
+            <FontAwesomeIcon icon={faGear} className=" p-1" />
+          </button>
           <FontAwesomeIcon icon={faLightbulb} className=" p-1" />
         </div>
       </header>
 
-      <div className="w-full flex flex-col ">
+      <div className="w-full flex flex-col  ">
         <SearchBar
           placeholder="Enter your guess..."
           onButtonClick={handleBtnClick}
         />
       </div>
 
-      {/* <div className="bg-red-300 min-h-20 border border-black w-20 mt-10">
-        {displayData.map((data, index) => {
-          return <p key={index}>{data.title}</p>;
-        })}
-      </div> */}
+      <div className="">
+        {displayData &&
+          displayData.map((data, index) => {
+            return <p key={index}>{data.title}</p>;
+          })}
+      </div>
+      <div id="guessArea" className="px-1">
+        <Guess />
+      </div>
 
-      <Guess />
+      {showHelpModal && (
+        <Modal
+          closeModal={() => {
+            setShowHelpModal(false);
+          }}
+        />
+      )}
+
+      {showSettingsModal && (
+        <SettingsModal
+          closeModal={() => {
+            setShowSettingModal(false);
+          }}
+        />
+      )}
     </>
   );
 }

@@ -4,6 +4,9 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUpLong } from "@fortawesome/free-solid-svg-icons";
 const Guess = () => {
+  const clamp = {
+    fontSize: "clamp(.5rem, 2.2vw, .8rem)",
+  };
   interface Album {
     title: string;
     artist: string;
@@ -22,12 +25,13 @@ const Guess = () => {
     average: "4.22",
     ratings: "42,143",
     reviews: "481",
-    date: "9 November 1993",
-    main_genre: "East Coast Hip Hop Boom Bap Hardcore Hip Hop",
-    sub_genre: "urban aggressive raw crime boastful violence rhythmic dark",
+    date: "1993",
+    main_genre: "East Coast Hip Hop",
+    sub_genre: "violence rhythmic dark",
     description:
       "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=",
-    img_url: null,
+    img_url:
+      "https://upload.wikimedia.org/wikipedia/en/3/3c/NickDrakePinkMoon.jpg",
   };
 
   const userGuess = {
@@ -132,34 +136,46 @@ const Guess = () => {
 
   return (
     <>
-      <div className="w-2/3 min-w-fit max-w-[500px] gap-2 grid grid-cols-6 my-3 justify-items-center font-panton text-sm">
+      <div
+        style={clamp}
+        className="w-2/3 min-w-fit max-w-[500px] gap-2 grid grid-cols-3 min-[450px]:grid-cols-6 my-3 justify-items-center font-panton 
+        "
+      >
         <div className="aspect-square min-h-fit  w-full max-w-[82px]   content-center text-center rounded-lg">
           <img
             className="rounded-lg border-2  border-black"
-            src="https://upload.wikimedia.org/wikipedia/en/3/3c/NickDrakePinkMoon.jpg"
+            src={correctGuess.img_url}
             alt="Pink Moon"
           />
         </div>
-        <div className="aspect-square text-[.55rem] bg-green-300 min-h-fit p-1 w-full max-w-[82px] border-2 border-black content-center text-center rounded-lg ">
-          Contemporary Folk
+        <div className="aspect-square text-[.55rem] bg-green-300 min-h-fit p-1 w-full max-w-[82px] border-2 border-black content-center text-center rounded-lg overflow-hidden text-wrap">
+          {correctGuess.main_genre}
         </div>
         <div className="aspect-square  bg-green-300 min-h-fit p-1 w-full max-w-[82px] border-2 border-black content-center text-center rounded-lg">
-          1972
+          {correctGuess.date}
         </div>
         <div className="aspect-square  bg-green-300 min-h-fit p-1 w-full max-w-[82px] border-2 border-black content-center text-center rounded-lg">
-          Nick Drake
+          {correctGuess.artist}
         </div>
-        <div className="aspect-square  bg-green-300 min-h-fit p-1 w-full max-w-[82px] border-2 border-black content-center text-center rounded-lg">
-          Folk Baroque
+        <div
+          style={clamp}
+          className="aspect-square  bg-green-300 min-h-fit p-1 w-full max-w-[82px] border-2 border-black content-center text-center rounded-lg"
+        >
+          {correctGuess.sub_genre}
         </div>
         <div className="relative aspect-square bg-green-300 min-h-fit p-1 w-full max-w-[82px] border-2 border-black text-center rounded-lg flex items-center justify-center">
           <div className="absolute inset-0 flex items-center justify-center z-0 opacity-0">
             <FontAwesomeIcon icon={faUpLong} className="text-white text-7xl" />
           </div>
-          <div className="relative z-10 text-black text-2xl font-bold">31</div>
+          <div className="relative z-10 text-black text-2xl font-bold">24</div>
         </div>
       </div>
-      <div className="w-2/3 min-w-fit max-w-[500px] gap-2 grid grid-cols-6 my-3 justify-items-center font-panton text-sm">
+
+      {/* next card */}
+      <div
+        style={clamp}
+        className="w-2/3 min-w-fit max-w-[500px] gap-2 grid grid-cols-3 min-[450px]:grid-cols-6 my-3 justify-items-center font-panton text-sm"
+      >
         <div className="aspect-square  min-h-fit  w-full max-w-[82px]  content-center text-center rounded-lg">
           <img
             className="rounded-lg border-2  border-black"

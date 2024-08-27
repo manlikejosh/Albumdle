@@ -52,7 +52,6 @@ const SearchBar = ({ placeholder, onButtonClick }: Props) => {
     const target = e.target as HTMLParagraphElement;
 
     setSearch(target.innerText);
-    console.log(target.innerText);
   };
 
   // this function will be called whenever the search array is updated (when you start typing in the input field)
@@ -70,8 +69,8 @@ const SearchBar = ({ placeholder, onButtonClick }: Props) => {
     if (searchData === null || searchData.length == 0) {
       alert("nothin");
     } else {
-      console.log("sent over: ");
-      console.log(searchData);
+      // console.log("sent over: ");
+      // console.log(searchData);
       onButtonClick(searchData);
     }
     setSearch("");
