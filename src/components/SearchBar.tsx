@@ -69,8 +69,8 @@ const SearchBar = ({ placeholder, onButtonClick }: Props) => {
     if (searchData === null || searchData.length == 0) {
       alert("nothin");
     } else {
-      // console.log("sent over: ");
-      // console.log(searchData);
+      console.log("sent over: ");
+      console.log(searchData);
       onButtonClick(searchData);
     }
     setSearch("");

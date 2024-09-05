@@ -21,7 +21,7 @@ const Modal: React.FC<{ closeModal: Dispatch<SetStateAction<boolean>> }> = ({
 
           <section className="p-2 font-pantonT ">
             <p className="py-1">
-              Every day a new album is presented for you to guess!{" "}
+              Every day a new album is presented for you to guess!
             </p>
             <p className="py-1">
               Type the name an album to start your turn. The color of the square

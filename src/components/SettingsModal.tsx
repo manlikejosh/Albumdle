@@ -19,7 +19,13 @@ const Modal: React.FC<{ closeModal: Dispatch<SetStateAction<boolean>> }> = ({
             </button>
           </header>
 
-          <section className="p-2 font-pantonT "></section>
+          <section className="p-2 font-pantonT ">
+            <p>
+              Click <button>Here</button> to see the full list of albums!
+            </p>
+
+            <p></p>
+          </section>
         </div>
       </div>
     </>
