@@ -7,146 +7,233 @@ import { faUpLong } from "@fortawesome/free-solid-svg-icons";
 interface Album {
   title: string;
   artist: string;
-  average: string;
-  ratings: string;
-  reviews: string;
-  date: string;
-  main_genre: string;
-  sub_genre: string;
-  description: string;
-  img_url: string | undefined;
+  rating: number;
+  year: number;
+  genres: ReadonlyArray<string>;
+  style: ReadonlyArray<string>;
+  tracklist: number;
 }
+
+// album {
+//   "title": "Channel Orange",
+//     "artist": "Frank Ocean",
+//     "ratings": 4.51,
+//     "year": 2012,
+//     "genres": ["Hip Hop", "Funk / Soul", "Pop"],
+//     "style": ["Soul", "Contemporary R&B"],
+//     "tracklist": 17
+// }
 const Guess = (userGuess: Album, correctGuess: Album) => {
   const clamp = {
     fontSize: "clamp(.5rem, 2.2vw, .8rem)",
   };
-  const colors: { [key: string]: string } = {};
+  let colors: { [key: string]: string } = {};
+
+  const compareArrays = (
+    correctArray: ReadonlyArray<string>,
+    userGuess: ReadonlyArray<string>
+  ) => {
+    // Convert one of the arrays to a Set for faster lookups
+    const setArr2 = new Set(correctArray);
+
+    // Find matching entries
+    const matches = userGuess.filter((item) => setArr2.has(item));
+
+    return matches;
+  };
+
+  const compareNumebrs = (
+    correctNumebr: number,
+    guessedNumber: number,
+    spread: number
+  ) => {
+    let styles: Array<string> = ["background-color", "arrow-style"];
+    if (correctNumebr === guessedNumber) {
+      styles[0] = "bg-green-300"; // background color
+      styles[1] = "hide"; // hide the arrow
+      return styles;
+    }
+
+    // test for background color
+    if (
+      spread <= userGuess.year - correctGuess.year ||
+      userGuess.year - correctGuess.year >= spread
+    ) {
+      console.log("date is within 10 years - yellow");
+      colors.year = "bg-yellow-300";
+    } else {
+      console.log("dates are not close - red");
+      colors.year = "bg-red-300";
+    }
+
+    // test for arrow
+    if (guessedNumber < correctNumebr) {
+      styles[1] = " "; // arrow up (default)
+    } else if (guessedNumber > correctNumebr) {
+      styles[1] = "rotate-180"; // arrow down
+    }
+
+    return styles;
+  };
 
   const compare = (userGuess: Album, correctGuess: Album) => {
     if (userGuess.title === correctGuess.title) {
-      return true;
+      colors.title = "bg-green-300";
+      colors.artist = "bg-green-300";
+      colors.ratings = "bg-green-300";
+      colors.year = "bg-green-300";
+      colors.genres = "bg-green-300";
+      colors.style = "bg-green-300";
+      colors.tracklist = "bg-green-300";
+      return true; // we don't need to go any further, everything is true. this will display correct guess
+    } else {
+      colors.title = "bg-red-300"; // titles are different
     }
 
-    // compare genre
-    if (userGuess.main_genre === correctGuess.main_genre) {
-      console.log("main genre is a complete match - green");
-      colors.mainGenre = "bg-green-300";
+    // compare genre, since it is an array, compare to see if values match
+    if (userGuess.genres.every((el) => correctGuess.genres.includes(el))) {
+      console.log("genre is a complete match - green");
+      colors.genres = "bg-green-300";
     } else {
-      // Split the sentences into words and convert them to sets
-      const words1 = new Set(userGuess.main_genre.toLowerCase().split(/\W+/));
-      const words2 = new Set(
-        correctGuess.main_genre.toLowerCase().split(/\W+/)
-      );
+      const matches = compareArrays(correctGuess.genres, userGuess.genres); // this will give what genres are the same
 
-      // Find the intersection of the two sets
-      const commonWords = new Set(
-        [...words1].filter((word) => words2.has(word))
-      );
-
-      if (commonWords.size != 0) {
+      if (matches.length > 0) {
         console.log("genres are similar - yellow");
-        colors.mainGenre = "bg-yellow-300";
+        colors.genres = "bg-yellow-300";
       } else {
         console.log("genres are not similar - red");
-        colors.mainGenre = "bg-red-300";
+        colors.gneres = "bg-red-300";
       }
     }
 
-    // compare year
-    if (userGuess.date === correctGuess.date) {
-      console.log("date matches - green");
-      colors.date = "bg-green-300";
-    } else if (
-      -10 <=
-        parseInt(userGuess.date.split(" ").pop()!) -
-          parseInt(correctGuess.date.split(" ").pop()!) ||
-      parseInt(userGuess.date.split(" ").pop()!) -
-        parseInt(correctGuess.date.split(" ").pop()!) >=
-        10
-    ) {
-      console.log("date is within 10 years - yellow");
-      colors.date = "bg-yellow-300";
-    } else {
-      console.log("dates do not match - red");
-      colors.date = "bg-red-300";
-    }
+    // compare date
+    const yearStyles = compareNumebrs(correctGuess.year, userGuess.year, 10);
+    colors.year = yearStyles[0]; //bg
+    colors.yearRotate = yearStyles[1]; //arrow
+
+    // compare rating
+    const ratingStyles = compareNumebrs(
+      correctGuess.rating,
+      userGuess.rating,
+      0.5
+    );
+    colors.rating = ratingStyles[0]; //bg
+    colors.ratingRotate = ratingStyles[1]; //arrow
 
     // compare artist
-    if (userGuess.artist === correctGuess.title) {
+    if (userGuess.artist === correctGuess.artist) {
       console.log("artists match - green");
-      colors.artists = "bg-green-300";
+      colors.artist = "bg-green-300";
     } else {
       console.log("artists do not match - red");
-      colors.artists = "bg-red-300";
+      colors.artist = "bg-red-300";
     }
 
-    // compare sub genre
-    if (userGuess.sub_genre === correctGuess.sub_genre) {
-      console.log("main genre is a complete match - green");
-      colors.subGenre = "bg-green-300";
+    // compare style, since it is an array, compare to see if any values match
+    if (userGuess.style.every((el) => correctGuess.style.includes(el))) {
+      console.log("genre is a complete match - green");
+      colors.style = "bg-green-300";
     } else {
-      // Split the sentences into words and convert them to sets
-      const words1 = new Set(userGuess.sub_genre.toLowerCase().split(/\W+/));
-      const words2 = new Set(correctGuess.sub_genre.toLowerCase().split(/\W+/));
+      const styleMatches = compareArrays(correctGuess.style, userGuess.style);
 
-      // Find the intersection of the two sets
-      const commonWords = new Set(
-        [...words1].filter((word) => words2.has(word))
-      );
-
-      if (commonWords.size != 0) {
-        console.log("genres are similar - yellow");
-        colors.subGenre = "bg-yellow-300";
+      if (styleMatches.length != 0) {
+        console.log("style are similar - yellow");
+        colors.style = "bg-yellow-300";
       } else {
-        console.log("genres are not similar - red");
-        colors.subGenre = "bg-red-300";
+        console.log("style are not similar - red");
+        colors.style = "bg-red-300";
       }
     }
-    return colors;
+
+    // compare number of tracks
+    const tracklistStyles = compareNumebrs(
+      correctGuess.tracklist,
+      userGuess.tracklist,
+      2
+    );
+    colors.tracklist = tracklistStyles[0]; //bg
+    colors.tracklistRotate = tracklistStyles[1]; //arrow
   };
+
+  const verify = compare(userGuess, correctGuess);
+  if (verify === true) {
+    console.log("you guessed the correct ablbum, nice job");
+  }
 
   return (
     <>
       <div
         style={clamp}
-        className="w-2/3 min-w-fit max-w-[500px] gap-2 grid grid-cols-3 min-[450px]:grid-cols-6 my-3 justify-items-center font-panton 
+        className="w-2/3 min-w-fit max-w-[750px] gap-2 grid grid-cols-4 min-[600px]:grid-cols-8 my-3 justify-items-center font-panton 
         "
       >
+        {/* image */}
         <div className="aspect-square min-h-fit  w-full max-w-[82px]   content-center text-center rounded-lg">
           <img
             className="rounded-lg border-2  border-black"
-            src={userGuess.img_url}
+            src="poopy"
             alt="Pink Moon"
           />
         </div>
+
+        {/* title */}
         <div
-          className={`aspect-square text-[.55rem]  min-h-fit p-1 w-full max-w-[82px] border-2 border-black content-center text-center rounded-lg overflow-hidden text-wrap ${colors.main_genre}`}
+          className={`aspect-square  min-h-fit p-1 w-full max-w-[82px] border-2 border-black content-center text-center rounded-lg ${colors.title}`}
         >
-          {userGuess.main_genre}
+          {userGuess.title}
         </div>
+
+        {/* artist */}
         <div
-          className={`aspect-square   min-h-fit p-1 w-full max-w-[82px] border-2 border-black content-center text-center rounded-lg ${colors.date}`}
-        >
-          {userGuess.date}
-        </div>
-        <div
-          className={`aspect-square  min-h-fit p-1 w-full max-w-[82px] border-2 border-black content-center text-center rounded-lg ${colors.artists}`}
+          className={`aspect-square  min-h-fit p-1 w-full max-w-[82px] border-2 border-black content-center text-center rounded-lg ${colors.artist}`}
         >
           {userGuess.artist}
         </div>
+
+        {/* rating */}
         <div
-          style={clamp}
-          className={`aspect-square   min-h-fit p-1 w-full max-w-[82px] border-2 border-black content-center text-center rounded-lg ${colors.sub_genre}`}
-        >
-          {userGuess.sub_genre}
-        </div>
-        <div
-          className={`relative aspect-square bg-green-300 min-h-fit p-1 w-full max-w-[82px] border-2 border-black text-center rounded-lg flex items-center justify-center ${colors.rating}`}
+          className={`relative aspect-square  min-h-fit p-1 w-full max-w-[82px] border-2 border-black text-center rounded-lg flex items-center justify-center ${colors.rating}`}
         >
           <div className="absolute inset-0 flex items-center justify-center z-0 opacity-0">
             <FontAwesomeIcon icon={faUpLong} className="text-white text-7xl" />
           </div>
-          <div className="relative z-10 text-black text-2xl font-bold">24</div>
+          <div className="relative z-10 text-black text-2xl font-bold">
+            {userGuess.rating}
+          </div>
+        </div>
+
+        {/* year */}
+        <div
+          className={`aspect-square   min-h-fit p-1 w-full max-w-[82px] border-2 border-black content-center text-center rounded-lg ${colors.year}`}
+        >
+          {userGuess.year}
+        </div>
+
+        {/* genres */}
+        <div
+          className={`aspect-square text-[.55rem]  min-h-fit p-1 w-full max-w-[82px] border-2 border-black content-center text-center rounded-lg overflow-hidden text-wrap ${colors.genres}`}
+        >
+          {userGuess.genres}
+        </div>
+
+        {/* style */}
+        <div
+          style={clamp}
+          className={`aspect-square min-h-fit p-1 w-full max-w-[82px] border-2 border-black content-center text-center rounded-lg ${colors.style}`}
+        >
+          {userGuess.style}
+        </div>
+
+        {/* tracklsit */}
+        <div
+          className={`relative aspect-square  min-h-fit p-1 w-full max-w-[82px] border-2 border-black text-center rounded-lg flex items-center justify-center ${colors.tracklist}`}
+        >
+          <div className="absolute inset-0 flex items-center justify-center z-0 opacity-0">
+            <FontAwesomeIcon icon={faUpLong} className="text-white text-7xl" />
+          </div>
+          <div className="relative z-10 text-black text-2xl font-bold">
+            {userGuess.tracklist}
+          </div>
         </div>
       </div>
     </>

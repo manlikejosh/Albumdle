@@ -25,33 +25,23 @@ const clampHead = {
 };
 
 const correctGuess = {
-  title: "Enter the Wu-Tang (36 Chambers)",
-  artist: "Wu-Tang Clan",
-  average: "4.22",
-  ratings: "42,143",
-  reviews: "481",
-  date: "1993",
-  main_genre: "East Coast Hip Hop",
-  sub_genre: "violence rhythmic dark",
-  description:
-    "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=",
-  img_url:
-    "https://upload.wikimedia.org/wikipedia/en/3/3c/NickDrakePinkMoon.jpg",
+  title: "The Low End Theory",
+  artist: "A Tribe Called Quest",
+  ratings: 4.69,
+  year: 1996,
+  genres: ["Hip Hop"],
+  style: ["Conscious", "Jazzy Hip-Hop"],
+  tracklist: 14,
 };
 
 let userGuess = {
-  title: "The Rise and Fall of Ziggy Stardust and the Spiders From Mars",
-  artist: "David Bowie",
-  average: "4.26",
-  ratings: "57,802",
-  reviews: "811",
-  date: "16 June 1972",
-  main_genre: "Glam Rock Pop Rock",
-  sub_genre: "Art Rock Rock Opera",
-  description:
-    "science fiction melodic concept album passionate anthemic rock opera bittersweet energetic",
-  img_url:
-    "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=",
+  title: "Selected Ambient Works 85-92",
+  artist: "Aphex Twin",
+  ratings: 4.72,
+  year: 2013,
+  genres: ["Electronic"],
+  style: ["IDM", "Techno", "Electro", "Experimental", "Ambient"],
+  tracklist: 13,
 };
 
 function App() {
@@ -76,7 +66,7 @@ function App() {
         </div>
         <h1
           style={clampHead}
-          className="font-bold tracking-wider     col-span-3 text-center my-auto"
+          className="font-bold tracking-wider  col-span-3 text-center my-auto"
         >
           Albumdle
         </h1>
@@ -116,7 +106,8 @@ function App() {
             return <p key={index}>{data.title}</p>;
           })}
       </div>
-      <div id="guessArea" className="px-1">
+
+      <div id="guessArea" className="px-1 ">
         <Guess />
       </div>
 
