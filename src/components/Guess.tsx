@@ -7,25 +7,21 @@ import { faUpLong } from "@fortawesome/free-solid-svg-icons";
 interface Album {
   title: string;
   artist: string;
-  rating: number;
+  ratings: number;
   year: number;
-  genres: ReadonlyArray<string>;
-  style: ReadonlyArray<string>;
+  genres: string[];
+  style: string[];
   tracklist: number;
 }
 
-// album {
-//   "title": "Channel Orange",
-//     "artist": "Frank Ocean",
-//     "ratings": 4.51,
-//     "year": 2012,
-//     "genres": ["Hip Hop", "Funk / Soul", "Pop"],
-//     "style": ["Soul", "Contemporary R&B"],
-//     "tracklist": 17
-// }
-const Guess = (userGuess: Album, correctGuess: Album) => {
+type Props = {
+  userGuess: Album;
+  correctGuess: Album;
+};
+
+const Guess = ({ userGuess, correctGuess }: Props) => {
   const clamp = {
-    fontSize: "clamp(.5rem, 2.2vw, .8rem)",
+    fontSize: "clamp(.4rem, 2.2vw, .7rem)",
   };
   let colors: { [key: string]: string } = {};
 
@@ -47,7 +43,7 @@ const Guess = (userGuess: Album, correctGuess: Album) => {
     guessedNumber: number,
     spread: number
   ) => {
-    let styles: Array<string> = ["background-color", "arrow-style"];
+    let styles: string[] = ["background-color", "arrow-style"];
     if (correctNumebr === guessedNumber) {
       styles[0] = "bg-green-300"; // background color
       styles[1] = "hide"; // hide the arrow
@@ -56,14 +52,13 @@ const Guess = (userGuess: Album, correctGuess: Album) => {
 
     // test for background color
     if (
-      spread <= userGuess.year - correctGuess.year ||
-      userGuess.year - correctGuess.year >= spread
+      -spread <= guessedNumber - correctNumebr ||
+      guessedNumber - correctNumebr >= spread
     ) {
-      console.log("date is within 10 years - yellow");
-      colors.year = "bg-yellow-300";
+      styles[0] = "bg-yellow-300";
     } else {
-      console.log("dates are not close - red");
-      colors.year = "bg-red-300";
+      styles[0] = "bg-red-300";
+      console.log("bg test done");
     }
 
     // test for arrow
@@ -108,16 +103,18 @@ const Guess = (userGuess: Album, correctGuess: Album) => {
 
     // compare date
     const yearStyles = compareNumebrs(correctGuess.year, userGuess.year, 10);
+    console.log(yearStyles);
     colors.year = yearStyles[0]; //bg
     colors.yearRotate = yearStyles[1]; //arrow
 
     // compare rating
     const ratingStyles = compareNumebrs(
-      correctGuess.rating,
-      userGuess.rating,
+      correctGuess.ratings,
+      userGuess.ratings,
       0.5
     );
     colors.rating = ratingStyles[0]; //bg
+    console.log("rating colors", colors.rating);
     colors.ratingRotate = ratingStyles[1]; //arrow
 
     // compare artist
@@ -157,7 +154,7 @@ const Guess = (userGuess: Album, correctGuess: Album) => {
 
   const verify = compare(userGuess, correctGuess);
   if (verify === true) {
-    console.log("you guessed the correct ablbum, nice job");
+    console.log("you guessed the correct album, nice job");
   }
 
   return (
@@ -171,8 +168,8 @@ const Guess = (userGuess: Album, correctGuess: Album) => {
         <div className="aspect-square min-h-fit  w-full max-w-[82px]   content-center text-center rounded-lg">
           <img
             className="rounded-lg border-2  border-black"
-            src="poopy"
-            alt="Pink Moon"
+            src="https://media.istockphoto.com/id/1361394182/photo/funny-british-shorthair-cat-portrait-looking-shocked-or-surprised.jpg?s=612x612&w=0&k=20&c=6yvVxdufrNvkmc50nCLCd8OFGhoJd6vPTNotl90L-vo="
+            alt="cool cat"
           />
         </div>
 
@@ -194,26 +191,35 @@ const Guess = (userGuess: Album, correctGuess: Album) => {
         <div
           className={`relative aspect-square  min-h-fit p-1 w-full max-w-[82px] border-2 border-black text-center rounded-lg flex items-center justify-center ${colors.rating}`}
         >
-          <div className="absolute inset-0 flex items-center justify-center z-0 opacity-0">
-            <FontAwesomeIcon icon={faUpLong} className="text-white text-7xl" />
+          <div
+            className={`absolute inset-0 flex items-center justify-center z-0 ${colors.ratingRotate}`}
+          >
+            <FontAwesomeIcon icon={faUpLong} className="text-white text-6xl" />
           </div>
-          <div className="relative z-10 text-black text-2xl font-bold">
-            {userGuess.rating}
+          <div className="relative z-10 text-black text-xl font-bold">
+            {userGuess.ratings}
           </div>
         </div>
 
         {/* year */}
         <div
-          className={`aspect-square   min-h-fit p-1 w-full max-w-[82px] border-2 border-black content-center text-center rounded-lg ${colors.year}`}
+          className={`relative aspect-square  min-h-fit p-1 w-full max-w-[82px] border-2 border-black text-center rounded-lg flex items-center justify-center ${colors.year}`}
         >
-          {userGuess.year}
+          <div
+            className={`absolute inset-0 flex items-center justify-center z-0 ${colors.yearRotate}`}
+          >
+            <FontAwesomeIcon icon={faUpLong} className="text-white text-6xl" />
+          </div>
+          <div className="relative z-10 text-black text-xl font-bold">
+            {userGuess.year}
+          </div>
         </div>
 
         {/* genres */}
         <div
-          className={`aspect-square text-[.55rem]  min-h-fit p-1 w-full max-w-[82px] border-2 border-black content-center text-center rounded-lg overflow-hidden text-wrap ${colors.genres}`}
+          className={`aspect-square  min-h-fit p-1 w-full max-w-[82px] border-2 border-black content-center text-center rounded-lg overflow-hidden text-wrap ${colors.genres}`}
         >
-          {userGuess.genres}
+          {userGuess.genres.join(" ")}
         </div>
 
         {/* style */}
@@ -221,17 +227,19 @@ const Guess = (userGuess: Album, correctGuess: Album) => {
           style={clamp}
           className={`aspect-square min-h-fit p-1 w-full max-w-[82px] border-2 border-black content-center text-center rounded-lg ${colors.style}`}
         >
-          {userGuess.style}
+          {userGuess.style.join(" ")}
         </div>
 
         {/* tracklsit */}
         <div
           className={`relative aspect-square  min-h-fit p-1 w-full max-w-[82px] border-2 border-black text-center rounded-lg flex items-center justify-center ${colors.tracklist}`}
         >
-          <div className="absolute inset-0 flex items-center justify-center z-0 opacity-0">
-            <FontAwesomeIcon icon={faUpLong} className="text-white text-7xl" />
+          <div
+            className={`absolute inset-0 flex items-center justify-center z-0 ${colors.tracklistRotate}`}
+          >
+            <FontAwesomeIcon icon={faUpLong} className="text-white text-6xl" />
           </div>
-          <div className="relative z-10 text-black text-2xl font-bold">
+          <div className="relative z-10 text-black text-xl font-bold">
             {userGuess.tracklist}
           </div>
         </div>

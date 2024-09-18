@@ -6,14 +6,11 @@ import data from "./data.json";
 interface Album {
   title: string;
   artist: string;
-  average: string;
-  ratings: string;
-  reviews: string;
-  date: string;
-  main_genre: string;
-  sub_genre: string;
-  description: string;
-  img_url: string | null;
+  ratings: number;
+  year: number;
+  genres: string[];
+  style: string[];
+  tracklist: number;
 }
 
 interface Props {

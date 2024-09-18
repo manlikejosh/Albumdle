@@ -24,7 +24,17 @@ const clampHead = {
   fontSize: "clamp(2rem, 8vw, 4.5rem)",
 };
 
-const correctGuess = {
+interface Album {
+  title: string;
+  artist: string;
+  ratings: number;
+  year: number;
+  genres: string[];
+  style: string[];
+  tracklist: number;
+}
+
+const userGuess: Album = {
   title: "The Low End Theory",
   artist: "A Tribe Called Quest",
   ratings: 4.69,
@@ -34,16 +44,15 @@ const correctGuess = {
   tracklist: 14,
 };
 
-let userGuess = {
-  title: "Selected Ambient Works 85-92",
-  artist: "Aphex Twin",
+const correctGuess: Album = {
+  title: "Paul's Boutique",
+  artist: "Beastie Boys",
   ratings: 4.72,
-  year: 2013,
-  genres: ["Electronic"],
-  style: ["IDM", "Techno", "Electro", "Experimental", "Ambient"],
-  tracklist: 13,
+  year: 2017,
+  genres: ["Electronic", "Hip Hop"],
+  style: ["Cut-up/DJ", "Hip Hop"],
+  tracklist: 15,
 };
-
 function App() {
   const [displayData, setDisplayData] = useState<any[]>([]);
   const [showHelpModal, setShowHelpModal] = useState(false);
@@ -51,6 +60,8 @@ function App() {
 
   const handleBtnClick = (data: string) => {
     setDisplayData((displayData) => {
+      console.log(...displayData);
+
       return [...displayData, data];
     });
 
@@ -108,7 +119,14 @@ function App() {
       </div>
 
       <div id="guessArea" className="px-1 ">
-        <Guess />
+        <Guess userGuess={userGuess} correctGuess={correctGuess} />
+      </div>
+
+      <div>
+        {displayData.map((data, index) => {
+          console.log(data.title);
+          return <p key={index}>{data.title}</p>;
+        })}
       </div>
 
       {showHelpModal && (
