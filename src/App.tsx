@@ -34,15 +34,15 @@ interface Album {
   tracklist: number;
 }
 
-const userGuess: Album = {
-  title: "The Low End Theory",
-  artist: "A Tribe Called Quest",
-  ratings: 4.69,
-  year: 1996,
-  genres: ["Hip Hop"],
-  style: ["Conscious", "Jazzy Hip-Hop"],
-  tracklist: 14,
-};
+// const userGuess: Album = {
+//   title: "The Low End Theory",
+//   artist: "A Tribe Called Quest",
+//   ratings: 4.69,
+//   year: 1996,
+//   genres: ["Hip Hop"],
+//   style: ["Conscious", "Jazzy Hip-Hop"],
+//   tracklist: 14,
+// };
 
 const correctGuess: Album = {
   title: "Paul's Boutique",
@@ -60,8 +60,6 @@ function App() {
 
   const handleBtnClick = (data: string) => {
     setDisplayData((displayData) => {
-      console.log(...displayData);
-
       return [...displayData, data];
     });
 
@@ -117,15 +115,15 @@ function App() {
             return <p key={index}>{data.title}</p>;
           })}
       </div>
-
-      <div id="guessArea" className="px-1 ">
-        <Guess userGuess={userGuess} correctGuess={correctGuess} />
-      </div>
-
-      <div>
+      <div id="guessArea" className="flex flex-col-reverse px-1 ">
         {displayData.map((data, index) => {
-          console.log(data.title);
-          return <p key={index}>{data.title}</p>;
+          return (
+            <Guess
+              userGuess={data[0]}
+              correctGuess={correctGuess}
+              key={index}
+            ></Guess>
+          );
         })}
       </div>
 

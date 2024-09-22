@@ -46,7 +46,7 @@ const Guess = ({ userGuess, correctGuess }: Props) => {
     let styles: string[] = ["background-color", "arrow-style"];
     if (correctNumebr === guessedNumber) {
       styles[0] = "bg-green-300"; // background color
-      styles[1] = "hide"; // hide the arrow
+      styles[1] = "opacity-0"; // hide the arrow
       return styles;
     }
 
@@ -58,7 +58,7 @@ const Guess = ({ userGuess, correctGuess }: Props) => {
       styles[0] = "bg-yellow-300";
     } else {
       styles[0] = "bg-red-300";
-      console.log("bg test done");
+      // console.log("bg test done");
     }
 
     // test for arrow
@@ -76,10 +76,16 @@ const Guess = ({ userGuess, correctGuess }: Props) => {
       colors.title = "bg-green-300";
       colors.artist = "bg-green-300";
       colors.ratings = "bg-green-300";
+      colors.ratingRotate = "opacity-0";
+
       colors.year = "bg-green-300";
+      colors.yearRotate = "opacity-0";
+
       colors.genres = "bg-green-300";
       colors.style = "bg-green-300";
       colors.tracklist = "bg-green-300";
+      colors.tracklistRotate = "opacity-0";
+
       return true; // we don't need to go any further, everything is true. this will display correct guess
     } else {
       colors.title = "bg-red-300"; // titles are different
@@ -87,23 +93,23 @@ const Guess = ({ userGuess, correctGuess }: Props) => {
 
     // compare genre, since it is an array, compare to see if values match
     if (userGuess.genres.every((el) => correctGuess.genres.includes(el))) {
-      console.log("genre is a complete match - green");
+      // console.log("genre is a complete match - green");
       colors.genres = "bg-green-300";
     } else {
       const matches = compareArrays(correctGuess.genres, userGuess.genres); // this will give what genres are the same
 
       if (matches.length > 0) {
-        console.log("genres are similar - yellow");
+        // console.log("genres are similar - yellow");
         colors.genres = "bg-yellow-300";
       } else {
         console.log("genres are not similar - red");
-        colors.gneres = "bg-red-300";
+        colors.genres = "bg-red-300";
       }
     }
 
     // compare date
     const yearStyles = compareNumebrs(correctGuess.year, userGuess.year, 10);
-    console.log(yearStyles);
+    // console.log(yearStyles);
     colors.year = yearStyles[0]; //bg
     colors.yearRotate = yearStyles[1]; //arrow
 
@@ -113,31 +119,31 @@ const Guess = ({ userGuess, correctGuess }: Props) => {
       userGuess.ratings,
       0.5
     );
-    colors.rating = ratingStyles[0]; //bg
-    console.log("rating colors", colors.rating);
+    colors.ratings = ratingStyles[0]; //bg
+    // console.log("rating colors", colors.rating);
     colors.ratingRotate = ratingStyles[1]; //arrow
 
     // compare artist
     if (userGuess.artist === correctGuess.artist) {
-      console.log("artists match - green");
+      // console.log("artists match - green");
       colors.artist = "bg-green-300";
     } else {
-      console.log("artists do not match - red");
+      // console.log("artists do not match - red");
       colors.artist = "bg-red-300";
     }
 
     // compare style, since it is an array, compare to see if any values match
     if (userGuess.style.every((el) => correctGuess.style.includes(el))) {
-      console.log("genre is a complete match - green");
+      // console.log("style is a complete match - green");
       colors.style = "bg-green-300";
     } else {
       const styleMatches = compareArrays(correctGuess.style, userGuess.style);
 
       if (styleMatches.length != 0) {
-        console.log("style are similar - yellow");
+        // console.log("style are similar - yellow");
         colors.style = "bg-yellow-300";
       } else {
-        console.log("style are not similar - red");
+        // console.log("style are not similar - red");
         colors.style = "bg-red-300";
       }
     }
@@ -152,16 +158,13 @@ const Guess = ({ userGuess, correctGuess }: Props) => {
     colors.tracklistRotate = tracklistStyles[1]; //arrow
   };
 
-  const verify = compare(userGuess, correctGuess);
-  if (verify === true) {
-    console.log("you guessed the correct album, nice job");
-  }
+  compare(userGuess, correctGuess);
 
   return (
     <>
       <div
         style={clamp}
-        className="w-2/3 min-w-fit max-w-[750px] gap-2 grid grid-cols-4 min-[600px]:grid-cols-8 my-3 justify-items-center font-panton 
+        className="w-2/3 min-w-fit max-w-[750px] gap-2 grid grid-cols-4 min-[600px]:grid-cols-8 my-3 justify-items-center font-panton animate-appear delay-700
         "
       >
         {/* image */}
@@ -175,21 +178,21 @@ const Guess = ({ userGuess, correctGuess }: Props) => {
 
         {/* title */}
         <div
-          className={`aspect-square  min-h-fit p-1 w-full max-w-[82px] border-2 border-black content-center text-center rounded-lg ${colors.title}`}
+          className={`aspect-square min-h-fit overflow-y-scroll overflow-x-hidden px-2 p-2 w-full max-w-[82px] border-2 border-black content-center text-center rounded-lg ${colors.title}`}
         >
           {userGuess.title}
         </div>
 
         {/* artist */}
         <div
-          className={`aspect-square  min-h-fit p-1 w-full max-w-[82px] border-2 border-black content-center text-center rounded-lg ${colors.artist}`}
+          className={`aspect-square min-h-fit overflow-y-scroll overflow-x-hidden px-2 p-2 w-full max-w-[82px] border-2 border-black content-center text-center rounded-lg ${colors.artist}`}
         >
           {userGuess.artist}
         </div>
 
         {/* rating */}
         <div
-          className={`relative aspect-square  min-h-fit p-1 w-full max-w-[82px] border-2 border-black text-center rounded-lg flex items-center justify-center ${colors.rating}`}
+          className={`relative aspect-square min-h-fit overflow-y-scroll overflow-x-hidden px-2 p-2 w-full max-w-[82px] border-2 border-black text-center rounded-lg flex items-center justify-center ${colors.ratings}`}
         >
           <div
             className={`absolute inset-0 flex items-center justify-center z-0 ${colors.ratingRotate}`}
@@ -203,7 +206,7 @@ const Guess = ({ userGuess, correctGuess }: Props) => {
 
         {/* year */}
         <div
-          className={`relative aspect-square  min-h-fit p-1 w-full max-w-[82px] border-2 border-black text-center rounded-lg flex items-center justify-center ${colors.year}`}
+          className={`relative aspect-square min-h-fit overflow-y-scroll overflow-x-hidden px-2 p-2 w-full max-w-[82px] border-2 border-black text-center rounded-lg flex items-center justify-center ${colors.year}`}
         >
           <div
             className={`absolute inset-0 flex items-center justify-center z-0 ${colors.yearRotate}`}
@@ -217,7 +220,7 @@ const Guess = ({ userGuess, correctGuess }: Props) => {
 
         {/* genres */}
         <div
-          className={`aspect-square  min-h-fit p-1 w-full max-w-[82px] border-2 border-black content-center text-center rounded-lg overflow-hidden text-wrap ${colors.genres}`}
+          className={`aspect-square min-h-fit overflow-y-scroll overflow-x-hidden px-2 p-2 w-full max-w-[82px] border-2 border-black content-center text-center rounded-lg overflow-hidden text-wrap ${colors.genres}`}
         >
           {userGuess.genres.join(" ")}
         </div>
@@ -225,14 +228,14 @@ const Guess = ({ userGuess, correctGuess }: Props) => {
         {/* style */}
         <div
           style={clamp}
-          className={`aspect-square min-h-fit p-1 w-full max-w-[82px] border-2 border-black content-center text-center rounded-lg ${colors.style}`}
+          className={`aspect-square min-h-fit overflow-y-scroll overflow-x-hidden px-2 p-2 w-full max-w-[82px] border-2 border-black content-center text-center rounded-lg ${colors.style}`}
         >
           {userGuess.style.join(" ")}
         </div>
 
         {/* tracklsit */}
         <div
-          className={`relative aspect-square  min-h-fit p-1 w-full max-w-[82px] border-2 border-black text-center rounded-lg flex items-center justify-center ${colors.tracklist}`}
+          className={`relative aspect-square min-h-fit overflow-y-scroll overflow-x-hidden px-2 p-2 w-full max-w-[82px] border-2 border-black text-center rounded-lg flex items-center justify-center ${colors.tracklist}`}
         >
           <div
             className={`absolute inset-0 flex items-center justify-center z-0 ${colors.tracklistRotate}`}
