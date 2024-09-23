@@ -102,7 +102,6 @@ const Guess = ({ userGuess, correctGuess }: Props) => {
         // console.log("genres are similar - yellow");
         colors.genres = "bg-yellow-300";
       } else {
-        console.log("genres are not similar - red");
         colors.genres = "bg-red-300";
       }
     }

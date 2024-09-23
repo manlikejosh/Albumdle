@@ -11,6 +11,7 @@ import { useState } from "react";
 import Guess from "./components/Guess";
 import Modal from "./components/Modal";
 import SettingsModal from "./components/SettingsModal";
+import { convertCompilerOptionsFromJson } from "typescript";
 
 const clampTimer = {
   fontSize: "clamp(.75rem, 2.4vw, 1.2rem)",
@@ -58,13 +59,17 @@ function App() {
   const [showHelpModal, setShowHelpModal] = useState(false);
   const [showSettingsModal, setShowSettingModal] = useState(false);
 
-  const handleBtnClick = (data: string) => {
+  const handleBtnClick = (data: any) => {
+    for (let i = 0; i < displayData.length; i++) {
+      if (displayData[i][0].title === data[0].title) {
+        alert("already guessed that one dumbass");
+        return;
+      }
+    }
+
     setDisplayData((displayData) => {
       return [...displayData, data];
     });
-
-    console.log("displaying data:");
-    console.log(displayData);
   };
 
   return (
