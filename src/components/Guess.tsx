@@ -1,8 +1,6 @@
-// RANK IS THE ARRAY INDEX FROM THE JSON FILE
-// alt will be the title
-// only take the first entry of the genre --- everything before the first comma, if there is no comman take the entire thing
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUpLong } from "@fortawesome/free-solid-svg-icons";
+import { useMemo } from "react";
 
 interface Album {
   title: string;
@@ -23,230 +21,184 @@ const Guess = ({ userGuess, correctGuess }: Props) => {
   const clamp = {
     fontSize: "clamp(.4rem, 2.2vw, .7rem)",
   };
-  let colors: { [key: string]: string } = {};
 
   const compareArrays = (
     correctArray: ReadonlyArray<string>,
     userGuess: ReadonlyArray<string>
   ) => {
-    // Convert one of the arrays to a Set for faster lookups
     const setArr2 = new Set(correctArray);
-
-    // Find matching entries
-    const matches = userGuess.filter((item) => setArr2.has(item));
-
-    return matches;
+    return userGuess.filter((item) => setArr2.has(item)); // Find matching entries
   };
 
-  const compareNumebrs = (
-    correctNumebr: number,
+  const compareNumbers = (
+    correctNumber: number,
     guessedNumber: number,
     spread: number
   ) => {
     let styles: string[] = ["background-color", "arrow-style"];
-    if (correctNumebr === guessedNumber) {
+    if (correctNumber === guessedNumber) {
       styles[0] = "bg-green-300"; // background color
       styles[1] = "opacity-0"; // hide the arrow
-      return styles;
-    }
-
-    // test for background color
-    if (
-      -spread <= guessedNumber - correctNumebr ||
-      guessedNumber - correctNumebr >= spread
-    ) {
-      styles[0] = "bg-yellow-300";
+    } else if (Math.abs(guessedNumber - correctNumber) <= spread) {
+      styles[0] = "bg-yellow-300"; // Close enough, yellow
+      styles[1] = guessedNumber < correctNumber ? "" : "rotate-180"; // arrow up/down
     } else {
-      styles[0] = "bg-red-300";
-      // console.log("bg test done");
+      styles[0] = "bg-red-300"; // far off, red
+      styles[1] = guessedNumber < correctNumber ? "" : "rotate-180";
     }
-
-    // test for arrow
-    if (guessedNumber < correctNumebr) {
-      styles[1] = " "; // arrow up (default)
-    } else if (guessedNumber > correctNumebr) {
-      styles[1] = "rotate-180"; // arrow down
-    }
-
     return styles;
   };
 
-  const compare = (userGuess: Album, correctGuess: Album) => {
+  const colorsMemoized = useMemo(() => {
+    let tempColors: { [key: string]: string } = {};
+
     if (userGuess.title === correctGuess.title) {
-      colors.title = "bg-green-300";
-      colors.artist = "bg-green-300";
-      colors.ratings = "bg-green-300";
-      colors.ratingRotate = "opacity-0";
-
-      colors.year = "bg-green-300";
-      colors.yearRotate = "opacity-0";
-
-      colors.genres = "bg-green-300";
-      colors.style = "bg-green-300";
-      colors.tracklist = "bg-green-300";
-      colors.tracklistRotate = "opacity-0";
-
-      return true; // we don't need to go any further, everything is true. this will display correct guess
+      tempColors = {
+        title: "bg-green-300",
+        artist: "bg-green-300",
+        ratings: "bg-green-300",
+        ratingRotate: "opacity-0",
+        year: "bg-green-300",
+        yearRotate: "opacity-0",
+        genres: "bg-green-300",
+        style: "bg-green-300",
+        tracklist: "bg-green-300",
+        tracklistRotate: "opacity-0",
+      };
     } else {
-      colors.title = "bg-red-300"; // titles are different
-    }
+      tempColors.title = "bg-red-300"; // titles are different
 
-    // compare genre, since it is an array, compare to see if values match
-    if (userGuess.genres.every((el) => correctGuess.genres.includes(el))) {
-      // console.log("genre is a complete match - green");
-      colors.genres = "bg-green-300";
-    } else {
-      const matches = compareArrays(correctGuess.genres, userGuess.genres); // this will give what genres are the same
-
-      if (matches.length > 0) {
-        // console.log("genres are similar - yellow");
-        colors.genres = "bg-yellow-300";
+      // Compare genre
+      if (userGuess.genres.every((el) => correctGuess.genres.includes(el))) {
+        tempColors.genres = "bg-green-300";
       } else {
-        colors.genres = "bg-red-300";
+        const matches = compareArrays(correctGuess.genres, userGuess.genres);
+        tempColors.genres = matches.length > 0 ? "bg-yellow-300" : "bg-red-300";
       }
-    }
 
-    // compare date
-    const yearStyles = compareNumebrs(correctGuess.year, userGuess.year, 10);
-    // console.log(yearStyles);
-    colors.year = yearStyles[0]; //bg
-    colors.yearRotate = yearStyles[1]; //arrow
+      // Compare year
+      const yearStyles = compareNumbers(correctGuess.year, userGuess.year, 10);
+      tempColors.year = yearStyles[0]; // bg
+      tempColors.yearRotate = yearStyles[1]; // arrow
 
-    // compare rating
-    const ratingStyles = compareNumebrs(
-      correctGuess.ratings,
-      userGuess.ratings,
-      0.5
-    );
-    colors.ratings = ratingStyles[0]; //bg
-    // console.log("rating colors", colors.rating);
-    colors.ratingRotate = ratingStyles[1]; //arrow
+      // Compare ratings
+      const ratingStyles = compareNumbers(
+        correctGuess.ratings,
+        userGuess.ratings,
+        0.5
+      );
+      tempColors.ratings = ratingStyles[0]; // bg
+      tempColors.ratingRotate = ratingStyles[1]; // arrow
 
-    // compare artist
-    if (userGuess.artist === correctGuess.artist) {
-      // console.log("artists match - green");
-      colors.artist = "bg-green-300";
-    } else {
-      // console.log("artists do not match - red");
-      colors.artist = "bg-red-300";
-    }
+      // Compare artist
+      tempColors.artist =
+        userGuess.artist === correctGuess.artist
+          ? "bg-green-300"
+          : "bg-red-300";
 
-    // compare style, since it is an array, compare to see if any values match
-    if (userGuess.style.every((el) => correctGuess.style.includes(el))) {
-      // console.log("style is a complete match - green");
-      colors.style = "bg-green-300";
-    } else {
+      // Compare style
       const styleMatches = compareArrays(correctGuess.style, userGuess.style);
+      tempColors.style =
+        styleMatches.length > 0 ? "bg-yellow-300" : "bg-red-300";
 
-      if (styleMatches.length != 0) {
-        // console.log("style are similar - yellow");
-        colors.style = "bg-yellow-300";
-      } else {
-        // console.log("style are not similar - red");
-        colors.style = "bg-red-300";
-      }
+      // Compare tracklist
+      const tracklistStyles = compareNumbers(
+        correctGuess.tracklist,
+        userGuess.tracklist,
+        2
+      );
+      tempColors.tracklist = tracklistStyles[0]; // bg
+      tempColors.tracklistRotate = tracklistStyles[1]; // arrow
     }
 
-    // compare number of tracks
-    const tracklistStyles = compareNumebrs(
-      correctGuess.tracklist,
-      userGuess.tracklist,
-      2
-    );
-    colors.tracklist = tracklistStyles[0]; //bg
-    colors.tracklistRotate = tracklistStyles[1]; //arrow
-  };
-
-  compare(userGuess, correctGuess);
+    return tempColors;
+  }, [userGuess, correctGuess]); // Dependencies: only re-run if these change
 
   return (
-    <>
+    <div
+      style={clamp}
+      className="w-2/3 min-w-fit max-w-[750px] gap-2 grid grid-cols-4 min-[600px]:grid-cols-8 my-3 justify-items-center font-panton animate-appear delay-700"
+    >
+      {/* Image */}
+      <div className="aspect-square min-h-fit w-full max-w-[82px] content-center text-center rounded-lg">
+        <img
+          className="rounded-lg border-2 border-black"
+          src="https://media.istockphoto.com/id/1361394182/photo/funny-british-shorthair-cat-portrait-looking-shocked-or-surprised.jpg?s=612x612&w=0&k=20&c=6yvVxdufrNvkmc50nCLCd8OFGhoJd6vPTNotl90L-vo="
+          alt="cool cat"
+        />
+      </div>
+
+      {/* Title */}
       <div
-        style={clamp}
-        className="w-2/3 min-w-fit max-w-[750px] gap-2 grid grid-cols-4 min-[600px]:grid-cols-8 my-3 justify-items-center font-panton animate-appear delay-700
-        "
+        className={`aspect-square min-h-fit overflow-y-scroll overflow-x-hidden px-2 p-2 w-full max-w-[82px] border-2 border-black content-center text-center rounded-lg ${colorsMemoized.title}`}
       >
-        {/* image */}
-        <div className="aspect-square min-h-fit  w-full max-w-[82px]   content-center text-center rounded-lg">
-          <img
-            className="rounded-lg border-2  border-black"
-            src="https://media.istockphoto.com/id/1361394182/photo/funny-british-shorthair-cat-portrait-looking-shocked-or-surprised.jpg?s=612x612&w=0&k=20&c=6yvVxdufrNvkmc50nCLCd8OFGhoJd6vPTNotl90L-vo="
-            alt="cool cat"
-          />
-        </div>
+        {userGuess.title}
+      </div>
 
-        {/* title */}
-        <div
-          className={`aspect-square min-h-fit overflow-y-scroll overflow-x-hidden px-2 p-2 w-full max-w-[82px] border-2 border-black content-center text-center rounded-lg ${colors.title}`}
-        >
-          {userGuess.title}
-        </div>
+      {/* Artist */}
+      <div
+        className={`aspect-square min-h-fit overflow-y-scroll overflow-x-hidden px-2 p-2 w-full max-w-[82px] border-2 border-black content-center text-center rounded-lg ${colorsMemoized.artist}`}
+      >
+        {userGuess.artist}
+      </div>
 
-        {/* artist */}
+      {/* Ratings */}
+      <div
+        className={`relative aspect-square min-h-fit overflow-y-scroll overflow-x-hidden px-2 p-2 w-full max-w-[82px] border-2 border-black text-center rounded-lg flex items-center justify-center ${colorsMemoized.ratings}`}
+      >
         <div
-          className={`aspect-square min-h-fit overflow-y-scroll overflow-x-hidden px-2 p-2 w-full max-w-[82px] border-2 border-black content-center text-center rounded-lg ${colors.artist}`}
+          className={`absolute inset-0 flex items-center justify-center z-0 ${colorsMemoized.ratingRotate}`}
         >
-          {userGuess.artist}
+          <FontAwesomeIcon icon={faUpLong} className="text-white text-6xl" />
         </div>
-
-        {/* rating */}
-        <div
-          className={`relative aspect-square min-h-fit overflow-y-scroll overflow-x-hidden px-2 p-2 w-full max-w-[82px] border-2 border-black text-center rounded-lg flex items-center justify-center ${colors.ratings}`}
-        >
-          <div
-            className={`absolute inset-0 flex items-center justify-center z-0 ${colors.ratingRotate}`}
-          >
-            <FontAwesomeIcon icon={faUpLong} className="text-white text-6xl" />
-          </div>
-          <div className="relative z-10 text-black text-xl font-bold">
-            {userGuess.ratings}
-          </div>
-        </div>
-
-        {/* year */}
-        <div
-          className={`relative aspect-square min-h-fit overflow-y-scroll overflow-x-hidden px-2 p-2 w-full max-w-[82px] border-2 border-black text-center rounded-lg flex items-center justify-center ${colors.year}`}
-        >
-          <div
-            className={`absolute inset-0 flex items-center justify-center z-0 ${colors.yearRotate}`}
-          >
-            <FontAwesomeIcon icon={faUpLong} className="text-white text-6xl" />
-          </div>
-          <div className="relative z-10 text-black text-xl font-bold">
-            {userGuess.year}
-          </div>
-        </div>
-
-        {/* genres */}
-        <div
-          className={`aspect-square min-h-fit overflow-y-scroll overflow-x-hidden px-2 p-2 w-full max-w-[82px] border-2 border-black content-center text-center rounded-lg overflow-hidden text-wrap ${colors.genres}`}
-        >
-          {userGuess.genres.join(" ")}
-        </div>
-
-        {/* style */}
-        <div
-          style={clamp}
-          className={`aspect-square min-h-fit overflow-y-scroll overflow-x-hidden px-2 p-2 w-full max-w-[82px] border-2 border-black content-center text-center rounded-lg ${colors.style}`}
-        >
-          {userGuess.style.join(" ")}
-        </div>
-
-        {/* tracklsit */}
-        <div
-          className={`relative aspect-square min-h-fit overflow-y-scroll overflow-x-hidden px-2 p-2 w-full max-w-[82px] border-2 border-black text-center rounded-lg flex items-center justify-center ${colors.tracklist}`}
-        >
-          <div
-            className={`absolute inset-0 flex items-center justify-center z-0 ${colors.tracklistRotate}`}
-          >
-            <FontAwesomeIcon icon={faUpLong} className="text-white text-6xl" />
-          </div>
-          <div className="relative z-10 text-black text-xl font-bold">
-            {userGuess.tracklist}
-          </div>
+        <div className="relative z-10 text-black text-xl font-bold">
+          {userGuess.ratings}
         </div>
       </div>
-    </>
+
+      {/* Year */}
+      <div
+        className={`relative aspect-square min-h-fit overflow-y-scroll overflow-x-hidden px-2 p-2 w-full max-w-[82px] border-2 border-black text-center rounded-lg flex items-center justify-center ${colorsMemoized.year}`}
+      >
+        <div
+          className={`absolute inset-0 flex items-center justify-center z-0 ${colorsMemoized.yearRotate}`}
+        >
+          <FontAwesomeIcon icon={faUpLong} className="text-white text-6xl" />
+        </div>
+        <div className="relative z-10 text-black text-xl font-bold">
+          {userGuess.year}
+        </div>
+      </div>
+
+      {/* Genres */}
+      <div
+        className={`aspect-square min-h-fit overflow-y-scroll overflow-x-hidden px-2 p-2 w-full max-w-[82px] border-2 border-black content-center text-center rounded-lg overflow-hidden text-wrap ${colorsMemoized.genres}`}
+      >
+        {userGuess.genres.join(" ")}
+      </div>
+
+      {/* Style */}
+      <div
+        style={clamp}
+        className={`aspect-square min-h-fit overflow-y-scroll overflow-x-hidden px-2 p-2 w-full max-w-[82px] border-2 border-black content-center text-center rounded-lg ${colorsMemoized.style}`}
+      >
+        {userGuess.style.join(" ")}
+      </div>
+
+      {/* Tracklist */}
+      <div
+        className={`relative aspect-square min-h-fit overflow-y-scroll overflow-x-hidden px-2 p-2 w-full max-w-[82px] border-2 border-black text-center rounded-lg flex items-center justify-center ${colorsMemoized.tracklist}`}
+      >
+        <div
+          className={`absolute inset-0 flex items-center justify-center z-0 ${colorsMemoized.tracklistRotate}`}
+        >
+          <FontAwesomeIcon icon={faUpLong} className="text-white text-6xl" />
+        </div>
+        <div className="relative z-10 text-black text-xl font-bold">
+          {userGuess.tracklist}
+        </div>
+      </div>
+    </div>
   );
 };
 

@@ -5,23 +5,23 @@ import {
   faQuestion,
   faGear,
   faLightbulb,
+  faHeart,
 } from "@fortawesome/free-solid-svg-icons";
 import SearchBar from "./components/SearchBar";
 import { useState } from "react";
 import Guess from "./components/Guess";
 import Modal from "./components/Modal";
 import SettingsModal from "./components/SettingsModal";
-import { convertCompilerOptionsFromJson } from "typescript";
 
-const clampTimer = {
+const timerStyles = {
   fontSize: "clamp(.75rem, 2.4vw, 1.2rem)",
 };
 
-const clampIcons = {
+const iconStyles = {
   fontSize: "clamp(1rem, 2.5vw, 1.5rem)",
 };
 
-const clampHead = {
+const headingStyles = {
   fontSize: "clamp(2rem, 8vw, 4.5rem)",
 };
 
@@ -35,16 +35,6 @@ interface Album {
   tracklist: number;
 }
 
-// const userGuess: Album = {
-//   title: "The Low End Theory",
-//   artist: "A Tribe Called Quest",
-//   ratings: 4.69,
-//   year: 1996,
-//   genres: ["Hip Hop"],
-//   style: ["Conscious", "Jazzy Hip-Hop"],
-//   tracklist: 14,
-// };
-
 const correctGuess: Album = {
   title: "Paul's Boutique",
   artist: "Beastie Boys",
@@ -54,98 +44,126 @@ const correctGuess: Album = {
   style: ["Cut-up/DJ", "Hip Hop"],
   tracklist: 15,
 };
-function App() {
-  const [displayData, setDisplayData] = useState<any[]>([]);
-  const [showHelpModal, setShowHelpModal] = useState(false);
-  const [showSettingsModal, setShowSettingModal] = useState(false);
 
-  const handleBtnClick = (data: any) => {
-    for (let i = 0; i < displayData.length; i++) {
-      if (displayData[i][0].title === data[0].title) {
-        alert("already guessed that one dumbass");
-        return;
-      }
+let lives = [
+  "text-red-500",
+  "text-red-500",
+  "text-red-500",
+  "text-red-500",
+  "text-red-500",
+  "text-red-500",
+  "text-red-500",
+  "text-red-500",
+];
+
+let count = lives.length - 1;
+
+function App() {
+  const [guessedAlbums, setGuessedAlbums] = useState<Album[]>([]);
+  const [showHelpModal, setShowHelpModal] = useState(false);
+  const [showSettingsModal, setShowSettingsModal] = useState(false);
+
+  const handleGuessSubmission = (data: Album[]) => {
+    const alreadyGuessed = guessedAlbums.some(
+      (album) => album.title === data[0].title
+    );
+
+    if (alreadyGuessed) {
+      alert("Already guessed that one!");
+      return;
     }
 
-    setDisplayData((displayData) => {
-      return [...displayData, data];
-    });
+    if (data[0].title === correctGuess.title) {
+      alert("Winner winner chicken dinner!");
+      setGuessedAlbums((prevGuessedAlbums) => [...prevGuessedAlbums, data[0]]);
+      return;
+    }
+
+    setGuessedAlbums((prevGuessedAlbums) => [...prevGuessedAlbums, data[0]]);
+    lives[count] = "text-black";
+    count = count - 1;
+    console.log(count);
   };
 
   return (
     <>
-      <header className=" font-panton font-thin   grid grid-cols-5 my-5 w-fit ">
-        <div className="  col-span-1  my-auto text-left" style={clampTimer}>
+      <header className="font-panton font-thin grid grid-cols-5 my-5 w-fit">
+        <div className="col-span-1 my-auto text-left" style={timerStyles}>
           <Timer />
         </div>
         <h1
-          style={clampHead}
-          className="font-bold tracking-wider  col-span-3 text-center my-auto"
+          style={headingStyles}
+          className="font-bold tracking-wider col-span-3 text-center my-auto"
         >
           Albumdle
         </h1>
         <div
           id="icons"
-          style={clampIcons}
-          className="    col-span-1 my-auto text-right"
+          style={iconStyles}
+          className="col-span-1 my-auto text-right"
         >
-          <button
-            onClick={() => {
-              setShowHelpModal(true);
-            }}
-          >
-            <FontAwesomeIcon icon={faQuestion} className=" p-1" />
+          <button onClick={() => setShowHelpModal(true)}>
+            <FontAwesomeIcon icon={faQuestion} className="p-1" />
           </button>
-          <button
-            onClick={() => {
-              setShowSettingModal(true);
-            }}
-          >
-            <FontAwesomeIcon icon={faGear} className=" p-1" />
+          <button onClick={() => setShowSettingsModal(true)}>
+            <FontAwesomeIcon icon={faGear} className="p-1" />
           </button>
-          <FontAwesomeIcon icon={faLightbulb} className=" p-1" />
+          <FontAwesomeIcon icon={faLightbulb} className="p-1" />
         </div>
       </header>
 
-      <div className="w-full flex flex-col  ">
+      <div className="w-full flex flex-col">
         <SearchBar
           placeholder="Enter your guess..."
-          onButtonClick={handleBtnClick}
+          onButtonClick={handleGuessSubmission}
         />
       </div>
 
-      <div className="">
-        {displayData &&
-          displayData.map((data, index) => {
-            return <p key={index}>{data.title}</p>;
-          })}
-      </div>
-      <div id="guessArea" className="flex flex-col-reverse px-1 ">
-        {displayData.map((data, index) => {
-          return (
-            <Guess
-              userGuess={data[0]}
-              correctGuess={correctGuess}
-              key={index}
-            ></Guess>
-          );
-        })}
+      <div className="p-2 flex flex-row mt-2" id="lives">
+        <FontAwesomeIcon
+          icon={faHeart}
+          className={`p-1 mx-2 text-3xl transition-colors duration-500 ${lives[0]}`}
+        />
+        <FontAwesomeIcon
+          icon={faHeart}
+          className={`p-1 mx-2 text-3xl transition-colors duration-500 ${lives[1]}`}
+        />
+        <FontAwesomeIcon
+          icon={faHeart}
+          className={`p-1 mx-2 text-3xl transition-colors duration-500 ${lives[2]}`}
+        />
+        <FontAwesomeIcon
+          icon={faHeart}
+          className={`p-1 mx-2 text-3xl transition-colors duration-500 ${lives[3]}`}
+        />
+        <FontAwesomeIcon
+          icon={faHeart}
+          className={`p-1 mx-2 text-3xl transition-colors duration-500 ${lives[4]}`}
+        />
+        <FontAwesomeIcon
+          icon={faHeart}
+          className={`p-1 mx-2 text-3xl transition-colors duration-500 ${lives[5]}`}
+        />
+        <FontAwesomeIcon
+          icon={faHeart}
+          className={`p-1 mx-2 text-3xl transition-colors duration-500 ${lives[6]}`}
+        />
+        <FontAwesomeIcon
+          icon={faHeart}
+          className={`p-1 mx-2 text-3xl transition-colors duration-500 ${lives[7]}`}
+        />
       </div>
 
-      {showHelpModal && (
-        <Modal
-          closeModal={() => {
-            setShowHelpModal(false);
-          }}
-        />
-      )}
+      <div id="guessArea" className="flex flex-col-reverse px-1">
+        {guessedAlbums.map((album, index) => (
+          <Guess userGuess={album} correctGuess={correctGuess} key={index} />
+        ))}
+      </div>
+
+      {showHelpModal && <Modal closeModal={() => setShowHelpModal(false)} />}
 
       {showSettingsModal && (
-        <SettingsModal
-          closeModal={() => {
-            setShowSettingModal(false);
-          }}
-        />
+        <SettingsModal closeModal={() => setShowSettingsModal(false)} />
       )}
     </>
   );
