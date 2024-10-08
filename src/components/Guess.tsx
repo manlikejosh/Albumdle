@@ -117,10 +117,10 @@ const Guess = ({ userGuess, correctGuess }: Props) => {
   return (
     <div
       style={clamp}
-      className="w-2/3 min-w-fit max-w-[750px] gap-2 grid grid-cols-4 min-[600px]:grid-cols-8 my-3 justify-items-center font-panton animate-appear delay-700"
+      className=" min-w-[680px] sm:p-2  gap-2 grid  grid-cols-8 my-3 justify-items-center font-panton animate-appear delay-700"
     >
       {/* Image */}
-      <div className="aspect-square min-h-fit w-full max-w-[82px] content-center text-center rounded-lg">
+      <div className="aspect-square min-h-fit min-w-[50px] w-full max-w-[82px] content-center text-center rounded-lg">
         <img
           className="rounded-lg border-2 border-black"
           src="https://media.istockphoto.com/id/1361394182/photo/funny-british-shorthair-cat-portrait-looking-shocked-or-surprised.jpg?s=612x612&w=0&k=20&c=6yvVxdufrNvkmc50nCLCd8OFGhoJd6vPTNotl90L-vo="
@@ -130,21 +130,21 @@ const Guess = ({ userGuess, correctGuess }: Props) => {
 
       {/* Title */}
       <div
-        className={`aspect-square min-h-fit overflow-y-scroll overflow-x-hidden px-2 p-2 w-full max-w-[82px] border-2 border-black content-center text-center rounded-lg ${colorsMemoized.title}`}
+        className={`aspect-square min-h-fit min-w-[50px] overflow-y-scroll overflow-x-hidden px-2 p-2 w-full max-w-[82px] border-2 border-black content-center text-center rounded-lg ${colorsMemoized.title}`}
       >
         {userGuess.title}
       </div>
 
       {/* Artist */}
       <div
-        className={`aspect-square min-h-fit overflow-y-scroll overflow-x-hidden px-2 p-2 w-full max-w-[82px] border-2 border-black content-center text-center rounded-lg ${colorsMemoized.artist}`}
+        className={`aspect-square min-h-fit min-w-[50px] overflow-y-scroll overflow-x-hidden px-2 p-2 w-full max-w-[82px] border-2 border-black content-center text-center rounded-lg ${colorsMemoized.artist}`}
       >
         {userGuess.artist}
       </div>
 
       {/* Ratings */}
       <div
-        className={`relative aspect-square min-h-fit overflow-y-scroll overflow-x-hidden px-2 p-2 w-full max-w-[82px] border-2 border-black text-center rounded-lg flex items-center justify-center ${colorsMemoized.ratings}`}
+        className={`relative aspect-square min-h-fit min-w-[50px] overflow-y-scroll overflow-x-hidden px-2 p-2 w-full max-w-[82px] border-2 border-black text-center rounded-lg flex items-center justify-center ${colorsMemoized.ratings}`}
       >
         <div
           className={`absolute inset-0 flex items-center justify-center z-0 ${colorsMemoized.ratingRotate}`}
@@ -158,7 +158,7 @@ const Guess = ({ userGuess, correctGuess }: Props) => {
 
       {/* Year */}
       <div
-        className={`relative aspect-square min-h-fit overflow-y-scroll overflow-x-hidden px-2 p-2 w-full max-w-[82px] border-2 border-black text-center rounded-lg flex items-center justify-center ${colorsMemoized.year}`}
+        className={`relative aspect-square min-h-fit min-w-[50px] overflow-y-scroll overflow-x-hidden px-2 p-2 w-full max-w-[82px] border-2 border-black text-center rounded-lg flex items-center justify-center ${colorsMemoized.year}`}
       >
         <div
           className={`absolute inset-0 flex items-center justify-center z-0 ${colorsMemoized.yearRotate}`}
@@ -172,7 +172,7 @@ const Guess = ({ userGuess, correctGuess }: Props) => {
 
       {/* Genres */}
       <div
-        className={`aspect-square min-h-fit overflow-y-scroll overflow-x-hidden px-2 p-2 w-full max-w-[82px] border-2 border-black content-center text-center rounded-lg overflow-hidden text-wrap ${colorsMemoized.genres}`}
+        className={`aspect-square min-h-fit min-w-[50px] overflow-y-scroll overflow-x-hidden px-2 p-2 w-full max-w-[82px] border-2 border-black content-center text-center rounded-lg overflow-hidden text-wrap ${colorsMemoized.genres}`}
       >
         {userGuess.genres.join(" ")}
       </div>
@@ -180,14 +180,14 @@ const Guess = ({ userGuess, correctGuess }: Props) => {
       {/* Style */}
       <div
         style={clamp}
-        className={`aspect-square min-h-fit overflow-y-scroll overflow-x-hidden px-2 p-2 w-full max-w-[82px] border-2 border-black content-center text-center rounded-lg ${colorsMemoized.style}`}
+        className={`aspect-square min-h-fit min-w-[50px] overflow-y-scroll overflow-x-hidden px-2 p-2 w-full max-w-[82px] border-2 border-black content-center text-center rounded-lg ${colorsMemoized.style}`}
       >
         {userGuess.style.join(" ")}
       </div>
 
       {/* Tracklist */}
       <div
-        className={`relative aspect-square min-h-fit overflow-y-scroll overflow-x-hidden px-2 p-2 w-full max-w-[82px] border-2 border-black text-center rounded-lg flex items-center justify-center ${colorsMemoized.tracklist}`}
+        className={`relative aspect-square min-h-fit min-w-[50px] overflow-y-scroll overflow-x-hidden px-2 p-2 w-full max-w-[82px] border-2 border-black text-center rounded-lg flex items-center justify-center ${colorsMemoized.tracklist}`}
       >
         <div
           className={`absolute inset-0 flex items-center justify-center z-0 ${colorsMemoized.tracklistRotate}`}

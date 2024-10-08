@@ -49,14 +49,16 @@ const SearchBar = ({ placeholder, onButtonClick }: Props) => {
   // Handle click on individual album suggestions
   const handleSuggestionClick = (e: React.MouseEvent<HTMLParagraphElement>) => {
     const target = e.target as HTMLParagraphElement;
-    setSearchQuery(target.innerText);
+    setSearchQuery(target.innerText.split("-")[0].trimEnd()); // split so only the ablum title is set as the serach query
   };
 
   // Update filtered albums based on search query
   useEffect(() => {
     if (searchQuery !== "") {
-      const newFilteredAlbums = data.filter((album: Album) =>
-        album.title.toLowerCase().includes(searchQuery.toLowerCase())
+      const newFilteredAlbums = data.filter(
+        (album: Album) =>
+          album.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          album.artist.toLowerCase().includes(searchQuery.toLowerCase())
       );
       setFilteredAlbums(newFilteredAlbums);
     } else {
@@ -105,7 +107,7 @@ const SearchBar = ({ placeholder, onButtonClick }: Props) => {
                   : "show"
               }`}
             >
-              {filteredAlbums.slice(0, 10).map((album, index) => (
+              {filteredAlbums.map((album, index) => (
                 <p
                   className={`p-1 font-panto font-medium hover:bg-gray-200 ${
                     highlightedIndex === index ? "bg-gray-200" : ""
@@ -114,7 +116,8 @@ const SearchBar = ({ placeholder, onButtonClick }: Props) => {
                   onClick={handleSuggestionClick}
                   ref={(el) => (itemRefs.current[index] = el)} // Assign ref to each item
                 >
-                  {album.title}
+                  {album.title} -{" "}
+                  <span className={` font-normal`}>{album.artist}</span>
                 </p>
               ))}
             </div>

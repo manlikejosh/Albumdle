@@ -119,42 +119,53 @@ function App() {
         />
       </div>
 
-      <div className="p-2 flex flex-row mt-2" id="lives">
+      <div className=" flex flex-row mt-2 " id="lives">
         <FontAwesomeIcon
           icon={faHeart}
-          className={`p-1 mx-2 text-3xl transition-colors duration-500 ${lives[0]}`}
+          style={iconStyles}
+          className={`p-1 mx-1 sm:mx-2  transition-colors duration-500 ${lives[0]}`}
         />
         <FontAwesomeIcon
           icon={faHeart}
-          className={`p-1 mx-2 text-3xl transition-colors duration-500 ${lives[1]}`}
+          style={iconStyles}
+          className={`p-1 mx-1 sm:mx-2  transition-colors duration-500 ${lives[1]}`}
         />
         <FontAwesomeIcon
           icon={faHeart}
-          className={`p-1 mx-2 text-3xl transition-colors duration-500 ${lives[2]}`}
+          style={iconStyles}
+          className={`p-1 mx-1 sm:mx-2  transition-colors duration-500 ${lives[2]}`}
         />
         <FontAwesomeIcon
           icon={faHeart}
-          className={`p-1 mx-2 text-3xl transition-colors duration-500 ${lives[3]}`}
+          style={iconStyles}
+          className={`p-1 mx-1 sm:mx-2  transition-colors duration-500 ${lives[3]}`}
         />
         <FontAwesomeIcon
           icon={faHeart}
-          className={`p-1 mx-2 text-3xl transition-colors duration-500 ${lives[4]}`}
+          style={iconStyles}
+          className={`p-1 mx-1 sm:mx-2  transition-colors duration-500 ${lives[4]}`}
         />
         <FontAwesomeIcon
           icon={faHeart}
-          className={`p-1 mx-2 text-3xl transition-colors duration-500 ${lives[5]}`}
+          style={iconStyles}
+          className={`p-1 mx-1 sm:mx-2  transition-colors duration-500 ${lives[5]}`}
         />
         <FontAwesomeIcon
           icon={faHeart}
-          className={`p-1 mx-2 text-3xl transition-colors duration-500 ${lives[6]}`}
+          style={iconStyles}
+          className={`p-1 mx-1 sm:mx-2  transition-colors duration-500 ${lives[6]}`}
         />
         <FontAwesomeIcon
           icon={faHeart}
-          className={`p-1 mx-2 text-3xl transition-colors duration-500 ${lives[7]}`}
+          style={iconStyles}
+          className={`p-1 mx-1 sm:mx-2  transition-colors duration-500 ${lives[7]}`}
         />
       </div>
 
-      <div id="guessArea" className="flex flex-col-reverse px-1">
+      <div
+        id="guessArea"
+        className="flex flex-col-reverse px-1 w-full overflow-scroll"
+      >
         {guessedAlbums.map((album, index) => (
           <Guess userGuess={album} correctGuess={correctGuess} key={index} />
         ))}
