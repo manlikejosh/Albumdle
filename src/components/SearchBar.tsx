@@ -117,7 +117,9 @@ const SearchBar = ({ placeholder, onButtonClick }: Props) => {
                   ref={(el) => (itemRefs.current[index] = el)} // Assign ref to each item
                 >
                   {album.title} -{" "}
-                  <span className={` font-normal`}>{album.artist}</span>
+                  <span className={`pointer-events-none	 font-normal`}>
+                    {album.artist}
+                  </span>
                 </p>
               ))}
             </div>

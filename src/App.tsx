@@ -82,7 +82,10 @@ function App() {
     setGuessedAlbums((prevGuessedAlbums) => [...prevGuessedAlbums, data[0]]);
     lives[count] = "text-black";
     count = count - 1;
-    console.log(count);
+
+    if (count === -1) {
+      alert("you LOSE");
+    }
   };
 
   return (
@@ -164,7 +167,7 @@ function App() {
 
       <div
         id="guessArea"
-        className="flex flex-col-reverse px-1 w-full overflow-scroll"
+        className="flex flex-col-reverse px-1 w-full overflow-scroll sm:items-center"
       >
         {guessedAlbums.map((album, index) => (
           <Guess userGuess={album} correctGuess={correctGuess} key={index} />

@@ -117,7 +117,7 @@ const Guess = ({ userGuess, correctGuess }: Props) => {
   return (
     <div
       style={clamp}
-      className=" min-w-[680px] sm:p-2  gap-2 grid  grid-cols-8 my-3 justify-items-center font-panton animate-appear delay-700"
+      className=" min-w-[680px] max-w-[60vw] sm:p-2  gap-2 grid  grid-cols-8 my-3 justify-items-center font-panton animate-appear delay-700"
     >
       {/* Image */}
       <div className="aspect-square min-h-fit min-w-[50px] w-full max-w-[82px] content-center text-center rounded-lg">
