@@ -111,7 +111,7 @@ const Guess = ({ userGuess, correctGuess }: Props) => {
   }, [userGuess, correctGuess]);
 
   return (
-    <div className="min-w-[680px] max-w-[60vw] sm:p-2 gap-2 grid grid-cols-8 my-2 border border-black justify-items-center font-panton animate-appear delay-700 text-sm">
+    <div className="min-w-[680px] max-w-[60vw] sm:p-2 gap-2 grid grid-cols-8 my-2  justify-items-center font-panton animate-appear delay-700 text-sm">
       {/* Image */}
       <div className="h-full w-full min-h-[80px] max-w-[100px] border-2 border-black rounded-lg overflow-hidden flex items-center justify-center">
         <img

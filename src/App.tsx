@@ -167,12 +167,8 @@ function App() {
 
       <div
         id="guessArea"
-        className="flex flex-col-reverse px-1 w-full overflow-scroll sm:items-center border border-black"
+        className="px-1 w-full flex flex-col overflow-scroll sm:items-center "
       >
-        {guessedAlbums.map((album, index) => (
-          <Guess userGuess={album} correctGuess={correctGuess} key={index} />
-        ))}
-
         <div className="flex flex-col px-1 w-screen sm:items-center">
           {/* Sticky Header */}
           {guessedAlbums.length > 0 && (
@@ -204,6 +200,9 @@ function App() {
             </div>
           )}
         </div>
+        {[...guessedAlbums].reverse().map((album, index) => (
+          <Guess userGuess={album} correctGuess={correctGuess} key={index} />
+        ))}
       </div>
 
       {showHelpModal && <Modal closeModal={() => setShowHelpModal(false)} />}
