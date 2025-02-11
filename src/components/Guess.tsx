@@ -18,16 +18,12 @@ type Props = {
 };
 
 const Guess = ({ userGuess, correctGuess }: Props) => {
-  const clamp = {
-    fontSize: "clamp(.4rem, 2.2vw, .7rem)",
-  };
-
   const compareArrays = (
     correctArray: ReadonlyArray<string>,
     userGuess: ReadonlyArray<string>
   ) => {
     const setArr2 = new Set(correctArray);
-    return userGuess.filter((item) => setArr2.has(item)); // Find matching entries
+    return userGuess.filter((item) => setArr2.has(item));
   };
 
   const compareNumbers = (
@@ -37,13 +33,13 @@ const Guess = ({ userGuess, correctGuess }: Props) => {
   ) => {
     let styles: string[] = ["background-color", "arrow-style"];
     if (correctNumber === guessedNumber) {
-      styles[0] = "bg-green-300"; // background color
-      styles[1] = "opacity-0"; // hide the arrow
+      styles[0] = "bg-green-300";
+      styles[1] = "opacity-0";
     } else if (Math.abs(guessedNumber - correctNumber) <= spread) {
-      styles[0] = "bg-yellow-300"; // Close enough, yellow
-      styles[1] = guessedNumber < correctNumber ? "" : "rotate-180"; // arrow up/down
+      styles[0] = "bg-yellow-300";
+      styles[1] = guessedNumber < correctNumber ? "" : "rotate-180";
     } else {
-      styles[0] = "bg-red-300"; // far off, red
+      styles[0] = "bg-red-300";
       styles[1] = guessedNumber < correctNumber ? "" : "rotate-180";
     }
     return styles;
@@ -112,91 +108,89 @@ const Guess = ({ userGuess, correctGuess }: Props) => {
     }
 
     return tempColors;
-  }, [userGuess, correctGuess]); // Dependencies: only re-run if these change
+  }, [userGuess, correctGuess]);
 
   return (
-    <div
-      style={clamp}
-      className=" min-w-[680px] max-w-[60vw] sm:p-2  gap-2 grid  grid-cols-8 my-3 justify-items-center font-panton animate-appear delay-700"
-    >
+    <div className="min-w-[680px] max-w-[60vw] sm:p-2 gap-2 grid grid-cols-8 my-2 border border-black justify-items-center font-panton animate-appear delay-700 text-sm">
       {/* Image */}
-      <div className="aspect-square min-h-fit min-w-[50px] w-full max-w-[82px] content-center text-center rounded-lg">
+      <div className="h-full w-full min-h-[80px] max-w-[100px] border-2 border-black rounded-lg overflow-hidden flex items-center justify-center">
         <img
-          className="rounded-lg border-2 border-black"
-          src="https://media.istockphoto.com/id/1361394182/photo/funny-british-shorthair-cat-portrait-looking-shocked-or-surprised.jpg?s=612x612&w=0&k=20&c=6yvVxdufrNvkmc50nCLCd8OFGhoJd6vPTNotl90L-vo="
-          alt="cool cat"
+          className="w-full h-full object-cover"
+          src="https://media.istockphoto.com/id/1361394182/photo/funny-british-shorthair-cat-portrait-looking-shocked-or-surprised.jpg"
+          alt="Album cover"
         />
       </div>
 
       {/* Title */}
       <div
-        className={`aspect-square min-h-fit min-w-[50px] overflow-y-scroll overflow-x-hidden px-2 p-2 w-full max-w-[82px] border-2 border-black content-center text-center rounded-lg ${colorsMemoized.title}`}
+        className={`h-full w-full min-h-[80px] max-w-[100px] border-2 border-black rounded-lg p-1 ${colorsMemoized.title} flex items-center justify-center`}
       >
-        {userGuess.title}
+        <div className="break-words hyphens-auto overflow-y-auto text-center">
+          {userGuess.title}
+        </div>
       </div>
 
       {/* Artist */}
       <div
-        className={`aspect-square min-h-fit min-w-[50px] overflow-y-scroll overflow-x-hidden px-2 p-2 w-full max-w-[82px] border-2 border-black content-center text-center rounded-lg ${colorsMemoized.artist}`}
+        className={`h-full w-full min-h-[80px] max-w-[100px] border-2 border-black rounded-lg p-1 ${colorsMemoized.artist} flex items-center justify-center`}
       >
-        {userGuess.artist}
+        <div className="break-words hyphens-auto overflow-y-auto text-center">
+          {userGuess.artist}
+        </div>
       </div>
 
       {/* Ratings */}
       <div
-        className={`relative aspect-square min-h-fit min-w-[50px] overflow-y-scroll overflow-x-hidden px-2 p-2 w-full max-w-[82px] border-2 border-black text-center rounded-lg flex items-center justify-center ${colorsMemoized.ratings}`}
+        className={`relative h-full w-full min-h-[80px] max-w-[100px] border-2 border-black rounded-lg flex items-center justify-center ${colorsMemoized.ratings}`}
       >
         <div
           className={`absolute inset-0 flex items-center justify-center z-0 ${colorsMemoized.ratingRotate}`}
         >
           <FontAwesomeIcon icon={faUpLong} className="text-white text-6xl" />
         </div>
-        <div className="relative z-10 text-black text-xl font-bold">
-          {userGuess.ratings}
-        </div>
+        <div className="relative z-10 font-bold">{userGuess.ratings}</div>
       </div>
 
       {/* Year */}
       <div
-        className={`relative aspect-square min-h-fit min-w-[50px] overflow-y-scroll overflow-x-hidden px-2 p-2 w-full max-w-[82px] border-2 border-black text-center rounded-lg flex items-center justify-center ${colorsMemoized.year}`}
+        className={`relative h-full w-full min-h-[80px] max-w-[100px] border-2 border-black rounded-lg flex items-center justify-center ${colorsMemoized.year}`}
       >
         <div
           className={`absolute inset-0 flex items-center justify-center z-0 ${colorsMemoized.yearRotate}`}
         >
           <FontAwesomeIcon icon={faUpLong} className="text-white text-6xl" />
         </div>
-        <div className="relative z-10 text-black text-xl font-bold">
-          {userGuess.year}
-        </div>
+        <div className="relative z-10 font-bold">{userGuess.year}</div>
       </div>
 
       {/* Genres */}
       <div
-        className={`aspect-square min-h-fit min-w-[50px] overflow-y-scroll overflow-x-hidden px-2 p-2 w-full max-w-[82px] border-2 border-black content-center text-center rounded-lg overflow-hidden text-wrap ${colorsMemoized.genres}`}
+        className={`h-full w-full min-h-[80px] max-w-[100px] border-2 border-black rounded-lg p-1 ${colorsMemoized.genres} flex items-center justify-center`}
       >
-        {userGuess.genres.join(" ")}
+        <div className="break-words hyphens-auto overflow-y-auto text-center">
+          {userGuess.genres.join(", ")}
+        </div>
       </div>
 
       {/* Style */}
       <div
-        style={clamp}
-        className={`aspect-square min-h-fit min-w-[50px] overflow-y-scroll overflow-x-hidden px-2 p-2 w-full max-w-[82px] border-2 border-black content-center text-center rounded-lg ${colorsMemoized.style}`}
+        className={`h-full w-full min-h-[80px] max-w-[100px] border-2 border-black rounded-lg p-1 ${colorsMemoized.style} flex items-center justify-center`}
       >
-        {userGuess.style.join(" ")}
+        <div className="break-words hyphens-auto overflow-y-auto text-center">
+          {userGuess.style.join(", ")}
+        </div>
       </div>
 
       {/* Tracklist */}
       <div
-        className={`relative aspect-square min-h-fit min-w-[50px] overflow-y-scroll overflow-x-hidden px-2 p-2 w-full max-w-[82px] border-2 border-black text-center rounded-lg flex items-center justify-center ${colorsMemoized.tracklist}`}
+        className={`relative h-full w-full min-h-[80px] max-w-[100px] border-2 border-black rounded-lg flex items-center justify-center ${colorsMemoized.tracklist}`}
       >
         <div
           className={`absolute inset-0 flex items-center justify-center z-0 ${colorsMemoized.tracklistRotate}`}
         >
           <FontAwesomeIcon icon={faUpLong} className="text-white text-6xl" />
         </div>
-        <div className="relative z-10 text-black text-xl font-bold">
-          {userGuess.tracklist}
-        </div>
+        <div className="relative z-10 font-bold">{userGuess.tracklist}</div>
       </div>
     </div>
   );

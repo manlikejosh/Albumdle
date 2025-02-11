@@ -167,11 +167,43 @@ function App() {
 
       <div
         id="guessArea"
-        className="flex flex-col-reverse px-1 w-full overflow-scroll sm:items-center"
+        className="flex flex-col-reverse px-1 w-full overflow-scroll sm:items-center border border-black"
       >
         {guessedAlbums.map((album, index) => (
           <Guess userGuess={album} correctGuess={correctGuess} key={index} />
         ))}
+
+        <div className="flex flex-col px-1 w-screen sm:items-center">
+          {/* Sticky Header */}
+          {guessedAlbums.length > 0 && (
+            <div className="overflow-y-auto sticky top-0 text-center min-w-[680px] max-w-[60vw] sm:p-2 gap-2 grid grid-cols-8 my-2 justify-items-center">
+              <div className="w-full  max-w-[100px] flex flex-col items-center justify-center">
+                <p>album img</p>
+              </div>
+              <div className="w-full  max-w-[100px] flex flex-col items-center justify-center">
+                <p>album title</p>
+              </div>
+              <div className="w-full  max-w-[100px] flex flex-col items-center justify-center">
+                <p>artist name</p>
+              </div>
+              <div className="w-full  max-w-[100px] flex flex-col items-center justify-center">
+                <p>avg score</p>
+              </div>
+              <div className="w-full  max-w-[100px] flex flex-col items-center justify-center">
+                <p>release year</p>
+              </div>
+              <div className="w-full  max-w-[100px] flex flex-col items-center justify-center">
+                <p>main genre</p>
+              </div>
+              <div className="w-full  max-w-[100px] flex flex-col items-center justify-center">
+                <p>sub genre</p>
+              </div>
+              <div className="w-full  max-w-[100px] flex flex-col items-center justify-center">
+                <p>number tracks</p>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
 
       {showHelpModal && <Modal closeModal={() => setShowHelpModal(false)} />}
