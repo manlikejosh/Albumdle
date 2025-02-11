@@ -1,39 +1,13 @@
 import "./index.css";
-import Timer from "./components/Timer";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faQuestion,
-  faGear,
-  faLightbulb,
-  faHeart,
-} from "@fortawesome/free-solid-svg-icons";
 import SearchBar from "./components/SearchBar";
 import { useState } from "react";
-import Guess from "./components/Guess";
 import Modal from "./components/Modal";
 import SettingsModal from "./components/SettingsModal";
-
-const timerStyles = {
-  fontSize: "clamp(.75rem, 2.4vw, 1.2rem)",
-};
-
-const iconStyles = {
-  fontSize: "clamp(1rem, 2.5vw, 1.5rem)",
-};
-
-const headingStyles = {
-  fontSize: "clamp(2rem, 8vw, 4.5rem)",
-};
-
-interface Album {
-  title: string;
-  artist: string;
-  ratings: number;
-  year: number;
-  genres: string[];
-  style: string[];
-  tracklist: number;
-}
+import { Album } from "./types/album";
+import Header from "./components/header";
+import LivesDisplay from "./components/LivesDisplay";
+import AlreadyGuessed from "./components/AlreadyGuessed";
+import GuessList from "./components/GuessList";
 
 const correctGuess: Album = {
   title: "Paul's Boutique",
@@ -62,6 +36,16 @@ function App() {
   const [guessedAlbums, setGuessedAlbums] = useState<Album[]>([]);
   const [showHelpModal, setShowHelpModal] = useState(false);
   const [showSettingsModal, setShowSettingsModal] = useState(false);
+  const [showAlreayGuessed, setShowAlreadyGuess] = useState(false);
+  const [resetKey, setResetKey] = useState(0);
+
+  const handleDuplicateGuess = () => {
+    setShowAlreadyGuess(false); // Hide first
+    setTimeout(() => {
+      setResetKey((prev) => prev + 1);
+      setShowAlreadyGuess(true);
+    }, 0);
+  };
 
   const handleGuessSubmission = (data: Album[]) => {
     const alreadyGuessed = guessedAlbums.some(
@@ -69,10 +53,9 @@ function App() {
     );
 
     if (alreadyGuessed) {
-      alert("Already guessed that one!");
+      handleDuplicateGuess();
       return;
     }
-
     if (data[0].title === correctGuess.title) {
       alert("Winner winner chicken dinner!");
       setGuessedAlbums((prevGuessedAlbums) => [...prevGuessedAlbums, data[0]]);
@@ -82,6 +65,7 @@ function App() {
     setGuessedAlbums((prevGuessedAlbums) => [...prevGuessedAlbums, data[0]]);
     lives[count] = "text-black";
     count = count - 1;
+    console.log(guessedAlbums);
 
     if (count === -1) {
       alert("you LOSE");
@@ -90,30 +74,10 @@ function App() {
 
   return (
     <>
-      <header className="font-panton font-thin grid grid-cols-5 my-5 w-fit">
-        <div className="col-span-1 my-auto text-left" style={timerStyles}>
-          <Timer />
-        </div>
-        <h1
-          style={headingStyles}
-          className="font-bold tracking-wider col-span-3 text-center my-auto"
-        >
-          Albumdle
-        </h1>
-        <div
-          id="icons"
-          style={iconStyles}
-          className="col-span-1 my-auto text-right"
-        >
-          <button onClick={() => setShowHelpModal(true)}>
-            <FontAwesomeIcon icon={faQuestion} className="p-1" />
-          </button>
-          <button onClick={() => setShowSettingsModal(true)}>
-            <FontAwesomeIcon icon={faGear} className="p-1" />
-          </button>
-          <FontAwesomeIcon icon={faLightbulb} className="p-1" />
-        </div>
-      </header>
+      <Header
+        onHelpClick={() => setShowHelpModal(true)}
+        onSettingsClick={() => setShowSettingsModal(true)}
+      />
 
       <div className="w-full flex flex-col">
         <SearchBar
@@ -121,90 +85,10 @@ function App() {
           onButtonClick={handleGuessSubmission}
         />
       </div>
+      {showAlreayGuessed && <AlreadyGuessed resetKey={resetKey} />}
 
-      <div className=" flex flex-row mt-2 " id="lives">
-        <FontAwesomeIcon
-          icon={faHeart}
-          style={iconStyles}
-          className={`p-1 mx-1 sm:mx-2  transition-colors duration-500 ${lives[0]}`}
-        />
-        <FontAwesomeIcon
-          icon={faHeart}
-          style={iconStyles}
-          className={`p-1 mx-1 sm:mx-2  transition-colors duration-500 ${lives[1]}`}
-        />
-        <FontAwesomeIcon
-          icon={faHeart}
-          style={iconStyles}
-          className={`p-1 mx-1 sm:mx-2  transition-colors duration-500 ${lives[2]}`}
-        />
-        <FontAwesomeIcon
-          icon={faHeart}
-          style={iconStyles}
-          className={`p-1 mx-1 sm:mx-2  transition-colors duration-500 ${lives[3]}`}
-        />
-        <FontAwesomeIcon
-          icon={faHeart}
-          style={iconStyles}
-          className={`p-1 mx-1 sm:mx-2  transition-colors duration-500 ${lives[4]}`}
-        />
-        <FontAwesomeIcon
-          icon={faHeart}
-          style={iconStyles}
-          className={`p-1 mx-1 sm:mx-2  transition-colors duration-500 ${lives[5]}`}
-        />
-        <FontAwesomeIcon
-          icon={faHeart}
-          style={iconStyles}
-          className={`p-1 mx-1 sm:mx-2  transition-colors duration-500 ${lives[6]}`}
-        />
-        <FontAwesomeIcon
-          icon={faHeart}
-          style={iconStyles}
-          className={`p-1 mx-1 sm:mx-2  transition-colors duration-500 ${lives[7]}`}
-        />
-      </div>
-
-      <div
-        id="guessArea"
-        className="px-1 w-full flex flex-col overflow-scroll sm:items-center "
-      >
-        <div className="flex flex-col px-1 w-screen sm:items-center">
-          {/* Sticky Header */}
-          {guessedAlbums.length > 0 && (
-            <div className="overflow-y-auto sticky top-0 text-center min-w-[680px] max-w-[60vw] sm:p-2 gap-2 grid grid-cols-8 my-2 justify-items-center">
-              <div className="w-full  max-w-[100px] flex flex-col items-center justify-center">
-                <p>album img</p>
-              </div>
-              <div className="w-full  max-w-[100px] flex flex-col items-center justify-center">
-                <p>album title</p>
-              </div>
-              <div className="w-full  max-w-[100px] flex flex-col items-center justify-center">
-                <p>artist name</p>
-              </div>
-              <div className="w-full  max-w-[100px] flex flex-col items-center justify-center">
-                <p>avg score</p>
-              </div>
-              <div className="w-full  max-w-[100px] flex flex-col items-center justify-center">
-                <p>release year</p>
-              </div>
-              <div className="w-full  max-w-[100px] flex flex-col items-center justify-center">
-                <p>main genre</p>
-              </div>
-              <div className="w-full  max-w-[100px] flex flex-col items-center justify-center">
-                <p>sub genre</p>
-              </div>
-              <div className="w-full  max-w-[100px] flex flex-col items-center justify-center">
-                <p>number tracks</p>
-              </div>
-            </div>
-          )}
-        </div>
-        {[...guessedAlbums].reverse().map((album, index) => (
-          <Guess userGuess={album} correctGuess={correctGuess} key={index} />
-        ))}
-      </div>
-
+      <LivesDisplay lives={lives} />
+      <GuessList guessedAlbums={guessedAlbums} correctGuess={correctGuess} />
       {showHelpModal && <Modal closeModal={() => setShowHelpModal(false)} />}
 
       {showSettingsModal && (

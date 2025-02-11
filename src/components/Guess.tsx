@@ -1,50 +1,20 @@
+import React, { useMemo } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUpLong } from "@fortawesome/free-solid-svg-icons";
-import { useMemo } from "react";
+import { compareArrays, compareNumbers } from "../utilities/guessUtils";
+import { Album } from "../types/album";
 
-interface Album {
-  title: string;
-  artist: string;
-  ratings: number;
-  year: number;
-  genres: string[];
-  style: string[];
-  tracklist: number;
-}
-
-type Props = {
+type GuessProps = {
   userGuess: Album;
   correctGuess: Album;
+  isNew?: boolean; // Optional prop to indicate a new guess... this shit don't work
 };
 
-const Guess = ({ userGuess, correctGuess }: Props) => {
-  const compareArrays = (
-    correctArray: ReadonlyArray<string>,
-    userGuess: ReadonlyArray<string>
-  ) => {
-    const setArr2 = new Set(correctArray);
-    return userGuess.filter((item) => setArr2.has(item));
-  };
-
-  const compareNumbers = (
-    correctNumber: number,
-    guessedNumber: number,
-    spread: number
-  ) => {
-    let styles: string[] = ["background-color", "arrow-style"];
-    if (correctNumber === guessedNumber) {
-      styles[0] = "bg-green-300";
-      styles[1] = "opacity-0";
-    } else if (Math.abs(guessedNumber - correctNumber) <= spread) {
-      styles[0] = "bg-yellow-300";
-      styles[1] = guessedNumber < correctNumber ? "" : "rotate-180";
-    } else {
-      styles[0] = "bg-red-300";
-      styles[1] = guessedNumber < correctNumber ? "" : "rotate-180";
-    }
-    return styles;
-  };
-
+const Guess: React.FC<GuessProps> = ({
+  userGuess,
+  correctGuess,
+  isNew = false,
+}) => {
   const colorsMemoized = useMemo(() => {
     let tempColors: { [key: string]: string } = {};
 
@@ -74,8 +44,8 @@ const Guess = ({ userGuess, correctGuess }: Props) => {
 
       // Compare year
       const yearStyles = compareNumbers(correctGuess.year, userGuess.year, 10);
-      tempColors.year = yearStyles[0]; // bg
-      tempColors.yearRotate = yearStyles[1]; // arrow
+      tempColors.year = yearStyles[0];
+      tempColors.yearRotate = yearStyles[1];
 
       // Compare ratings
       const ratingStyles = compareNumbers(
@@ -83,8 +53,8 @@ const Guess = ({ userGuess, correctGuess }: Props) => {
         userGuess.ratings,
         0.5
       );
-      tempColors.ratings = ratingStyles[0]; // bg
-      tempColors.ratingRotate = ratingStyles[1]; // arrow
+      tempColors.ratings = ratingStyles[0];
+      tempColors.ratingRotate = ratingStyles[1];
 
       // Compare artist
       tempColors.artist =
@@ -103,15 +73,20 @@ const Guess = ({ userGuess, correctGuess }: Props) => {
         userGuess.tracklist,
         2
       );
-      tempColors.tracklist = tracklistStyles[0]; // bg
-      tempColors.tracklistRotate = tracklistStyles[1]; // arrow
+      tempColors.tracklist = tracklistStyles[0];
+      tempColors.tracklistRotate = tracklistStyles[1];
     }
 
     return tempColors;
   }, [userGuess, correctGuess]);
 
+  // Only apply the fade-in animation if this is the newest guess... this shit doesn't work
+  const animationClasses = isNew ? "SHITNEW animate-appear delay-700" : "";
+
   return (
-    <div className="min-w-[680px] max-w-[60vw] sm:p-2 gap-2 grid grid-cols-8 my-2  justify-items-center font-panton animate-appear delay-700 text-sm">
+    <div
+      className={`min-w-[680px] max-w-[60vw] sm:p-2 gap-2 grid grid-cols-8 my-2 justify-items-center font-panton text-sm ${animationClasses}`}
+    >
       {/* Image */}
       <div className="h-full w-full min-h-[80px] max-w-[100px] border-2 border-black rounded-lg overflow-hidden flex items-center justify-center">
         <img
@@ -196,4 +171,4 @@ const Guess = ({ userGuess, correctGuess }: Props) => {
   );
 };
 
-export default Guess;
+export default React.memo(Guess);
