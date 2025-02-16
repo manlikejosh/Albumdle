@@ -1,6 +1,6 @@
 import "./index.css";
 import SearchBar from "./components/SearchBar";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Modal from "./components/Modal";
 import SettingsModal from "./components/SettingsModal";
 import { Album } from "./types/album";
@@ -8,6 +8,11 @@ import Header from "./components/header";
 import LivesDisplay from "./components/LivesDisplay";
 import AlreadyGuessed from "./components/AlreadyGuessed";
 import GuessList from "./components/GuessList";
+import {
+  checkAndResetGameProgress,
+  saveProgress,
+  getProgress,
+} from "./utilities/gameStorage";
 
 const correctGuess: Album = {
   title: "Paul's Boutique",
@@ -19,25 +24,23 @@ const correctGuess: Album = {
   tracklist: 15,
 };
 
-let lives = [
-  "text-red-500",
-  "text-red-500",
-  "text-red-500",
-  "text-red-500",
-  "text-red-500",
-  "text-red-500",
-  "text-red-500",
-  "text-red-500",
-];
-
-let count = lives.length - 1;
+let count = 7; // Starting from 7 as lives length - 1
 
 function App() {
   const [guessedAlbums, setGuessedAlbums] = useState<Album[]>([]);
+  const [lives, setLives] = useState<string[]>([]);
   const [showHelpModal, setShowHelpModal] = useState(false);
   const [showSettingsModal, setShowSettingsModal] = useState(false);
   const [showAlreayGuessed, setShowAlreadyGuess] = useState(false);
   const [resetKey, setResetKey] = useState(0);
+
+  // Check and reset the game progress on page load
+  useEffect(() => {
+    checkAndResetGameProgress();
+    const { lives, guessedAlbums } = getProgress();
+    setLives(lives);
+    setGuessedAlbums(guessedAlbums);
+  }, []);
 
   const handleDuplicateGuess = () => {
     setShowAlreadyGuess(false); // Hide first
@@ -59,16 +62,20 @@ function App() {
     if (data[0].title === correctGuess.title) {
       alert("Winner winner chicken dinner!");
       setGuessedAlbums((prevGuessedAlbums) => [...prevGuessedAlbums, data[0]]);
+      saveProgress(lives, guessedAlbums); // Save progress after winning
       return;
     }
 
     setGuessedAlbums((prevGuessedAlbums) => [...prevGuessedAlbums, data[0]]);
     lives[count] = "text-black";
     count = count - 1;
-    console.log(guessedAlbums);
+    setLives([...lives]); // Update lives state
 
     if (count === -1) {
       alert("you LOSE");
+      saveProgress(lives, guessedAlbums); // Save progress after losing
+    } else {
+      saveProgress(lives, guessedAlbums); // Save progress on each guess
     }
   };
 
