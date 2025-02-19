@@ -15,16 +15,14 @@ import {
 } from "./utilities/gameStorage";
 
 const correctGuess: Album = {
-  title: "Paul's Boutique",
-  artist: "Beastie Boys",
-  ratings: 4.72,
+  title: "Rubber Soul",
+  artist: "The Beatles",
+  ratings: 4.58,
   year: 2017,
-  genres: ["Electronic", "Hip Hop"],
-  style: ["Cut-up/DJ", "Hip Hop"],
-  tracklist: 15,
+  genres: ["Rock", "Pop"],
+  style: ["Pop Rock"],
+  tracklist: 14,
 };
-
-let count = 7; // Starting from 7 as lives length - 1
 
 function App() {
   const [guessedAlbums, setGuessedAlbums] = useState<Album[]>([]);
@@ -59,23 +57,37 @@ function App() {
       handleDuplicateGuess();
       return;
     }
+
     if (data[0].title === correctGuess.title) {
       alert("Winner winner chicken dinner!");
-      setGuessedAlbums((prevGuessedAlbums) => [...prevGuessedAlbums, data[0]]);
-      saveProgress(lives, guessedAlbums); // Save progress after winning
+
+      setGuessedAlbums((prevGuessedAlbums) => {
+        const updatedGuessedAlbums = [...prevGuessedAlbums, data[0]];
+        saveProgress(lives, updatedGuessedAlbums); // Save after albums update
+        return updatedGuessedAlbums;
+      });
+
       return;
     }
 
-    setGuessedAlbums((prevGuessedAlbums) => [...prevGuessedAlbums, data[0]]);
-    lives[count] = "text-black";
-    count = count - 1;
-    setLives([...lives]); // Update lives state
+    // Update both states in a controlled manner
+    setGuessedAlbums((prevGuessedAlbums) => {
+      const updatedGuessedAlbums = [...prevGuessedAlbums, data[0]];
 
-    if (count === -1) {
-      alert("you LOSE");
-      saveProgress(lives, guessedAlbums); // Save progress after losing
-    } else {
-      saveProgress(lives, guessedAlbums); // Save progress on each guess
+      setLives((prevLives) => {
+        if (prevLives.length === 0) return prevLives;
+
+        const updatedLives = [...prevLives];
+        updatedLives[updatedLives.length - 1] = "text-black"; // Change last life
+        saveProgress(updatedLives, updatedGuessedAlbums); // Save progress after both updates
+        return updatedLives.slice(0, -1); // Remove last life
+      });
+
+      return updatedGuessedAlbums;
+    });
+
+    if (lives.length === 1) {
+      alert("You LOSE");
     }
   };
 
