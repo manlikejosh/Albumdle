@@ -1,9 +1,11 @@
 export interface Album {
   title: string;
   artist: string;
-  ratings: number;
-  year: number;
-  genres: string[];
-  style: string[];
-  tracklist: number;
+  date: number;
+  main_genre: string;
+  sub_genre: string;
+  rating: number;
+  num_ratings: string;
+  num_reviews: string;
+  ranking: number;
 }

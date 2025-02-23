@@ -1,16 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import data from "./data.json";
+import { Album } from "../types/album";
 
 // Define the type for your album data
-interface Album {
-  title: string;
-  artist: string;
-  ratings: number;
-  year: number;
-  genres: string[];
-  style: string[];
-  tracklist: number;
-}
 
 interface Props {
   placeholder: string;

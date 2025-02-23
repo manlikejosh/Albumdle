@@ -49,8 +49,8 @@ const Guess: React.FC<GuessProps> = ({
 
       // Compare ratings
       const ratingStyles = compareNumbers(
-        correctGuess.ratings,
-        userGuess.ratings,
+        correctGuess.rating,
+        userGuess.rating,
         0.5
       );
       tempColors.ratings = ratingStyles[0];

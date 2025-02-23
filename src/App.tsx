@@ -15,13 +15,15 @@ import {
 } from "./utilities/gameStorage";
 
 const correctGuess: Album = {
-  title: "Rubber Soul",
-  artist: "The Beatles",
-  ratings: 4.58,
-  year: 2017,
-  genres: ["Rock", "Pop"],
-  style: ["Pop Rock"],
-  tracklist: 14,
+  title: "Nevermind",
+  artist: "Nirvana",
+  date: 1991,
+  main_genre: "Grunge",
+  sub_genre: "Punk Rock",
+  rating: 4.03,
+  num_ratings: "70k",
+  num_reviews: "1k",
+  ranking: 67,
 };
 
 function App() {
