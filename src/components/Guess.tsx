@@ -18,63 +18,79 @@ const Guess: React.FC<GuessProps> = ({
   const colorsMemoized = useMemo(() => {
     let tempColors: { [key: string]: string } = {};
 
+    // if they have the same title, it is the same album
     if (userGuess.title === correctGuess.title) {
       tempColors = {
         title: "bg-green-300",
         artist: "bg-green-300",
-        ratings: "bg-green-300",
+        rating: "bg-green-300",
         ratingRotate: "opacity-0",
-        year: "bg-green-300",
-        yearRotate: "opacity-0",
-        genres: "bg-green-300",
-        style: "bg-green-300",
-        tracklist: "bg-green-300",
-        tracklistRotate: "opacity-0",
+        date: "bg-green-300",
+        dateRotate: "opacity-0",
+        mainGenre: "bg-green-300",
+        subGenre: "bg-green-300",
+        ranking: "bg-green-300",
+        rankingRotate: "opacity-0",
       };
     } else {
-      tempColors.title = "bg-red-300"; // titles are different
+      // titles are different
+      tempColors.title = "bg-red-300";
 
       // Compare genre
-      if (userGuess.genres.every((el) => correctGuess.genres.includes(el))) {
-        tempColors.genres = "bg-green-300";
+      const mainGenreUserSplit = userGuess.main_genre.split(" ");
+      const mainGenreCorrectSplit = correctGuess.main_genre.split(" ");
+      if (
+        mainGenreUserSplit.every((el) => mainGenreCorrectSplit.includes(el))
+      ) {
+        tempColors.mainGenre = "bg-green-300";
       } else {
-        const matches = compareArrays(correctGuess.genres, userGuess.genres);
-        tempColors.genres = matches.length > 0 ? "bg-yellow-300" : "bg-red-300";
+        const matches = compareArrays(
+          mainGenreCorrectSplit,
+          mainGenreUserSplit
+        );
+        tempColors.mainGenre =
+          matches.length > 0 ? "bg-yellow-300" : "bg-red-300";
       }
 
-      // Compare year
-      const yearStyles = compareNumbers(correctGuess.year, userGuess.year, 10);
-      tempColors.year = yearStyles[0];
-      tempColors.yearRotate = yearStyles[1];
+      // Compare sub genre
+      const subGenreUserSplit = userGuess.sub_genre.split(" ");
+      const subGenreCorrectSplit = correctGuess.sub_genre.split(" ");
+      if (subGenreUserSplit.every((el) => subGenreCorrectSplit.includes(el))) {
+        tempColors.subGenre = "bg-green-300";
+      } else {
+        const matches = compareArrays(subGenreCorrectSplit, subGenreUserSplit);
+        tempColors.subGenre =
+          matches.length > 0 ? "bg-yellow-300" : "bg-red-300";
+      }
 
-      // Compare ratings
+      // Compare date
+      const dateStyle = compareNumbers(correctGuess.date, userGuess.date, 10);
+      tempColors.date = dateStyle[0];
+      tempColors.dateRotate = dateStyle[1];
+
+      // Compare rating
       const ratingStyles = compareNumbers(
-        correctGuess.ratings,
-        userGuess.ratings,
+        correctGuess.rating,
+        userGuess.rating,
         0.5
       );
-      tempColors.ratings = ratingStyles[0];
+      tempColors.rating = ratingStyles[0];
       tempColors.ratingRotate = ratingStyles[1];
+
+      // Compare ranking - switch em up cause number 1 is best on this
+      const rankingStyles = compareNumbers(
+        userGuess.ranking,
+        correctGuess.ranking,
+        10
+      );
+      tempColors.ranking = rankingStyles[0];
+      tempColors.rankingRotate = rankingStyles[1];
 
       // Compare artist
       tempColors.artist =
         userGuess.artist === correctGuess.artist
           ? "bg-green-300"
           : "bg-red-300";
-
-      // Compare style
-      const styleMatches = compareArrays(correctGuess.style, userGuess.style);
-      tempColors.style =
-        styleMatches.length > 0 ? "bg-yellow-300" : "bg-red-300";
-
-      // Compare tracklist
-      const tracklistStyles = compareNumbers(
-        correctGuess.tracklist,
-        userGuess.tracklist,
-        2
-      );
-      tempColors.tracklist = tracklistStyles[0];
-      tempColors.tracklistRotate = tracklistStyles[1];
     }
 
     return tempColors;
@@ -91,7 +107,7 @@ const Guess: React.FC<GuessProps> = ({
       <div className="h-full w-full min-h-[80px] max-w-[100px] border-2 border-black rounded-lg overflow-hidden flex items-center justify-center">
         <img
           className="w-full h-full object-cover"
-          src="https://media.istockphoto.com/id/1361394182/photo/funny-british-shorthair-cat-portrait-looking-shocked-or-surprised.jpg"
+          src={userGuess.cover_url}
           alt="Album cover"
         />
       </div>
@@ -114,58 +130,58 @@ const Guess: React.FC<GuessProps> = ({
         </div>
       </div>
 
-      {/* Ratings */}
+      {/* Rating */}
       <div
-        className={`relative h-full w-full min-h-[80px] max-w-[100px] border-2 border-black rounded-lg flex items-center justify-center ${colorsMemoized.ratings}`}
+        className={`relative h-full w-full min-h-[80px] max-w-[100px] border-2 border-black rounded-lg flex items-center justify-center ${colorsMemoized.rating}`}
       >
         <div
           className={`absolute inset-0 flex items-center justify-center z-0 ${colorsMemoized.ratingRotate}`}
         >
           <FontAwesomeIcon icon={faUpLong} className="text-white text-6xl" />
         </div>
-        <div className="relative z-10 font-bold">{userGuess.ratings}</div>
+        <div className="relative z-10 font-bold">{userGuess.rating}</div>
       </div>
 
-      {/* Year */}
+      {/* date */}
       <div
-        className={`relative h-full w-full min-h-[80px] max-w-[100px] border-2 border-black rounded-lg flex items-center justify-center ${colorsMemoized.year}`}
+        className={`relative h-full w-full min-h-[80px] max-w-[100px] border-2 border-black rounded-lg flex items-center justify-center ${colorsMemoized.date}`}
       >
         <div
-          className={`absolute inset-0 flex items-center justify-center z-0 ${colorsMemoized.yearRotate}`}
+          className={`absolute inset-0 flex items-center justify-center z-0 ${colorsMemoized.dateRotate}`}
         >
           <FontAwesomeIcon icon={faUpLong} className="text-white text-6xl" />
         </div>
-        <div className="relative z-10 font-bold">{userGuess.year}</div>
+        <div className="relative z-10 font-bold">{userGuess.date}</div>
       </div>
 
-      {/* Genres */}
+      {/* Main genre */}
       <div
-        className={`h-full w-full min-h-[80px] max-w-[100px] border-2 border-black rounded-lg p-1 ${colorsMemoized.genres} flex items-center justify-center`}
+        className={`h-full w-full min-h-[80px] max-w-[100px] border-2 border-black rounded-lg p-1 ${colorsMemoized.mainGenre} flex items-center justify-center`}
       >
         <div className="break-words hyphens-auto overflow-y-auto text-center">
-          {userGuess.genres.join(", ")}
+          {userGuess.main_genre}
         </div>
       </div>
 
-      {/* Style */}
+      {/* Sub genre  */}
       <div
-        className={`h-full w-full min-h-[80px] max-w-[100px] border-2 border-black rounded-lg p-1 ${colorsMemoized.style} flex items-center justify-center`}
+        className={`h-full w-full min-h-[80px] max-w-[100px] border-2 border-black rounded-lg p-1 ${colorsMemoized.subGenre} flex items-center justify-center`}
       >
         <div className="break-words hyphens-auto overflow-y-auto text-center">
-          {userGuess.style.join(", ")}
+          {userGuess.sub_genre}
         </div>
       </div>
 
-      {/* Tracklist */}
+      {/* Ranking */}
       <div
-        className={`relative h-full w-full min-h-[80px] max-w-[100px] border-2 border-black rounded-lg flex items-center justify-center ${colorsMemoized.tracklist}`}
+        className={`relative h-full w-full min-h-[80px] max-w-[100px] border-2 border-black rounded-lg flex items-center justify-center ${colorsMemoized.ranking}`}
       >
         <div
-          className={`absolute inset-0 flex items-center justify-center z-0 ${colorsMemoized.tracklistRotate}`}
+          className={`absolute inset-0 flex items-center justify-center z-0 ${colorsMemoized.rankingRotate}`}
         >
           <FontAwesomeIcon icon={faUpLong} className="text-white text-6xl" />
         </div>
-        <div className="relative z-10 font-bold">{userGuess.tracklist}</div>
+        <div className="relative z-10 font-bold">{userGuess.ranking}</div>
       </div>
     </div>
   );
