@@ -13,11 +13,11 @@ const StickyHeader: React.FC = () => (
       "album img",
       "album title",
       "artist name",
-      "avg score",
+      "avg rating",
       "release year",
       "main genre",
       "sub genre",
-      "number tracks",
+      "rym ranking",
     ].map((label, idx) => (
       <div
         key={idx}

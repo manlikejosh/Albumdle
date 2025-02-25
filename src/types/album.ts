@@ -8,4 +8,5 @@ export interface Album {
   num_ratings: string;
   num_reviews: string;
   ranking: number;
+  cover_url: string;
 }

@@ -1,6 +1,3 @@
-/**
- * Returns the common elements between two arrays.
- */
 export const compareArrays = (
   correctArray: ReadonlyArray<string>,
   userGuess: ReadonlyArray<string>
@@ -9,9 +6,6 @@ export const compareArrays = (
   return userGuess.filter((item) => setArr2.has(item));
 };
 
-/**
- * Returns style classes based on the difference between two numbers.
- */
 export const compareNumbers = (
   correctNumber: number,
   guessedNumber: number,

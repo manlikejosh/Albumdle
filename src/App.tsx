@@ -13,17 +13,20 @@ import {
   saveProgress,
   getProgress,
 } from "./utilities/gameStorage";
+import dotenv from "dotenv";
 
 const correctGuess: Album = {
-  title: "Nevermind",
-  artist: "Nirvana",
-  date: 1991,
-  main_genre: "Grunge",
-  sub_genre: "Punk Rock",
-  rating: 4.03,
-  num_ratings: "70k",
-  num_reviews: "1k",
-  ranking: 67,
+  title: "Pink Moon",
+  artist: "Nick Drake",
+  date: 1972,
+  main_genre: "Contemporary Folk Singer-Songwriter",
+  sub_genre: "Folk Baroque",
+  rating: 4.19,
+  num_ratings: "47k",
+  num_reviews: "690",
+  ranking: 34,
+  cover_url:
+    "https://lastfm.freetls.fastly.net/i/u/300x300/dc70139e0457a04d2749fe062647fc79.png",
 };
 
 function App() {
@@ -34,6 +37,7 @@ function App() {
   const [showAlreayGuessed, setShowAlreadyGuess] = useState(false);
   const [resetKey, setResetKey] = useState(0);
 
+  console.log(import.meta.env.VITE_ALBUMDLE_API_KEY);
   // Check and reset the game progress on page load
   useEffect(() => {
     checkAndResetGameProgress();

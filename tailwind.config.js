@@ -20,6 +20,10 @@ export default {
       animation: {
         appear: "appear 0.75s ease-in-out",
       },
+      screens: {
+        single: "470px",
+        double: "940px",
+      },
     },
     plugins: [],
   },
