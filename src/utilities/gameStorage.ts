@@ -31,6 +31,24 @@ export const checkAndResetGameProgress = (): void => {
   }
 };
 
+// Function to reset game progress (for testing)
+export const resetGameProgress = (): void => {
+  localStorage.setItem(
+    "lives",
+    JSON.stringify([
+      "text-red-500",
+      "text-red-500",
+      "text-red-500",
+      "text-red-500",
+      "text-red-500",
+      "text-red-500",
+      "text-red-500",
+      "text-red-500",
+    ])
+  );
+  localStorage.setItem("guessedAlbums", JSON.stringify([]));
+};
+
 // Function to save lives and guessed albums
 export const saveProgress = (lives: string[], guessedAlbums: Album[]): void => {
   localStorage.setItem("lives", JSON.stringify(lives));

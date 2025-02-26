@@ -1,17 +1,12 @@
-import {
-  faQuestion,
-  faGear,
-  faLightbulb,
-} from "@fortawesome/free-solid-svg-icons";
+import { faQuestion, faBook } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Timer from "./Timer";
 
 type HeaderProps = {
   onHelpClick: () => void;
-  onSettingsClick: () => void;
 };
 
-function Header({ onHelpClick, onSettingsClick }: HeaderProps) {
+function Header({ onHelpClick }: HeaderProps) {
   const headingStyles = {
     fontSize: "clamp(2rem, 8vw, 4.5rem)",
   };
@@ -42,10 +37,9 @@ function Header({ onHelpClick, onSettingsClick }: HeaderProps) {
           <button onClick={onHelpClick}>
             <FontAwesomeIcon icon={faQuestion} className="p-1" />
           </button>
-          <button onClick={onSettingsClick}>
-            <FontAwesomeIcon icon={faGear} className="p-1" />
+          <button onClick={() => window.open("/album-list", "_blank")}>
+            <FontAwesomeIcon icon={faBook} className="p-1" />
           </button>
-          <FontAwesomeIcon icon={faLightbulb} className="p-1" />
         </div>
       </header>
     </>

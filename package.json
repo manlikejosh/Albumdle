@@ -19,6 +19,7 @@
     "node-schedule": "^2.1.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-router-dom": "^7.2.0",
     "textfit": "^2.4.0"
   },
   "devDependencies": {

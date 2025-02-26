@@ -21,7 +21,14 @@ const Modal: React.FC<{ closeModal: Dispatch<SetStateAction<boolean>> }> = ({
 
           <section className="p-2 font-pantonT ">
             <p>
-              Click <button>Here</button> to see the full list of albums!
+              Click{" "}
+              <button
+                onClick={() => window.open("/album-list", "_blank")}
+                className="underline"
+              >
+                Here
+              </button>{" "}
+              to see the full list of albums!
             </p>
 
             <p></p>

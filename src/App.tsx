@@ -2,7 +2,6 @@ import "./index.css";
 import SearchBar from "./components/SearchBar";
 import { useState, useEffect } from "react";
 import Modal from "./components/Modal";
-import SettingsModal from "./components/SettingsModal";
 import { Album } from "./types/album";
 import Header from "./components/header";
 import LivesDisplay from "./components/LivesDisplay";
@@ -12,8 +11,10 @@ import {
   checkAndResetGameProgress,
   saveProgress,
   getProgress,
+  resetGameProgress,
 } from "./utilities/gameStorage";
-import dotenv from "dotenv";
+import { Routes, Route } from "react-router-dom";
+import AlbumListPage from "./components/AlbumListPage";
 
 const correctGuess: Album = {
   title: "Pink Moon",
@@ -33,11 +34,13 @@ function App() {
   const [guessedAlbums, setGuessedAlbums] = useState<Album[]>([]);
   const [lives, setLives] = useState<string[]>([]);
   const [showHelpModal, setShowHelpModal] = useState(false);
-  const [showSettingsModal, setShowSettingsModal] = useState(false);
   const [showAlreayGuessed, setShowAlreadyGuess] = useState(false);
   const [resetKey, setResetKey] = useState(0);
 
-  console.log(import.meta.env.VITE_ALBUMDLE_API_KEY);
+  const reset = () => {
+    resetGameProgress();
+    window.location.reload();
+  };
   // Check and reset the game progress on page load
   useEffect(() => {
     checkAndResetGameProgress();
@@ -98,28 +101,41 @@ function App() {
   };
 
   return (
-    <>
-      <Header
-        onHelpClick={() => setShowHelpModal(true)}
-        onSettingsClick={() => setShowSettingsModal(true)}
-      />
+    <Routes>
+      <Route
+        path="/"
+        element={
+          <>
+            <Header onHelpClick={() => setShowHelpModal(true)} />
 
-      <div className="w-full flex flex-col">
-        <SearchBar
-          placeholder="Enter your guess..."
-          onButtonClick={handleGuessSubmission}
-        />
-      </div>
-      {showAlreayGuessed && <AlreadyGuessed resetKey={resetKey} />}
+            <div className="w-full flex flex-col">
+              <SearchBar
+                placeholder="Enter your guess..."
+                onButtonClick={handleGuessSubmission}
+              />
+            </div>
+            {showAlreayGuessed && <AlreadyGuessed resetKey={resetKey} />}
 
-      <LivesDisplay lives={lives} />
-      <GuessList guessedAlbums={guessedAlbums} correctGuess={correctGuess} />
-      {showHelpModal && <Modal closeModal={() => setShowHelpModal(false)} />}
+            <LivesDisplay lives={lives} />
+            <GuessList
+              guessedAlbums={guessedAlbums}
+              correctGuess={correctGuess}
+            />
+            {showHelpModal && (
+              <Modal closeModal={() => setShowHelpModal(false)} />
+            )}
 
-      {showSettingsModal && (
-        <SettingsModal closeModal={() => setShowSettingsModal(false)} />
-      )}
-    </>
+            <button
+              onClick={() => reset()}
+              className="border-4 rounded-md font-bold border-black bg-red-500 px-4 py-2"
+            >
+              RESET
+            </button>
+          </>
+        }
+      ></Route>
+      <Route path="/album-list" element={<AlbumListPage />} />
+    </Routes>
   );
 }
 
