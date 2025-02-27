@@ -1,6 +1,6 @@
-import data from "./data.json";
+import data from "../data.json";
 import AlbumItem from "./AlbumItem";
-import { Album } from "../types/album";
+import { Album } from "../../types/types";
 
 const AlbumList = () => {
   const albums: Album[] = data as Album[];

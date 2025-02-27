@@ -1,8 +1,8 @@
 import React, { useMemo } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUpLong } from "@fortawesome/free-solid-svg-icons";
-import { compareArrays, compareNumbers } from "../utilities/guessUtils";
-import { Album } from "../types/album";
+import { compareArrays, compareNumbers } from "../../utilities/guessUtils";
+import { Album } from "../../types/types";
 
 type GuessProps = {
   userGuess: Album;

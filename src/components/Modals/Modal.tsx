@@ -45,9 +45,10 @@ const Modal: React.FC<{ closeModal: Dispatch<SetStateAction<boolean>> }> = ({
             </section>
 
             <p className="py-1">
-              The year and rank boxes will also contain an arrow indicating if
-              your guess was higher or lower. For these boxes, yellow will mean
-              you are either within 10 years or 10 ranks of the correct album.
+              The year, rating, and ranking boxes will include arrows showing if
+              your guess was too high or low. A yellow box means your guess is
+              within 10 years, 10 ranks, or 0.5 rating points of the correct
+              album.
             </p>
           </section>
         </div>

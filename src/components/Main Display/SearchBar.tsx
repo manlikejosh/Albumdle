@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
-import data from "./data.json";
-import { Album } from "../types/album";
+import data from "../data.json";
+import { Album } from "../../types/types";
 
 // Define the type for your album data
 

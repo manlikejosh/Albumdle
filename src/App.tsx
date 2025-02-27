@@ -1,12 +1,12 @@
 import "./index.css";
-import SearchBar from "./components/SearchBar";
+import SearchBar from "./components/Main Display/SearchBar";
 import { useState, useEffect } from "react";
-import Modal from "./components/Modal";
-import { Album } from "./types/album";
-import Header from "./components/header";
-import LivesDisplay from "./components/LivesDisplay";
-import AlreadyGuessed from "./components/AlreadyGuessed";
-import GuessList from "./components/GuessList";
+import Modal from "./components/Modals/Modal";
+import { Album } from "./types/types";
+import Header from "./components/Main Display/Header";
+import LivesDisplay from "./components/Main Display/LivesDisplay";
+import AlreadyGuessed from "./components/Guess Display/AlreadyGuessed";
+import GuessList from "./components/Guess Display/GuessList";
 import {
   checkAndResetGameProgress,
   saveProgress,
@@ -14,7 +14,7 @@ import {
   resetGameProgress,
 } from "./utilities/gameStorage";
 import { Routes, Route } from "react-router-dom";
-import AlbumListPage from "./components/AlbumListPage";
+import AlbumListPage from "./components/Glossary/AlbumListPage";
 
 const correctGuess: Album = {
   title: "Pink Moon",

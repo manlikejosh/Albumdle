@@ -1,5 +1,5 @@
 import React from "react";
-import { Album } from "../types/album";
+import { Album } from "../../types/types";
 import Guess from "./Guess";
 
 interface GuessListProps {

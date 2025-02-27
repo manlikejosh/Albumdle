@@ -1,4 +1,4 @@
-import { Album } from "../types/album";
+import { Album, UserStats } from "../types/types";
 
 // Utility function to get today's date in YYYY-MM-DD format
 export const getTodayDate = (): string => {
@@ -63,4 +63,51 @@ export const getProgress = (): { lives: string[]; guessedAlbums: Album[] } => {
     lives: lives ? JSON.parse(lives) : [],
     guessedAlbums: guessedAlbums ? JSON.parse(guessedAlbums) : [],
   };
+};
+
+// Function to save new user stats
+export const saveNewUserStats = (
+  result: boolean,
+  numGuesses: number
+): UserStats => {
+  let newUserStat: UserStats = {
+    wins: 0,
+    losses: 0,
+    winningGuesses: 0,
+    totalGuesses: 0,
+  };
+  newUserStat.totalGuesses += numGuesses;
+  if (result) {
+    newUserStat.wins = 1;
+    newUserStat.winningGuesses = numGuesses;
+  } else {
+    newUserStat.losses = 1;
+  }
+
+  localStorage.setItem("userStats", JSON.stringify(newUserStat));
+
+  return newUserStat;
+};
+
+// Function to get user stats
+export const getUserStats = (): UserStats | null => {
+  let stats = localStorage.getItem("userStats");
+
+  return stats ? (JSON.parse(stats) as UserStats) : null;
+};
+
+// Function to save game data
+export const updateUserStats = (
+  result: boolean,
+  numGuesses: number,
+  userStats: UserStats
+): void => {
+  // if they win result true
+  if (result) {
+    userStats.wins += 1;
+    userStats.winningGuesses += numGuesses;
+  } else {
+    userStats.losses += 1;
+  }
+  localStorage.setItem("userStats", JSON.stringify(userStats));
 };
