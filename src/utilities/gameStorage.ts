@@ -92,7 +92,6 @@ export const saveNewUserStats = (
 // Function to get user stats
 export const getUserStats = (): UserStats | null => {
   let stats = localStorage.getItem("userStats");
-
   return stats ? (JSON.parse(stats) as UserStats) : null;
 };
 

@@ -2,7 +2,7 @@ import "./index.css";
 import SearchBar from "./components/Main Display/SearchBar";
 import { useState, useEffect } from "react";
 import Modal from "./components/Modals/Modal";
-import { Album } from "./types/types";
+import { Album, UserStats } from "./types/types";
 import data from "./components/data.json";
 
 import Header from "./components/Main Display/Header";
@@ -14,6 +14,9 @@ import {
   saveProgress,
   getProgress,
   resetGameProgress,
+  getUserStats,
+  saveNewUserStats,
+  updateUserStats,
 } from "./utilities/gameStorage";
 import { Routes, Route } from "react-router-dom";
 import AlbumListPage from "./components/Glossary/AlbumListPage";
@@ -21,13 +24,25 @@ import AlbumListPage from "./components/Glossary/AlbumListPage";
 let random = Math.floor(Math.random() * (119 - 1 + 1) + 1);
 
 const correctGuess: Album = data[random];
+
 function App() {
+  let guesses = 0;
   const [guessedAlbums, setGuessedAlbums] = useState<Album[]>([]);
   const [lives, setLives] = useState<string[]>([]);
   const [showHelpModal, setShowHelpModal] = useState(false);
   const [showAlreayGuessed, setShowAlreadyGuess] = useState(false);
   const [resetKey, setResetKey] = useState(0);
 
+  const handleStats = (result: boolean, numGuesses: number) => {
+    let stats: UserStats | null = getUserStats();
+    if (!stats) {
+      let newStats = saveNewUserStats(result, numGuesses);
+      return newStats;
+    }
+    updateUserStats(result, numGuesses, stats);
+    let updatedStats = getUserStats();
+    return updatedStats;
+  };
   const reset = () => {
     resetGameProgress();
     window.location.reload();
@@ -58,9 +73,10 @@ function App() {
       return;
     }
 
+    // handle win
     if (data[0].title === correctGuess.title) {
       alert("Winner winner chicken dinner!");
-
+      let userStats = handleStats(true, guesses);
       setGuessedAlbums((prevGuessedAlbums) => {
         const updatedGuessedAlbums = [...prevGuessedAlbums, data[0]];
         saveProgress(lives, updatedGuessedAlbums); // Save after albums update
@@ -80,6 +96,7 @@ function App() {
         const updatedLives = [...prevLives];
         updatedLives[updatedLives.length - 1] = "text-black"; // Change last life
         saveProgress(updatedLives, updatedGuessedAlbums); // Save progress after both updates
+        guesses++;
         return updatedLives.slice(0, -1); // Remove last life
       });
 
@@ -87,8 +104,7 @@ function App() {
     });
 
     if (lives.length === 1) {
-      alert("You LOSE");
-      alert(correctGuess.title);
+      let userStats = handleStats(false, guesses);
     }
   };
 
