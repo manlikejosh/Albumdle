@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-const Timer = () => {
+const Timer = ({ style }: { style: boolean }) => {
   const [timeRemaining, setTimeRemaining] = useState<number>(0);
 
   useEffect(() => {
@@ -38,10 +38,9 @@ const Timer = () => {
       .toString()
       .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
   };
-
   return (
-    <div id="timer" className="">
-      <p>Next:</p>
+    <div id="timer" className={style ? "flex gap-1" : ""}>
+      <p>Next puzzle in:</p>
       <p>{formatTime(timeRemaining)}</p>
     </div>
   );

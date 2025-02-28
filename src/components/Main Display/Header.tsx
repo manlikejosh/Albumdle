@@ -21,7 +21,7 @@ function Header({ onHelpClick }: HeaderProps) {
     <>
       <header className="font-panton font-thin grid grid-cols-5 my-5 w-fit">
         <div className="col-span-1 my-auto text-left" style={timerStyles}>
-          <Timer />
+          <Timer style={false} />
         </div>
         <h1
           style={headingStyles}

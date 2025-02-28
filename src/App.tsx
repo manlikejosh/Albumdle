@@ -3,6 +3,8 @@ import SearchBar from "./components/Main Display/SearchBar";
 import { useState, useEffect } from "react";
 import Modal from "./components/Modals/Modal";
 import { Album } from "./types/types";
+import data from "./components/data.json";
+
 import Header from "./components/Main Display/Header";
 import LivesDisplay from "./components/Main Display/LivesDisplay";
 import AlreadyGuessed from "./components/Guess Display/AlreadyGuessed";
@@ -16,20 +18,9 @@ import {
 import { Routes, Route } from "react-router-dom";
 import AlbumListPage from "./components/Glossary/AlbumListPage";
 
-const correctGuess: Album = {
-  title: "Pink Moon",
-  artist: "Nick Drake",
-  date: 1972,
-  main_genre: "Contemporary Folk Singer-Songwriter",
-  sub_genre: "Folk Baroque",
-  rating: 4.19,
-  num_ratings: "47k",
-  num_reviews: "690",
-  ranking: 34,
-  cover_url:
-    "https://lastfm.freetls.fastly.net/i/u/300x300/dc70139e0457a04d2749fe062647fc79.png",
-};
+let random = Math.floor(Math.random() * (119 - 1 + 1) + 1);
 
+const correctGuess: Album = data[random];
 function App() {
   const [guessedAlbums, setGuessedAlbums] = useState<Album[]>([]);
   const [lives, setLives] = useState<string[]>([]);
@@ -97,6 +88,7 @@ function App() {
 
     if (lives.length === 1) {
       alert("You LOSE");
+      alert(correctGuess.title);
     }
   };
 
