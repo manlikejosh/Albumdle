@@ -19,7 +19,7 @@ function Header({ onHelpClick }: HeaderProps) {
 
   return (
     <>
-      <header className="font-panton font-thin grid grid-cols-5 my-5 w-fit">
+      <header className="l font-thin grid grid-cols-5 my-5 w-fit">
         <div className="col-span-1 my-auto text-left" style={timerStyles}>
           <Timer style={false} />
         </div>

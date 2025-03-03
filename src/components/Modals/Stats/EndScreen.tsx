@@ -15,42 +15,42 @@ const EndScreen: React.FC<Props> = ({
   correctAlbum,
   userStats,
 }: Props) => {
-  numGuesses = 5;
-  result = true;
+  let avg = Math.round((userStats.winningGuesses / userStats.wins) * 10) / 10;
+  avg.toString();
 
-  let avg = userStats.winningGuesses / userStats.wins;
   // fetch and calculate stats
+  numGuesses.toString();
+
   const winningMessage = (numGuesses: number) => {
-    numGuesses.toString();
     if (numGuesses == 1) {
       return (
-        <p>
+        <div>
           Congrats on getting{" "}
           <span className="font-bold">{correctAlbum.title} </span> by{" "}
           <span className="font-bold"> {correctAlbum.artist}</span> first try!
           Are you a wizard??? Come back tomorrow for a new puzzle!
-        </p>
+        </div>
       );
     } else {
       return (
-        <p>
+        <div>
           Well done! It took you {numGuesses} tries to guess{" "}
           <span className="font-bold">{correctAlbum.title}</span> by{" "}
           <span className="font-bold">{correctAlbum.artist}</span>.. Come back
           tomorrow for a new puzzle!
-        </p>
+        </div>
       );
     }
   };
 
   const losingMessage = () => {
     return (
-      <p>
+      <div>
         Better luck next time... the correct album was{" "}
         <span className="font-bold">{correctAlbum.title}</span> by{" "}
         <span className="font-bold">{correctAlbum.artist}</span>. come back
         tomorrow and maybe you won't suck so much lolz.
-      </p>
+      </div>
     );
   };
 
@@ -71,7 +71,7 @@ const EndScreen: React.FC<Props> = ({
                 src={correctAlbum.cover_url}
               />
             </div>
-            <p>{result ? winningMessage(numGuesses) : losingMessage()}</p>
+            {result ? winningMessage(numGuesses) : losingMessage()}
             <ul className="flex w-full justify-evenly mb-2">
               <li className="flex flex-col items-center border-black rounded-md border-2 p-3 w-1/4">
                 <p>Average</p>

@@ -12,7 +12,7 @@ const AlreadyGuessed = ({ resetKey }: { resetKey: number }) => {
   }, [resetKey]);
   return isVisible ? (
     <>
-      <div className="fade-in-out shadow-md absolute top-[25vh] z-50 p-2 rounded-md font-panton text-white bg-gray-400">
+      <div className="fade-in-out shadow-md absolute top-[25vh] z-50 p-2 rounded-md l text-white bg-gray-400">
         Already Guessed!
       </div>
     </>

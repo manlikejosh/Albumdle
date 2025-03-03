@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import data from "../data.json";
+import data from "../../data/data.json";
 import { Album } from "../../types/types";
 
 // Define the type for your album data
@@ -81,7 +81,7 @@ const SearchBar = ({ placeholder, onButtonClick }: Props) => {
 
   return (
     <>
-      <div className="flex text-center font-pantonT font-medium mx-auto z-50">
+      <div className="flex text-center l font-medium mx-auto z-50">
         <div className="w-[60vw] max-w-[530px]">
           <input
             className="bg-white outline-none h-fit border-2 border-black px-2 py-3 w-full font-medium"
@@ -101,7 +101,7 @@ const SearchBar = ({ placeholder, onButtonClick }: Props) => {
             >
               {filteredAlbums.map((album, index) => (
                 <p
-                  className={`p-1 font-panto font-medium hover:bg-gray-200 ${
+                  className={`p-1 l font-medium hover:bg-gray-200 ${
                     highlightedIndex === index ? "bg-gray-200" : ""
                   }`}
                   key={index}

@@ -2,12 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
-@font-face {
-  font-family: "Panton";
-  src: url("./Panton-Trial-Black.ttf");
-  font-weight: normal;
+.lora {
+  font-family: "Lora", serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
   font-style: normal;
 }
+
 @keyframes fadeInOut {
   0% {
     opacity: 0;
@@ -25,4 +26,21 @@
 
 .fade-in-out {
   animation: fadeInOut 1s ease-in-out forwards;
+}
+
+.wave {
+  aspect-ratio: 960/540;
+  width: 100%;
+  background-position: center;
+  background-size: cover;
+  background-image: url("./assets/waveBig.svg");
+}
+
+.waveSmall {
+  aspect-ratio: 540/960;
+  width: 100%;
+  background-position: center;
+  background-repeat: repeat;
+  background-size: cover;
+  background-image: url("./assets/waveSmall.svg");
 }

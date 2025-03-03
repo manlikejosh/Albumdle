@@ -101,7 +101,7 @@ const Guess: React.FC<GuessProps> = ({
 
   return (
     <div
-      className={`min-w-[680px] max-w-[60vw] sm:p-2 gap-2 grid grid-cols-8 my-2 justify-items-center font-panton text-sm ${animationClasses}`}
+      className={`min-w-[680px] max-w-[60vw] sm:p-2 gap-2 grid grid-cols-8 my-2 justify-items-center l text-sm ${animationClasses}`}
     >
       {/* Image */}
       <div className="h-full w-full min-h-[80px] max-w-[100px] border-2 border-black rounded-lg overflow-hidden flex items-center justify-center">

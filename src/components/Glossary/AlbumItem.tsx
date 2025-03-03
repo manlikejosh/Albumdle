@@ -8,14 +8,14 @@ type Props = {
 const AlbumItem: React.FC<Props> = ({ album }) => {
   return (
     <>
-      <div className="border-2 rounded-md border-black h-[100px] w-[300px] single:h-[150px] single:w-[450px]  flex overflow-scroll ">
+      <div className="bg-lightGray border-2 rounded-md border-black h-[100px] w-[300px] single:h-[150px] single:w-[450px]  flex overflow-scroll ">
         <div className="w-1/3 border-black">
           <img
             className="w-full h-full object-cover rounded-l-md"
             src={album.cover_url}
           />
         </div>
-        <ul className="w-2/3 flex flex-col p-1 font-pantonT">
+        <ul className="w-2/3 flex flex-col p-1 l">
           <li className="text-xs single:text-lg">
             <p>{album.title}</p>
           </li>

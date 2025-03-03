@@ -4,8 +4,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        panton: ["Panton", "sans-serif"],
-        pantonT: ["Panton-Trial", "sans-serif"],
+        lora: ["Lora", "serif"],
       },
       keyframes: {
         appear: {
@@ -23,6 +22,10 @@ export default {
       screens: {
         single: "470px",
         double: "940px",
+      },
+      colors: {
+        darkBlueBackground: "#3160a6",
+        lightGray: "#ebebeb",
       },
     },
     plugins: [],

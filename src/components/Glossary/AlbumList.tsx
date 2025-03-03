@@ -1,4 +1,4 @@
-import data from "../data.json";
+import data from "../../data/data.json";
 import AlbumItem from "./AlbumItem";
 import { Album } from "../../types/types";
 

@@ -28,6 +28,7 @@ export const checkAndResetGameProgress = (): void => {
     );
     localStorage.setItem("guessedAlbums", JSON.stringify([])); // Empty array for new guesses
     localStorage.setItem("lastPlayedDate", today); // Store today's date
+    localStorage.setItem("showEndScreen", "false");
   }
 };
 
@@ -56,7 +57,10 @@ export const saveProgress = (lives: string[], guessedAlbums: Album[]): void => {
 };
 
 // Function to get saved lives and guessed albums
-export const getProgress = (): { lives: string[]; guessedAlbums: Album[] } => {
+export const getProgress = (): {
+  lives: string[];
+  guessedAlbums: Album[];
+} => {
   const lives = localStorage.getItem("lives");
   const guessedAlbums = localStorage.getItem("guessedAlbums");
   return {
@@ -90,9 +94,11 @@ export const saveNewUserStats = (
 };
 
 // Function to get user stats
-export const getUserStats = (): UserStats | null => {
+export const getUserStats = (): UserStats => {
   let stats = localStorage.getItem("userStats");
-  return stats ? (JSON.parse(stats) as UserStats) : null;
+  return stats
+    ? (JSON.parse(stats) as UserStats)
+    : { wins: 0, losses: 0, winningGuesses: 0, totalGuesses: 0 };
 };
 
 // Function to save game data
@@ -101,7 +107,7 @@ export const updateUserStats = (
   numGuesses: number,
   userStats: UserStats
 ): void => {
-  // if they win result true
+  userStats.totalGuesses += numGuesses;
   if (result) {
     userStats.wins += 1;
     userStats.winningGuesses += numGuesses;
@@ -109,4 +115,9 @@ export const updateUserStats = (
     userStats.losses += 1;
   }
   localStorage.setItem("userStats", JSON.stringify(userStats));
+};
+
+// User stats reset helper
+export const resetUserStorage = (): void => {
+  localStorage.removeItem("userStats");
 };
