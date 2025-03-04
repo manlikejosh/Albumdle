@@ -10,9 +10,9 @@ interface Props {
 }
 
 const SearchBar = ({ placeholder, onButtonClick }: Props) => {
-  const [searchQuery, setSearchQuery] = useState(""); // Renamed for clarity
-  const [filteredAlbums, setFilteredAlbums] = useState<Album[]>([]); // Renamed for clarity
-  const [highlightedIndex, setHighlightedIndex] = useState(-1); // Renamed for clarity
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredAlbums, setFilteredAlbums] = useState<Album[]>([]);
+  const [highlightedIndex, setHighlightedIndex] = useState(-1);
   const itemRefs = useRef<(HTMLParagraphElement | null)[]>([]); // Create refs for each list item
 
   // Handle keydown events for navigation and selection in the search list

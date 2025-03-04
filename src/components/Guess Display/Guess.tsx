@@ -37,28 +37,31 @@ const Guess: React.FC<GuessProps> = ({
       tempColors.title = "bg-red-300";
 
       // Compare genre
-      const mainGenreUserSplit = userGuess.main_genre.split(" ");
-      const mainGenreCorrectSplit = correctGuess.main_genre.split(" ");
+
       if (
-        mainGenreUserSplit.every((el) => mainGenreCorrectSplit.includes(el))
+        userGuess.main_genre.every((el) => correctGuess.main_genre.includes(el))
       ) {
         tempColors.mainGenre = "bg-green-300";
       } else {
         const matches = compareArrays(
-          mainGenreCorrectSplit,
-          mainGenreUserSplit
+          correctGuess.main_genre,
+          userGuess.main_genre
         );
         tempColors.mainGenre =
           matches.length > 0 ? "bg-yellow-300" : "bg-red-300";
       }
 
       // Compare sub genre
-      const subGenreUserSplit = userGuess.sub_genre.split(" ");
-      const subGenreCorrectSplit = correctGuess.sub_genre.split(" ");
-      if (subGenreUserSplit.every((el) => subGenreCorrectSplit.includes(el))) {
+
+      if (
+        userGuess.sub_genre.every((el) => correctGuess.sub_genre.includes(el))
+      ) {
         tempColors.subGenre = "bg-green-300";
       } else {
-        const matches = compareArrays(subGenreCorrectSplit, subGenreUserSplit);
+        const matches = compareArrays(
+          correctGuess.sub_genre,
+          userGuess.sub_genre
+        );
         tempColors.subGenre =
           matches.length > 0 ? "bg-yellow-300" : "bg-red-300";
       }
@@ -159,7 +162,7 @@ const Guess: React.FC<GuessProps> = ({
         className={`h-full w-full min-h-[80px] max-w-[100px] border-2 border-black rounded-lg p-1 ${colorsMemoized.mainGenre} flex items-center justify-center`}
       >
         <div className="break-words hyphens-auto overflow-y-auto text-center">
-          {userGuess.main_genre}
+          {userGuess.main_genre.join(", ")}
         </div>
       </div>
 
@@ -168,7 +171,7 @@ const Guess: React.FC<GuessProps> = ({
         className={`h-full w-full min-h-[80px] max-w-[100px] border-2 border-black rounded-lg p-1 ${colorsMemoized.subGenre} flex items-center justify-center`}
       >
         <div className="break-words hyphens-auto overflow-y-auto text-center">
-          {userGuess.sub_genre}
+          {userGuess.sub_genre.join(", ")}
         </div>
       </div>
 

@@ -24,17 +24,17 @@ import AlbumListPage from "./components/Glossary/AlbumListPage";
 import EndScreen from "./components/Modals/Stats/EndScreen";
 
 const correctGuess: Album = {
-  title: "Illinois",
-  artist: "Sufjan Stevens",
-  date: 2005,
-  main_genre: "Chamber Pop Singer-Songwriter",
-  sub_genre: "Chamber Folk Progressive Pop",
-  rating: 4.13,
-  num_ratings: "40k",
-  num_reviews: "474",
-  ranking: 65,
+  title: "Doolittle",
+  artist: "Pixies",
+  date: 1989,
+  main_genre: ["Indie Rock", "Alternative Rock"],
+  sub_genre: ["Noise Pop", "Surf Rock"],
+  rating: 4.09,
+  num_ratings: "50k",
+  num_reviews: "623",
+  ranking: 68,
   cover_url:
-    "https://lastfm.freetls.fastly.net/i/u/300x300/4884fbb2a3714e42cef5a1782e10c26e.png",
+    "https://lastfm.freetls.fastly.net/i/u/300x300/995f97abbadd1a5e69a2967c72074867.jpg",
 };
 
 function App() {
@@ -163,8 +163,9 @@ function App() {
         path="/"
         element={
           <>
-            <div className="wave -z-50 absolute "></div>
-            {/* <div className="waveSmall -z-50 absolute "></div> */}
+            <div className=" w-full h-full opacity-0 min-[650px]:opacity-100 absolute ">
+              <div className=" wave -z-50 absolute "></div>
+            </div>
 
             <Header onHelpClick={() => setShowHelpModal(true)} />
             <div className="w-full flex flex-col">
