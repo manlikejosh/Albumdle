@@ -29,6 +29,7 @@ export const checkAndResetGameProgress = (): void => {
     localStorage.setItem("guessedAlbums", JSON.stringify([])); // Empty array for new guesses
     localStorage.setItem("lastPlayedDate", today); // Store today's date
     localStorage.setItem("showEndScreen", "false");
+    localStorage.setItem("endGame", "false");
   }
 };
 

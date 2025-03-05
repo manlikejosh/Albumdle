@@ -1,7 +1,6 @@
 import "./index.css";
 import SearchBar from "./components/Main Display/SearchBar";
 import { useState, useEffect } from "react";
-import Modal from "./components/Modals/Modal";
 import { Album, UserStats } from "./types/types";
 import data from "./data/data.json";
 
@@ -22,6 +21,8 @@ import {
 import { Routes, Route } from "react-router-dom";
 import AlbumListPage from "./components/Glossary/AlbumListPage";
 import EndScreen from "./components/Modals/Stats/EndScreen";
+import HelpModal from "./components/Modals/HelpModal";
+import StatModal from "./components/Modals/Stats/StatModal";
 
 const correctGuess: Album = {
   title: "Doolittle",
@@ -36,14 +37,23 @@ const correctGuess: Album = {
   cover_url:
     "https://lastfm.freetls.fastly.net/i/u/300x300/995f97abbadd1a5e69a2967c72074867.jpg",
 };
-
+const dumbStats: UserStats = {
+  winningGuesses: 123,
+  totalGuesses: 123,
+  wins: 10,
+  losses: 13,
+};
 function App() {
   const [guessedAlbums, setGuessedAlbums] = useState<Album[]>([]);
   const [lives, setLives] = useState<string[]>([]);
   const [showHelpModal, setShowHelpModal] = useState(false);
+  const [showStatModal, setShowStatModal] = useState(false);
+
   const [showAlreayGuessed, setShowAlreadyGuess] = useState(false);
   const [resetKey, setResetKey] = useState(0);
-
+  const [endGame, setEndGame] = useState<boolean>(() => {
+    return localStorage.getItem("endGame") === "true";
+  });
   // Load EndScreen state from localStorage
   const [showEndScreen, setShowEndScreen] = useState<boolean>(() => {
     return localStorage.getItem("showEndScreen") === "true";
@@ -64,6 +74,13 @@ function App() {
       localStorage.removeItem("showEndScreen");
     }
   }, [showEndScreen]);
+  useEffect(() => {
+    if (endGame) {
+      localStorage.setItem("endGame", "true");
+    } else {
+      localStorage.removeItem("endGame");
+    }
+  }, [endGame]);
 
   useEffect(() => {
     localStorage.setItem("userStats", JSON.stringify(userStats));
@@ -125,6 +142,7 @@ function App() {
 
       const updatedStats = handleStats(true, guessedAlbums.length + 1);
       setUserStats(updatedStats);
+      setEndGame(true);
       setShowEndScreen(true);
       return;
     }
@@ -147,6 +165,7 @@ function App() {
       const updatedStats = handleStats(false, 8);
       setUserStats(updatedStats);
       setShowEndScreen(true);
+      setEndGame(true);
     }
   };
 
@@ -167,7 +186,10 @@ function App() {
               <div className=" wave -z-50 absolute "></div>
             </div>
 
-            <Header onHelpClick={() => setShowHelpModal(true)} />
+            <Header
+              onHelpClick={() => setShowHelpModal(true)}
+              onStatClick={() => setShowStatModal(true)}
+            />
             <div className="w-full flex flex-col">
               <SearchBar
                 placeholder="Enter your guess..."
@@ -181,8 +203,15 @@ function App() {
               correctGuess={correctGuess}
             />
             {showHelpModal && (
-              <Modal closeModal={() => setShowHelpModal(false)} />
+              <HelpModal closeModal={() => setShowHelpModal(false)} />
             )}
+            {showStatModal && (
+              <StatModal
+                stats={userStats}
+                closeModal={() => setShowStatModal(false)}
+              />
+            )}
+
             {showEndScreen && (
               <EndScreen
                 numGuesses={guessedAlbums.length}
@@ -191,7 +220,7 @@ function App() {
                 userStats={userStats}
               />
             )}
-            <div className="flex gap-5 z-50">
+            <div className="flex gap-5 z-40">
               <button
                 onClick={() => resetGame()}
                 className="border-4 rounded-md font-bold border-black bg-red-500 px-4 py-2"

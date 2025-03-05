@@ -8,7 +8,7 @@ interface GuessListProps {
 }
 
 const StickyHeader: React.FC = () => (
-  <div className="overflow-y-auto sticky top-0 text-center min-w-[680px] max-w-[60vw] sm:p-2 gap-2 grid grid-cols-8 my-2 justify-items-center">
+  <div className="overflow-y-auto sticky top-0  text-center min-w-[680px] max-w-[60vw] sm:p-2 gap-2 grid grid-cols-8 my-2 justify-items-center">
     {[
       "album img",
       "album title",
@@ -34,7 +34,10 @@ const GuessList: React.FC<GuessListProps> = ({
   correctGuess,
 }) => {
   return (
-    <div id="guessArea" className="guess-area">
+    <div
+      id="guessArea"
+      className="guess-area overflow-scroll px-44 min-[650px]:p-0 min-[650px]:flex min-[650px]:flex-col items-center  w-full "
+    >
       <StickyHeader />
       {[...guessedAlbums].reverse().map((album, index) => (
         <Guess
