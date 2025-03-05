@@ -25,17 +25,17 @@ import HelpModal from "./components/Modals/HelpModal";
 import StatModal from "./components/Modals/Stats/StatModal";
 
 const correctGuess: Album = {
-  title: "Doolittle",
-  artist: "Pixies",
-  date: 1989,
-  main_genre: ["Indie Rock", "Alternative Rock"],
-  sub_genre: ["Noise Pop", "Surf Rock"],
-  rating: 4.09,
-  num_ratings: "50k",
-  num_reviews: "623",
-  ranking: 68,
+  title: "Pornography",
+  artist: "The Cure",
+  date: 1982,
+  main_genre: ["Gothic Rock", "Post-Punk"],
+  sub_genre: ["Coldwave", "Neo-Psychedelia"],
+  rating: 4.07,
+  num_ratings: "34k",
+  num_reviews: "346",
+  ranking: 100,
   cover_url:
-    "https://lastfm.freetls.fastly.net/i/u/300x300/995f97abbadd1a5e69a2967c72074867.jpg",
+    "https://lastfm.freetls.fastly.net/i/u/300x300/dcf7ccf93e1c445583ff952f49eb7a5d.png",
 };
 const dumbStats: UserStats = {
   winningGuesses: 123,
@@ -220,7 +220,7 @@ function App() {
                 userStats={userStats}
               />
             )}
-            <div className="flex gap-5 z-40">
+            <div className="flex gap-5 z-50">
               <button
                 onClick={() => resetGame()}
                 className="border-4 rounded-md font-bold border-black bg-red-500 px-4 py-2"

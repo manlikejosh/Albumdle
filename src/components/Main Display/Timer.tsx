@@ -34,9 +34,9 @@ const Timer = ({ style }: { style: boolean }) => {
     const minutes = Math.floor((totalSeconds % 3600) / 60);
     const seconds = totalSeconds % 60;
 
-    return `${hours.toString().padStart(2, "0")}h:${minutes
+    return `${hours.toString().padStart(2, "0")}:${minutes
       .toString()
-      .padStart(2, "0")}m:${seconds.toString().padStart(2, "0")}s`;
+      .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
   };
   return (
     <div id="timer" className={style ? "flex gap-1" : ""}>
