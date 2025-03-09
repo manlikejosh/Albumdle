@@ -3,7 +3,6 @@ import SearchBar from "./components/Main Display/SearchBar";
 import { useState, useEffect } from "react";
 import { Album, UserStats } from "./types/types";
 import data from "./data/data.json";
-
 import Header from "./components/Main Display/Header";
 import LivesDisplay from "./components/Main Display/LivesDisplay";
 import AlreadyGuessed from "./components/Guess Display/AlreadyGuessed";
@@ -51,9 +50,7 @@ function App() {
 
   const [showAlreayGuessed, setShowAlreadyGuess] = useState(false);
   const [resetKey, setResetKey] = useState(0);
-  const [endGame, setEndGame] = useState<boolean>(() => {
-    return localStorage.getItem("endGame") === "true";
-  });
+
   // Load EndScreen state from localStorage
   const [showEndScreen, setShowEndScreen] = useState<boolean>(() => {
     return localStorage.getItem("showEndScreen") === "true";
@@ -67,20 +64,27 @@ function App() {
       : { winningGuesses: 0, totalGuesses: 0, wins: 0, losses: 0 };
   });
 
+  // handle page scroll when modals open
+  useEffect(() => {
+    if (showHelpModal || showStatModal) {
+      document.body.style.overflow = "hidden";
+      window.scrollTo({ top: 0 });
+    } else {
+      document.body.style.overflow = "unset";
+    }
+  }, [showHelpModal, showStatModal]);
+
+  // handle end screen modal and
   useEffect(() => {
     if (showEndScreen) {
       localStorage.setItem("showEndScreen", "true");
+      window.scrollTo({ top: 0 });
+      document.body.style.overflow = "hidden";
     } else {
       localStorage.removeItem("showEndScreen");
+      document.body.style.overflow = "unset";
     }
   }, [showEndScreen]);
-  useEffect(() => {
-    if (endGame) {
-      localStorage.setItem("endGame", "true");
-    } else {
-      localStorage.removeItem("endGame");
-    }
-  }, [endGame]);
 
   useEffect(() => {
     localStorage.setItem("userStats", JSON.stringify(userStats));
@@ -142,7 +146,6 @@ function App() {
 
       const updatedStats = handleStats(true, guessedAlbums.length + 1);
       setUserStats(updatedStats);
-      setEndGame(true);
       setShowEndScreen(true);
       return;
     }
@@ -165,7 +168,6 @@ function App() {
       const updatedStats = handleStats(false, 8);
       setUserStats(updatedStats);
       setShowEndScreen(true);
-      setEndGame(true);
     }
   };
 

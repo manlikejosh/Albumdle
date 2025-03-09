@@ -4,7 +4,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        lora: ["Lora", "serif"],
+        noto: ["Noto Sans JP", "serif"],
       },
       keyframes: {
         appear: {
@@ -25,6 +25,8 @@ export default {
       },
       colors: {
         darkBlueBackground: "#3160a6",
+        lightBlue: "#71b7e0",
+        mediumBlue: "#488cc5",
         lightGray: "#ebebeb",
       },
     },

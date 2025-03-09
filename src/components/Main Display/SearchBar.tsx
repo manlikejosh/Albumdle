@@ -119,7 +119,7 @@ const SearchBar = ({ placeholder, onButtonClick }: Props) => {
         </div>
 
         <button
-          className="border-2 border-black px-2 border-l-0 bg-blue-200 h-[52px]"
+          className="border-2 border-black px-2 border-l-0 bg-lightBlue active:bg-mediumBlue h-[52px]"
           onClick={handleSearchSubmit}
         >
           GUESS

@@ -13,7 +13,7 @@ type HeaderProps = {
 
 function Header({ onHelpClick, onStatClick }: HeaderProps) {
   const headingStyles = {
-    fontSize: "clamp(2rem, 8vw, 4.5rem)",
+    fontSize: "clamp(1.5rem, 6.5vw, 4.5rem)",
   };
   const timerStyles = {
     fontSize: "clamp(.75rem, 2.4vw, 1.2rem)",
@@ -24,7 +24,7 @@ function Header({ onHelpClick, onStatClick }: HeaderProps) {
 
   return (
     <>
-      <header className="l font-thin grid grid-cols-5 my-5 w-fit z-50">
+      <header className="grid grid-cols-5 my-5 w-fit z-50 ">
         <div className="col-span-1 my-auto text-left" style={timerStyles}>
           <Timer style={false} />
         </div>
@@ -32,7 +32,7 @@ function Header({ onHelpClick, onStatClick }: HeaderProps) {
           style={headingStyles}
           className="font-bold tracking-wider col-span-3 text-center my-auto"
         >
-          Albumdle
+          Album Guesser
         </h1>
         <div
           id="icons"

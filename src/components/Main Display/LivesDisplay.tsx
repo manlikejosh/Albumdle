@@ -12,7 +12,7 @@ const LivesDisplay = ({ lives }: LivesProps) => {
 
   return (
     <>
-      <div className="flex flex-row mt-2 " id="lives">
+      <div className="flex flex-row my-2 " id="lives">
         <FontAwesomeIcon
           icon={faHeart}
           style={iconStyles}

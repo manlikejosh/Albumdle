@@ -75,7 +75,7 @@ const Guess: React.FC<GuessProps> = ({
       const ratingStyles = compareNumbers(
         correctGuess.rating,
         userGuess.rating,
-        0.5
+        0.08
       );
       tempColors.rating = ratingStyles[0];
       tempColors.ratingRotate = ratingStyles[1];
@@ -100,7 +100,7 @@ const Guess: React.FC<GuessProps> = ({
   }, [userGuess, correctGuess]);
 
   // Only apply the fade-in animation if this is the newest guess... this shit doesn't work
-  const animationClasses = isNew ? "SHITNEW animate-appear delay-700" : "";
+  const animationClasses = isNew ? "animate-appear delay-700" : "";
 
   return (
     <div
@@ -117,19 +117,29 @@ const Guess: React.FC<GuessProps> = ({
 
       {/* Title */}
       <div
-        className={`h-full w-full min-h-[80px] max-w-[100px] border-2 border-black rounded-lg p-1 ${colorsMemoized.title} flex items-center justify-center`}
+        className={`h-full w-full min-h-[80px]  relative max-w-[100px] border-2 border-black rounded-lg p-1 ${colorsMemoized.title} flex items-center justify-center`}
       >
-        <div className="break-words hyphens-auto overflow-y-auto text-center">
+        <div className="break-words  hyphens-auto overflow-y-auto text-center">
           {userGuess.title}
+          <div className="max-w-[100px] hover:opacity-100 opacity-0 w-full h-full absolute  text-center -top-[28%] left-0 aaaaaaa">
+            <p className=" max-[553px]:text-xs bg-white rounded-md shadow-xl shadow-white/90">
+              Album Title
+            </p>
+          </div>
         </div>
       </div>
 
       {/* Artist */}
       <div
-        className={`h-full w-full min-h-[80px] max-w-[100px] border-2 border-black rounded-lg p-1 ${colorsMemoized.artist} flex items-center justify-center`}
+        className={`h-full w-full min-h-[80px] relative max-w-[100px] border-2 border-black rounded-lg p-1 ${colorsMemoized.artist} flex items-center justify-center`}
       >
         <div className="break-words hyphens-auto overflow-y-auto text-center">
           {userGuess.artist}
+          <div className="max-w-[100px] hover:opacity-100 opacity-0 w-full h-full absolute  text-center -top-[28%] left-0 aaaaaaa">
+            <p className=" max-[553px]:text-xs bg-white rounded-md shadow-xl shadow-white/90">
+              Artist Name
+            </p>
+          </div>
         </div>
       </div>
 
@@ -141,6 +151,11 @@ const Guess: React.FC<GuessProps> = ({
           className={`absolute inset-0 flex items-center justify-center z-0 ${colorsMemoized.ratingRotate}`}
         >
           <FontAwesomeIcon icon={faUpLong} className="text-white text-6xl" />
+        </div>
+        <div className="max-w-[100px] hover:opacity-100 opacity-0 w-full h-full absolute  text-center -top-[28%] left-0 aaaaaaa">
+          <p className=" max-[553px]:text-xs bg-white rounded-md shadow-xl shadow-white/90">
+            RYM Rating
+          </p>
         </div>
         <div className="relative z-10 font-bold">{userGuess.rating}</div>
       </div>
@@ -154,35 +169,55 @@ const Guess: React.FC<GuessProps> = ({
         >
           <FontAwesomeIcon icon={faUpLong} className="text-white text-6xl" />
         </div>
+        <div className="max-w-[100px] hover:opacity-100 opacity-0 w-full h-full absolute  text-center -top-[28%] left-0 aaaaaaa">
+          <p className=" max-[553px]:text-xs bg-white rounded-md shadow-xl shadow-white/90">
+            Release Year
+          </p>
+        </div>
         <div className="relative z-10 font-bold">{userGuess.date}</div>
       </div>
 
       {/* Main genre */}
       <div
-        className={`h-full w-full min-h-[80px] max-w-[100px] border-2 border-black rounded-lg p-1 ${colorsMemoized.mainGenre} flex items-center justify-center`}
+        className={`h-full w-full relative min-h-[80px] max-w-[100px] border-2 border-black rounded-lg p-1 ${colorsMemoized.mainGenre} flex items-center justify-center`}
       >
         <div className="break-words hyphens-auto overflow-y-auto text-center">
           {userGuess.main_genre.join(", ")}
+          <div className="max-w-[100px] hover:opacity-100 opacity-0 w-full h-full absolute  text-center -top-[28%] left-0 aaaaaaa">
+            <p className=" max-[553px]:text-xs bg-white rounded-md shadow-xl shadow-white/90">
+              Main Genre
+            </p>
+          </div>
         </div>
       </div>
 
       {/* Sub genre  */}
       <div
-        className={`h-full w-full min-h-[80px] max-w-[100px] border-2 border-black rounded-lg p-1 ${colorsMemoized.subGenre} flex items-center justify-center`}
+        className={`h-full w-full relative min-h-[80px] max-w-[100px] border-2 border-black rounded-lg p-1 ${colorsMemoized.subGenre} flex items-center justify-center`}
       >
         <div className="break-words hyphens-auto overflow-y-auto text-center">
           {userGuess.sub_genre.join(", ")}
+          <div className="max-w-[100px] hover:opacity-100 opacity-0 w-full h-full absolute  text-center -top-[28%] left-0 aaaaaaa">
+            <p className=" max-[553px]:text-xs bg-white rounded-md shadow-xl shadow-white/90">
+              Sub Genere
+            </p>
+          </div>
         </div>
       </div>
 
       {/* Ranking */}
       <div
-        className={`relative h-full w-full min-h-[80px] max-w-[100px] border-2 border-black rounded-lg flex items-center justify-center ${colorsMemoized.ranking}`}
+        className={`relative h-full  w-full min-h-[80px] max-w-[100px] border-2 border-black rounded-lg flex items-center justify-center ${colorsMemoized.ranking}`}
       >
         <div
           className={`absolute inset-0 flex items-center justify-center z-0 ${colorsMemoized.rankingRotate}`}
         >
           <FontAwesomeIcon icon={faUpLong} className="text-white text-6xl" />
+        </div>
+        <div className="max-w-[100px] hover:opacity-100 opacity-0 w-full h-full absolute  text-center -top-[28%] left-0 aaaaaaa">
+          <p className=" max-[553px]:text-xs bg-white rounded-md shadow-xl shadow-white/90">
+            RYM Ranking
+          </p>
         </div>
         <div className="relative z-10 font-bold">{userGuess.ranking}</div>
       </div>

@@ -2,8 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-.lora {
-  font-family: "Lora", serif;
+.noto {
+  font-family: "Noto Sans JP", sans-serif;
   font-optical-sizing: auto;
   font-weight: <weight>;
   font-style: normal;
