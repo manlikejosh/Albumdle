@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
-import data from "../../data/data.json";
 import { Album } from "../../types/types";
+import { getAllItems } from "../../utilities/apiHelper";
 
 // Define the type for your album data
 
@@ -45,19 +45,35 @@ const SearchBar = ({ placeholder, onButtonClick }: Props) => {
   };
 
   // Update filtered albums based on search query
-  useEffect(() => {
-    if (searchQuery !== "") {
-      const newFilteredAlbums = data.filter(
-        (album: Album) =>
-          album.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          album.artist.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-      setFilteredAlbums(newFilteredAlbums);
-    } else {
-      setFilteredAlbums([]);
-    }
-  }, [searchQuery]);
 
+  useEffect(() => {
+    const fetchAndFilterAlbums = async () => {
+      try {
+        if (searchQuery !== "") {
+          // Fetch data only if searchQuery is not empty
+          const allAlbums = await getAllItems(); // Assuming you have an async function to fetch data
+
+          // Filter the albums based on searchQuery
+          const newFilteredAlbums = allAlbums.filter(
+            (album: Album) =>
+              album.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+              album.artist.toLowerCase().includes(searchQuery.toLowerCase())
+          );
+
+          setFilteredAlbums(newFilteredAlbums); // Update the state with filtered albums
+        } else {
+          setFilteredAlbums([]); // Clear filtered albums when searchQuery is empty
+        }
+      } catch (error) {
+        console.error("Error fetching albums:", error);
+        alert(
+          "There was an error fetching data, please refresh or come back later"
+        );
+      }
+    };
+
+    fetchAndFilterAlbums(); // Call the async function
+  }, [searchQuery]);
   // Handle the guess button click
   const handleSearchSubmit = () => {
     if (filteredAlbums.length === 0) {

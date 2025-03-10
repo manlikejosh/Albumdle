@@ -22,20 +22,22 @@ import AlbumListPage from "./components/Glossary/AlbumListPage";
 import EndScreen from "./components/Modals/Stats/EndScreen";
 import HelpModal from "./components/Modals/HelpModal";
 import StatModal from "./components/Modals/Stats/StatModal";
+import { getDailyItem } from "./utilities/apiHelper";
+import LoadingSpinner from "./components/Loading";
 
-const correctGuess: Album = {
-  title: "Pornography",
-  artist: "The Cure",
-  date: 1982,
-  main_genre: ["Gothic Rock", "Post-Punk"],
-  sub_genre: ["Coldwave", "Neo-Psychedelia"],
-  rating: 4.07,
-  num_ratings: "34k",
-  num_reviews: "346",
-  ranking: 100,
-  cover_url:
-    "https://lastfm.freetls.fastly.net/i/u/300x300/dcf7ccf93e1c445583ff952f49eb7a5d.png",
-};
+// const correctGuess: Album = {
+//   title: "Pornography",
+//   artist: "The Cure",
+//   date: 1982,
+//   main_genre: ["Gothic Rock", "Post-Punk"],
+//   sub_genre: ["Coldwave", "Neo-Psychedelia"],
+//   rating: 4.07,
+//   num_ratings: "34k",
+//   num_reviews: "346",
+//   ranking: 100,
+//   cover_url:
+//     "https://lastfm.freetls.fastly.net/i/u/300x300/dcf7ccf93e1c445583ff952f49eb7a5d.png",
+// };
 const dumbStats: UserStats = {
   winningGuesses: 123,
   totalGuesses: 123,
@@ -43,6 +45,27 @@ const dumbStats: UserStats = {
   losses: 13,
 };
 function App() {
+  const [dailyItem, setDailyItem] = useState<Album | null>(null);
+  const [loading, setLoading] = useState(true); // Add loading state
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const daily = await getDailyItem();
+        setDailyItem(daily);
+      } catch (err) {
+        setError("Failed to load data");
+        alert("There was an error, please refresh or come back later");
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchData();
+  }, []);
+
+  let correctGuess = dailyItem;
+
   const [guessedAlbums, setGuessedAlbums] = useState<Album[]>([]);
   const [lives, setLives] = useState<string[]>([]);
   const [showHelpModal, setShowHelpModal] = useState(false);
@@ -137,17 +160,19 @@ function App() {
       return;
     }
 
-    if (data[0].title === correctGuess.title) {
-      setGuessedAlbums((prevGuessedAlbums) => {
-        const updatedGuessedAlbums = [...prevGuessedAlbums, data[0]];
-        saveProgress(lives, updatedGuessedAlbums);
-        return updatedGuessedAlbums;
-      });
+    if (correctGuess) {
+      if (data[0].title === correctGuess.title) {
+        setGuessedAlbums((prevGuessedAlbums) => {
+          const updatedGuessedAlbums = [...prevGuessedAlbums, data[0]];
+          saveProgress(lives, updatedGuessedAlbums);
+          return updatedGuessedAlbums;
+        });
 
-      const updatedStats = handleStats(true, guessedAlbums.length + 1);
-      setUserStats(updatedStats);
-      setShowEndScreen(true);
-      return;
+        const updatedStats = handleStats(true, guessedAlbums.length + 1);
+        setUserStats(updatedStats);
+        setShowEndScreen(true);
+        return;
+      }
     }
 
     setGuessedAlbums((prevGuessedAlbums) => {
@@ -198,29 +223,36 @@ function App() {
                 onButtonClick={handleGuessSubmission}
               />
             </div>
+
             {showAlreayGuessed && <AlreadyGuessed resetKey={resetKey} />}
             <LivesDisplay lives={lives} />
-            <GuessList
-              guessedAlbums={guessedAlbums}
-              correctGuess={correctGuess}
-            />
-            {showHelpModal && (
-              <HelpModal closeModal={() => setShowHelpModal(false)} />
-            )}
-            {showStatModal && (
-              <StatModal
-                stats={userStats}
-                closeModal={() => setShowStatModal(false)}
-              />
-            )}
 
-            {showEndScreen && (
-              <EndScreen
-                numGuesses={guessedAlbums.length}
-                result={true}
-                correctAlbum={correctGuess}
-                userStats={userStats}
-              />
+            {correctGuess ? (
+              <>
+                <GuessList
+                  guessedAlbums={guessedAlbums}
+                  correctGuess={correctGuess}
+                />
+                {showHelpModal && (
+                  <HelpModal closeModal={() => setShowHelpModal(false)} />
+                )}
+                {showStatModal && (
+                  <StatModal
+                    stats={userStats}
+                    closeModal={() => setShowStatModal(false)}
+                  />
+                )}
+                {showEndScreen && (
+                  <EndScreen
+                    numGuesses={guessedAlbums.length}
+                    result={true}
+                    correctAlbum={correctGuess}
+                    userStats={userStats}
+                  />
+                )}{" "}
+              </>
+            ) : (
+              <LoadingSpinner />
             )}
             <div className="flex gap-5 z-50">
               <button
