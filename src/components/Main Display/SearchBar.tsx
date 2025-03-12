@@ -9,11 +9,12 @@ interface Props {
   onButtonClick: (albums: Album[]) => void;
 }
 
-const SearchBar = ({ placeholder, onButtonClick }: Props) => {
-  const [searchQuery, setSearchQuery] = useState("");
+const SearchBar = ({ onButtonClick, placeholder }: Props) => {
+  const [searchQuery, setSearchQuery] = useState<string>("");
   const [filteredAlbums, setFilteredAlbums] = useState<Album[]>([]);
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
   const itemRefs = useRef<(HTMLParagraphElement | null)[]>([]); // Create refs for each list item
+  const [isVisible, setIsVisible] = useState(false);
 
   // Handle keydown events for navigation and selection in the search list
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -77,7 +78,7 @@ const SearchBar = ({ placeholder, onButtonClick }: Props) => {
   // Handle the guess button click
   const handleSearchSubmit = () => {
     if (filteredAlbums.length === 0) {
-      alert("No results found");
+      setIsVisible(true);
     } else {
       onButtonClick(filteredAlbums);
     }
@@ -95,9 +96,17 @@ const SearchBar = ({ placeholder, onButtonClick }: Props) => {
     }
   }, [highlightedIndex]);
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsVisible(false);
+    }, 1000);
+
+    return () => clearTimeout(timer); // Cleanup function
+  }, [isVisible]);
+
   return (
     <>
-      <div className="flex text-center l font-medium mx-auto z-50">
+      <div className="flex text-center l font-medium mx-auto z-50 realtive">
         <div className="w-[60vw] max-w-[530px]">
           <input
             className="bg-white outline-none h-fit border-2 border-black px-2 py-3 w-full font-medium"
@@ -140,6 +149,14 @@ const SearchBar = ({ placeholder, onButtonClick }: Props) => {
         >
           GUESS
         </button>
+      </div>
+
+      <div className="h-6 flex justify-center mt-2">
+        {isVisible && (
+          <div className="bg-red-400 rounded-md px-4 left-1/2 fade-in-out">
+            NO RESULT FOUND
+          </div>
+        )}
       </div>
     </>
   );
