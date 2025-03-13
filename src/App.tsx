@@ -45,7 +45,7 @@ const dumbStats: UserStats = {
   losses: 13,
 };
 function App() {
-  const [dailyItem, setDailyItem] = useState<Album | null>(null);
+  const [correctGuess, setDailyItem] = useState<Album | null>(null);
   const [loading, setLoading] = useState(true); // Add loading state
   const [error, setError] = useState<string | null>(null);
 
@@ -63,8 +63,6 @@ function App() {
     }
     fetchData();
   }, []);
-
-  let correctGuess = dailyItem;
 
   const [guessedAlbums, setGuessedAlbums] = useState<Album[]>([]);
   const [lives, setLives] = useState<string[]>([]);
@@ -217,18 +215,16 @@ function App() {
               onHelpClick={() => setShowHelpModal(true)}
               onStatClick={() => setShowStatModal(true)}
             />
-            <div className="w-full flex flex-col">
-              <SearchBar
-                placeholder="Enter your guess..."
-                onButtonClick={handleGuessSubmission}
-              />
-            </div>
-
-            {showAlreayGuessed && <AlreadyGuessed resetKey={resetKey} />}
-            <LivesDisplay lives={lives} />
-
             {correctGuess ? (
               <>
+                <div className="w-full flex flex-col">
+                  <SearchBar
+                    placeholder="Enter your guess..."
+                    onButtonClick={handleGuessSubmission}
+                  />
+                </div>
+                {showAlreayGuessed && <AlreadyGuessed resetKey={resetKey} />}
+                <LivesDisplay lives={lives} />
                 <GuessList
                   guessedAlbums={guessedAlbums}
                   correctGuess={correctGuess}
