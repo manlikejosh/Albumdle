@@ -2,7 +2,6 @@ import "./index.css";
 import SearchBar from "./components/Main Display/SearchBar";
 import { useState, useEffect } from "react";
 import { Album, UserStats } from "./types/types";
-import data from "./data/data.json";
 import Header from "./components/Main Display/Header";
 import LivesDisplay from "./components/Main Display/LivesDisplay";
 import AlreadyGuessed from "./components/Guess Display/AlreadyGuessed";
@@ -11,11 +10,9 @@ import {
   checkAndResetGameProgress,
   saveProgress,
   getProgress,
-  resetGameProgress,
   getUserStats,
   saveNewUserStats,
   updateUserStats,
-  resetUserStorage,
 } from "./utilities/gameStorage";
 import { Routes, Route } from "react-router-dom";
 import AlbumListPage from "./components/Glossary/AlbumListPage";
@@ -23,31 +20,10 @@ import EndScreen from "./components/Modals/Stats/EndScreen";
 import HelpModal from "./components/Modals/HelpModal";
 import StatModal from "./components/Modals/Stats/StatModal";
 import { getDailyItem } from "./utilities/apiHelper";
-import LoadingSpinner from "./components/Loading";
+import LoadingSpinner from "./components/Modals/Loading";
 
-// const correctGuess: Album = {
-//   title: "Pornography",
-//   artist: "The Cure",
-//   date: 1982,
-//   main_genre: ["Gothic Rock", "Post-Punk"],
-//   sub_genre: ["Coldwave", "Neo-Psychedelia"],
-//   rating: 4.07,
-//   num_ratings: "34k",
-//   num_reviews: "346",
-//   ranking: 100,
-//   cover_url:
-//     "https://lastfm.freetls.fastly.net/i/u/300x300/dcf7ccf93e1c445583ff952f49eb7a5d.png",
-// };
-const dumbStats: UserStats = {
-  winningGuesses: 123,
-  totalGuesses: 123,
-  wins: 10,
-  losses: 13,
-};
 function App() {
   const [correctGuess, setDailyItem] = useState<Album | null>(null);
-  const [loading, setLoading] = useState(true); // Add loading state
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchData() {
@@ -55,10 +31,7 @@ function App() {
         const daily = await getDailyItem();
         setDailyItem(daily);
       } catch (err) {
-        setError("Failed to load data");
         alert("There was an error, please refresh or come back later");
-      } finally {
-        setLoading(false);
       }
     }
     fetchData();
@@ -121,27 +94,6 @@ function App() {
     updateUserStats(result, numGuesses, stats);
     let updatedStats = getUserStats();
     return updatedStats;
-  };
-
-  const resetGame = () => {
-    resetGameProgress();
-    localStorage.removeItem("showEndScreen");
-    window.location.reload();
-  };
-
-  const resetUser = () => {
-    resetUserStorage();
-    localStorage.removeItem("showEndScreen");
-    localStorage.removeItem("userStats");
-    window.location.reload();
-  };
-
-  const resetAll = () => {
-    resetGameProgress();
-    resetUserStorage();
-    localStorage.removeItem("showEndScreen");
-    localStorage.removeItem("userStats");
-    window.location.reload();
   };
 
   const handleDuplicateGuess = () => {
@@ -250,26 +202,6 @@ function App() {
             ) : (
               <LoadingSpinner />
             )}
-            <div className="flex gap-5 z-50">
-              <button
-                onClick={() => resetGame()}
-                className="border-4 rounded-md font-bold border-black bg-red-500 px-4 py-2"
-              >
-                RESET GAME
-              </button>
-              <button
-                onClick={() => resetUser()}
-                className="border-4 rounded-md font-bold border-black bg-red-500 px-4 py-2"
-              >
-                RESET USER
-              </button>
-              <button
-                onClick={() => resetAll()}
-                className="border-4 rounded-md font-bold border-black bg-red-500 px-4 py-2"
-              >
-                RESET ALL
-              </button>
-            </div>
           </>
         }
       ></Route>
