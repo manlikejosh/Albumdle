@@ -28,7 +28,7 @@ export const checkAndResetGameProgress = (): void => {
     );
     localStorage.setItem("guessedAlbums", JSON.stringify([])); // Empty array for new guesses
     localStorage.setItem("lastPlayedDate", today); // Store today's date
-    localStorage.setItem("showEndScreen", "false");
+    localStorage.setItem("gameOver", "false");
   }
 };
 
@@ -120,4 +120,14 @@ export const updateUserStats = (
 // User stats reset helper
 export const resetUserStorage = (): void => {
   localStorage.removeItem("userStats");
+};
+
+// Function to save game over state
+export const saveGameOver = (isOver: boolean): void => {
+  localStorage.setItem("gameOver", isOver.toString());
+};
+
+// Function to get game over state
+export const getGameOver = (): boolean => {
+  return localStorage.getItem("gameOver") === "true";
 };

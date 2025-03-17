@@ -7,9 +7,10 @@ import { getAllItems } from "../../utilities/apiHelper";
 interface Props {
   placeholder: string;
   onButtonClick: (albums: Album[]) => void;
+  disabled?: boolean;
 }
 
-const SearchBar = ({ onButtonClick, placeholder }: Props) => {
+const SearchBar = ({ onButtonClick, placeholder, disabled = false }: Props) => {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [filteredAlbums, setFilteredAlbums] = useState<Album[]>([]);
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
@@ -109,12 +110,15 @@ const SearchBar = ({ onButtonClick, placeholder }: Props) => {
       <div className="flex text-center l font-medium mx-auto z-50 realtive">
         <div className="w-[60vw] max-w-[530px]">
           <input
-            className="bg-white outline-none h-fit border-2 border-black px-2 py-3 w-full font-medium"
+            className={`bg-white outline-none h-fit border-2 border-black px-2 py-3 w-full font-medium ${
+              disabled ? 'opacity-50 cursor-not-allowed' : ''
+            }`}
             type="text"
             placeholder={placeholder}
             value={searchQuery}
             onChange={handleSearchChange}
             onKeyDown={handleKeyDown}
+            disabled={disabled}
           />
           <div className="w-full relative">
             <div
@@ -144,8 +148,11 @@ const SearchBar = ({ onButtonClick, placeholder }: Props) => {
         </div>
 
         <button
-          className="border-2 border-black px-2 border-l-0 bg-lightBlue active:bg-mediumBlue h-[52px]"
+          className={`border-2 border-black px-2 border-l-0 bg-lightBlue active:bg-mediumBlue h-[52px] ${
+            disabled ? 'opacity-50 cursor-not-allowed' : ''
+          }`}
           onClick={handleSearchSubmit}
+          disabled={disabled}
         >
           GUESS
         </button>

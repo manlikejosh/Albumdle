@@ -7,6 +7,7 @@ type Props = {
   result: boolean;
   correctAlbum: Album;
   userStats: UserStats;
+  closeModal: () => void;
 };
 
 const EndScreen: React.FC<Props> = ({
@@ -14,6 +15,7 @@ const EndScreen: React.FC<Props> = ({
   result,
   correctAlbum,
   userStats,
+  closeModal,
 }: Props) => {
   let avg = Math.round((userStats.winningGuesses / userStats.wins) * 10) / 10;
   avg.toString();
@@ -89,6 +91,12 @@ const EndScreen: React.FC<Props> = ({
             <section className="p-2 min-w-full justify-center flex ">
               <Timer style={true} />
             </section>
+            <button
+              onClick={closeModal}
+              className="mt-2 px-4 py-2 bg-black text-white rounded-md hover:bg-gray-800 transition-colors"
+            >
+              Close
+            </button>
           </section>
         </div>
       </div>

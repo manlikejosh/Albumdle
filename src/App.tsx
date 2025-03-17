@@ -13,6 +13,8 @@ import {
   getUserStats,
   saveNewUserStats,
   updateUserStats,
+  saveGameOver,
+  getGameOver,
 } from "./utilities/gameStorage";
 import { Routes, Route } from "react-router-dom";
 import AlbumListPage from "./components/Glossary/AlbumListPage";
@@ -44,11 +46,8 @@ function App() {
 
   const [showAlreayGuessed, setShowAlreadyGuess] = useState(false);
   const [resetKey, setResetKey] = useState(0);
-
-  // Load EndScreen state from localStorage
-  const [showEndScreen, setShowEndScreen] = useState<boolean>(() => {
-    return localStorage.getItem("showEndScreen") === "true";
-  });
+  const [gameOver, setGameOver] = useState<boolean>(() => getGameOver());
+  const [showEndScreen, setShowEndScreen] = useState<boolean>(false);
 
   // Load userStats from localStorage
   const [userStats, setUserStats] = useState<UserStats>(() => {
@@ -60,25 +59,22 @@ function App() {
 
   // handle page scroll when modals open
   useEffect(() => {
-    if (showHelpModal || showStatModal) {
+    if (showHelpModal || showStatModal || showEndScreen) {
       document.body.style.overflow = "hidden";
       window.scrollTo({ top: 0 });
     } else {
       document.body.style.overflow = "unset";
     }
-  }, [showHelpModal, showStatModal]);
+  }, [showHelpModal, showStatModal, showEndScreen]);
 
-  // handle end screen modal and
   useEffect(() => {
-    if (showEndScreen) {
-      localStorage.setItem("showEndScreen", "true");
-      window.scrollTo({ top: 0 });
-      document.body.style.overflow = "hidden";
+    if (gameOver) {
+      saveGameOver(true);
+      setShowEndScreen(true);
     } else {
-      localStorage.removeItem("showEndScreen");
-      document.body.style.overflow = "unset";
+      saveGameOver(false);
     }
-  }, [showEndScreen]);
+  }, [gameOver]);
 
   useEffect(() => {
     localStorage.setItem("userStats", JSON.stringify(userStats));
@@ -120,7 +116,7 @@ function App() {
 
         const updatedStats = handleStats(true, guessedAlbums.length + 1);
         setUserStats(updatedStats);
-        setShowEndScreen(true);
+        setGameOver(true);
         return;
       }
     }
@@ -142,7 +138,7 @@ function App() {
     if (lives.length === 1) {
       const updatedStats = handleStats(false, 8);
       setUserStats(updatedStats);
-      setShowEndScreen(true);
+      setGameOver(true);
     }
   };
 
@@ -173,6 +169,7 @@ function App() {
                   <SearchBar
                     placeholder="Enter your guess..."
                     onButtonClick={handleGuessSubmission}
+                    disabled={gameOver}
                   />
                 </div>
                 {showAlreayGuessed && <AlreadyGuessed resetKey={resetKey} />}
@@ -196,6 +193,7 @@ function App() {
                     result={true}
                     correctAlbum={correctGuess}
                     userStats={userStats}
+                    closeModal={() => setShowEndScreen(false)}
                   />
                 )}{" "}
               </>
