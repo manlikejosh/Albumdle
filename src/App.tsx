@@ -16,7 +16,7 @@ import {
   saveGameOver,
   getGameOver,
 } from "./utilities/gameStorage";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import AlbumListPage from "./components/Glossary/AlbumListPage";
 import EndScreen from "./components/Modals/Stats/EndScreen";
 import HelpModal from "./components/Modals/HelpModal";
@@ -25,6 +25,8 @@ import { getDailyItem } from "./utilities/apiHelper";
 import LoadingSpinner from "./components/Modals/Loading";
 
 function App() {
+  const location = useLocation();
+  const isMainPage = location.pathname === "/";
   const [correctGuess, setDailyItem] = useState<Album | null>(null);
 
   useEffect(() => {
@@ -59,13 +61,13 @@ function App() {
 
   // handle page scroll when modals open
   useEffect(() => {
-    if (showHelpModal || showStatModal || showEndScreen) {
+    if (isMainPage && (showHelpModal || showStatModal || showEndScreen)) {
       document.body.style.overflow = "hidden";
       window.scrollTo({ top: 0 });
     } else {
       document.body.style.overflow = "unset";
     }
-  }, [showHelpModal, showStatModal, showEndScreen]);
+  }, [showHelpModal, showStatModal, showEndScreen, isMainPage]);
 
   useEffect(() => {
     if (gameOver) {
