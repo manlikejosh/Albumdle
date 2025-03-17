@@ -2,7 +2,10 @@ import { Album } from "../types/types";
 
 export async function getDailyItem(): Promise<Album | null> {
   try {
-    const response = await fetch("albumdlebackend-production.up.railway.app");
+    const response = await fetch(
+      "https://albumdlebackend-production.up.railway.app/daily-item/"
+    );
+
     if (!response.ok) throw new Error("Failed to fetch daily item");
 
     const data = await response.json();
@@ -16,7 +19,9 @@ export async function getDailyItem(): Promise<Album | null> {
 
 export async function getAllItems(): Promise<Album[]> {
   try {
-    const response = await fetch("albumdlebackend-production.up.railway.app");
+    const response = await fetch(
+      "https://albumdlebackend-production.up.railway.app/all-items/"
+    );
     if (!response.ok) throw new Error("Failed to fetch items");
 
     const data = await response.json();
