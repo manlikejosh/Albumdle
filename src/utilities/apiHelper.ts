@@ -10,6 +10,7 @@ export async function getDailyItem(): Promise<Album | null> {
     // console.log("Response URL:", response.url);
 
     // Check the content type and log the raw response body
+    
     const rawResponse = await response.text(); // get raw response as text
     // console.log("Raw Response Body:", rawResponse);
 
