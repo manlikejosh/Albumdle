@@ -18,6 +18,9 @@ const EndScreen: React.FC<Props> = ({
   closeModal,
 }: Props) => {
   let avg = Math.round((userStats.winningGuesses / userStats.wins) * 10) / 10;
+  if (isNaN(avg)) { 
+    avg = 0;
+     }
   avg.toString();
 
   // fetch and calculate stats
@@ -77,7 +80,7 @@ const EndScreen: React.FC<Props> = ({
             <ul className="flex w-full justify-evenly mb-2">
               <li className="flex flex-col items-center border-black rounded-md border-2 p-3 w-1/4">
                 <p>Average</p>
-                <p>{avg}</p>
+                <p>{avg === 0 ? "n/a" : avg}</p>
               </li>
               <li className="flex flex-col items-center border-black rounded-md border-2 p-3 w-1/4">
                 <p>Wins</p>

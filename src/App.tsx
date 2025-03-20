@@ -28,7 +28,9 @@ function App() {
   const location = useLocation();
   const isMainPage = location.pathname === "/";
   const [correctGuess, setDailyItem] = useState<Album | null>(null);
+  const [result, setResult] = useState<boolean>(false);
 
+  
   useEffect(() => {
     async function fetchData() {
       try {
@@ -118,6 +120,7 @@ function App() {
 
         const updatedStats = handleStats(true, guessedAlbums.length + 1);
         setUserStats(updatedStats);
+        setResult(true);
         setGameOver(true);
         return;
       }
@@ -140,7 +143,9 @@ function App() {
     if (lives.length === 1) {
       const updatedStats = handleStats(false, 8);
       setUserStats(updatedStats);
+      setResult(false);
       setGameOver(true);
+
     }
   };
 
@@ -200,7 +205,7 @@ function App() {
                 {showEndScreen && (
                   <EndScreen
                     numGuesses={guessedAlbums.length}
-                    result={true}
+                    result={result}
                     correctAlbum={correctGuess}
                     userStats={userStats}
                     closeModal={() => setShowEndScreen(false)}

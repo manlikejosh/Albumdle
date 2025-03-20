@@ -12,7 +12,7 @@ const StatModal: React.FC<Props> = ({ stats, closeModal }) => {
     Math.round((stats.winningGuesses / stats.wins) * 100) / 100;
   let winPercentage = Math.round((stats.wins / played) * 10000) / 100;
 
-  let displayAvg = isNaN(averageGuesses) ? "N/A" : averageGuesses.toString();
+  let displayAvg = isNaN(averageGuesses) ? "n/a" : averageGuesses.toString();
   let displayWinPercentage = isNaN(winPercentage)
     ? "No Wins"
     : winPercentage.toString() + "%";
