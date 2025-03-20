@@ -149,6 +149,14 @@ function App() {
     const { lives, guessedAlbums } = getProgress();
     setLives(lives);
     setGuessedAlbums(guessedAlbums);
+    // Only show end screen if game is over and we have guessed albums
+    if (getGameOver() && guessedAlbums.length > 0) {
+      setGameOver(true);
+      setShowEndScreen(true);
+    } else {
+      setGameOver(false);
+      setShowEndScreen(false);
+    }
   }, []);
 
   return (
