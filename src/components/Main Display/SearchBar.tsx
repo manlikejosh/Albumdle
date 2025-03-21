@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Album } from "../../types/types";
 import { getAllItems } from "../../utilities/apiHelper";
 
@@ -16,6 +16,50 @@ const SearchBar = ({ onButtonClick, placeholder, disabled = false }: Props) => {
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
   const itemRefs = useRef<(HTMLParagraphElement | null)[]>([]); // Create refs for each list item
   const [isVisible, setIsVisible] = useState(false);
+  const allAlbumsRef = useRef<Album[]>([]);
+  const debounceTimerRef = useRef<NodeJS.Timeout>();
+
+  // Fetch all albums once on component mount
+  useEffect(() => {
+    const fetchAlbums = async () => {
+      try {
+        allAlbumsRef.current = await getAllItems();
+      } catch (error) {
+        console.error("Error fetching albums:", error);
+      }
+    };
+    fetchAlbums();
+  }, []);
+
+  // Debounced search function
+  const debouncedSearch = useCallback((query: string) => {
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current);
+    }
+
+    debounceTimerRef.current = setTimeout(() => {
+      if (query === "") {
+        setFilteredAlbums([]);
+        return;
+      }
+
+      const filtered = allAlbumsRef.current.filter(
+        (album) =>
+          album.title.toLowerCase().includes(query.toLowerCase()) ||
+          album.artist.toLowerCase().includes(query.toLowerCase())
+      );
+      if (filtered.length > 1) {
+        const exactMatch = filtered.find((album: Album) => 
+          album.title.toLowerCase() === query.toLowerCase()
+        );
+        if (exactMatch) {
+          setFilteredAlbums([exactMatch]);
+          return;
+        }
+      }
+      setFilteredAlbums(filtered);
+    }, 300); // 300ms debounce delay
+  }, []);
 
   // Handle keydown events for navigation and selection in the search list
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -35,53 +79,27 @@ const SearchBar = ({ onButtonClick, placeholder, disabled = false }: Props) => {
     }
   };
 
-  // Update search query state
+  // Update search query and trigger debounced search
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(e.target.value);
+    const query = e.target.value;
+    setSearchQuery(query);
+    debouncedSearch(query);
   };
 
   // Handle click on individual album suggestions
   const handleSuggestionClick = (e: React.MouseEvent<HTMLParagraphElement>) => {
     const target = e.target as HTMLParagraphElement;
+    console.log(target);
     setSearchQuery(target.innerText.split("-")[0].trimEnd()); // split so only the ablum title is set as the serach query
   };
 
-  // Update filtered albums based on search query
-
-  useEffect(() => {
-    const fetchAndFilterAlbums = async () => {
-      try {
-        if (searchQuery !== "") {
-          // Fetch data only if searchQuery is not empty
-          const allAlbums = await getAllItems(); // Assuming you have an async function to fetch data
-
-          // Filter the albums based on searchQuery
-          const newFilteredAlbums = allAlbums.filter(
-            (album: Album) =>
-              album.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-              album.artist.toLowerCase().includes(searchQuery.toLowerCase())
-          );
-
-          setFilteredAlbums(newFilteredAlbums); // Update the state with filtered albums
-        } else {
-          setFilteredAlbums([]); // Clear filtered albums when searchQuery is empty
-        }
-      } catch (error) {
-        console.error("Error fetching albums:", error);
-        alert(
-          "There was an error fetching data, please refresh or come back later"
-        );
-      }
-    };
-
-    fetchAndFilterAlbums(); // Call the async function
-  }, [searchQuery]);
   // Handle the guess button click
   const handleSearchSubmit = () => {
     if (filteredAlbums.length === 0) {
       setIsVisible(true);
     } else {
       onButtonClick(filteredAlbums);
+      console.log(filteredAlbums);
     }
     setSearchQuery("");
     setFilteredAlbums([]);
@@ -111,7 +129,7 @@ const SearchBar = ({ onButtonClick, placeholder, disabled = false }: Props) => {
         <div className="w-[60vw] max-w-[530px]">
           <input
             className={`bg-white outline-none h-fit border-2 border-black px-2 py-3 w-full font-medium ${
-              disabled ? 'opacity-50 cursor-not-allowed' : ''
+              disabled ? "opacity-50 cursor-not-allowed" : ""
             }`}
             type="text"
             placeholder={placeholder}
@@ -149,7 +167,7 @@ const SearchBar = ({ onButtonClick, placeholder, disabled = false }: Props) => {
 
         <button
           className={`border-2 border-black px-2 border-l-0 bg-lightBlue active:bg-mediumBlue h-[52px] ${
-            disabled ? 'opacity-50 cursor-not-allowed' : ''
+            disabled ? "opacity-50 cursor-not-allowed" : ""
           }`}
           onClick={handleSearchSubmit}
           disabled={disabled}
