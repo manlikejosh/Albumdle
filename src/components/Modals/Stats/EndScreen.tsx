@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Album, UserStats } from "../../../types/types";
 import Timer from "../../Main Display/Timer";
+import { getDailyResult, DailyResult } from "../../../utilities/gameStorage";
 
 type Props = {
   numGuesses: number;
@@ -17,6 +18,18 @@ const EndScreen: React.FC<Props> = ({
   userStats,
   closeModal,
 }: Props) => {
+  const [savedResult, setSavedResult] = useState<DailyResult | null>(null);
+  
+  useEffect(() => {
+    // Get the saved result from localStorage
+    const dailyResult = getDailyResult();
+    setSavedResult(dailyResult);
+  }, []);
+  
+  // Use savedResult if available, otherwise use props
+  const displayNumGuesses = savedResult ? savedResult.numGuesses : numGuesses;
+  const displayResult = savedResult ? savedResult.win : result;
+  
   let avg = Math.round((userStats.winningGuesses / userStats.wins) * 10) / 10;
   if (isNaN(avg)) { 
     avg = 0;
@@ -24,7 +37,7 @@ const EndScreen: React.FC<Props> = ({
   avg.toString();
 
   // fetch and calculate stats
-  numGuesses.toString();
+  displayNumGuesses.toString();
 
   const winningMessage = (numGuesses: number) => {
     if (numGuesses == 1) {
@@ -65,7 +78,7 @@ const EndScreen: React.FC<Props> = ({
         <div className="border-2 border-black bg-white rounded-md w-[300px] h-fit mx-auto overflow-y-scroll ">
           <header className="font-sans  font-bold tracking-wider  text-3xl  flex justify-center">
             <h3 className="  p-1">
-              {result ? "winner winner" : "loser loser"}
+              {displayResult ? "winner winner" : "loser loser"}
             </h3>
           </header>
 
@@ -76,7 +89,7 @@ const EndScreen: React.FC<Props> = ({
                 src={correctAlbum.cover_url}
               />
             </div>
-            {result ? winningMessage(numGuesses) : losingMessage()}
+            {displayResult ? winningMessage(displayNumGuesses) : losingMessage()}
             <ul className="flex w-full justify-evenly mb-2">
               <li className="flex flex-col items-center border-black rounded-md border-2 p-3 w-1/4">
                 <p>Average</p>

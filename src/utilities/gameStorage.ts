@@ -1,5 +1,14 @@
 import { Album, UserStats } from "../types/types";
 
+// Define a type for daily result
+export type DailyResult = {
+  date: string;
+  win: boolean;
+  numGuesses: number;
+  albumTitle: string;
+  albumArtist: string;
+};
+
 // Utility function to get today's date in YYYY-MM-DD format
 export const getTodayDate = (): string => {
   const date = new Date();
@@ -30,6 +39,7 @@ export const checkAndResetGameProgress = (): void => {
     localStorage.setItem("lastPlayedDate", today); // Store today's date
     localStorage.setItem("gameOver", "false"); // Reset game over state
     localStorage.removeItem("showEndScreen"); // Remove any lingering end screen state
+    localStorage.removeItem("dailyResult"); // Reset daily result
   }
 };
 
@@ -131,4 +141,32 @@ export const saveGameOver = (isOver: boolean): void => {
 // Function to get game over state
 export const getGameOver = (): boolean => {
   return localStorage.getItem("gameOver") === "true";
+};
+
+// Function to save the day's result
+export const saveDailyResult = (
+  win: boolean,
+  numGuesses: number,
+  album: Album
+): void => {
+  const result: DailyResult = {
+    date: getTodayDate(),
+    win,
+    numGuesses,
+    albumTitle: album.title,
+    albumArtist: album.artist
+  };
+  localStorage.setItem("dailyResult", JSON.stringify(result));
+};
+
+// Function to get the day's result
+export const getDailyResult = (): DailyResult | null => {
+  const resultStr = localStorage.getItem("dailyResult");
+  return resultStr ? JSON.parse(resultStr) : null;
+};
+
+// Function to check if today's result already exists
+export const hasTodayResult = (): boolean => {
+  const result = getDailyResult();
+  return result !== null && result.date === getTodayDate();
 };

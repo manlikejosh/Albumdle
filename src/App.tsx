@@ -15,6 +15,9 @@ import {
   updateUserStats,
   saveGameOver,
   getGameOver,
+  saveDailyResult,
+  hasTodayResult,
+  getDailyResult
 } from "./utilities/gameStorage";
 import { Routes, Route, useLocation } from "react-router-dom";
 import AlbumListPage from "./components/Glossary/AlbumListPage";
@@ -28,9 +31,7 @@ function App() {
   const location = useLocation();
   const isMainPage = location.pathname === "/";
   const [correctGuess, setDailyItem] = useState<Album | null>(null);
-  const [result, setResult] = useState<boolean>(false);
 
-  
   useEffect(() => {
     async function fetchData() {
       try {
@@ -120,8 +121,13 @@ function App() {
 
         const updatedStats = handleStats(true, guessedAlbums.length + 1);
         setUserStats(updatedStats);
-        setResult(true);
         setGameOver(true);
+        
+        // Save daily result for win
+        if (correctGuess) {
+          saveDailyResult(true, guessedAlbums.length + 1, correctGuess);
+        }
+        
         return;
       }
     }
@@ -143,9 +149,12 @@ function App() {
     if (lives.length === 1) {
       const updatedStats = handleStats(false, 8);
       setUserStats(updatedStats);
-      setResult(false);
       setGameOver(true);
-
+      
+      // Save daily result for loss
+      if (correctGuess) {
+        saveDailyResult(false, 8, correctGuess);
+      }
     }
   };
 
@@ -154,6 +163,12 @@ function App() {
     const { lives, guessedAlbums } = getProgress();
     setLives(lives);
     setGuessedAlbums(guessedAlbums);
+    
+    // Check if we already have a result for today
+    if (hasTodayResult()) {
+      setGameOver(true);
+    }
+    
     // Only show end screen if game is over and we have guessed albums
     if (getGameOver() && guessedAlbums.length > 0) {
       setGameOver(true);
@@ -205,7 +220,7 @@ function App() {
                 {showEndScreen && (
                   <EndScreen
                     numGuesses={guessedAlbums.length}
-                    result={result}
+                    result={getDailyResult()?.win || false}
                     correctAlbum={correctGuess}
                     userStats={userStats}
                     closeModal={() => setShowEndScreen(false)}

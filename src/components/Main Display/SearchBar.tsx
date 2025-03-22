@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { Album } from "../../types/types";
 import { getAllItems } from "../../utilities/apiHelper";
+import { filterAlbums, handleKeyNavigation } from "../../utilities/searchHelpers";
 
 // Define the type for your album data
 
@@ -38,45 +39,13 @@ const SearchBar = ({ onButtonClick, placeholder, disabled = false }: Props) => {
     }
 
     debounceTimerRef.current = setTimeout(() => {
-      if (query === "") {
-        setFilteredAlbums([]);
-        return;
-      }
-
-      const filtered = allAlbumsRef.current.filter(
-        (album) =>
-          album.title.toLowerCase().includes(query.toLowerCase()) ||
-          album.artist.toLowerCase().includes(query.toLowerCase())
-      );
-      if (filtered.length > 1) {
-        const exactMatch = filtered.find((album: Album) => 
-          album.title.toLowerCase() === query.toLowerCase()
-        );
-        if (exactMatch) {
-          setFilteredAlbums([exactMatch]);
-          return;
-        }
-      }
-      setFilteredAlbums(filtered);
-    }, 300); // 300ms debounce delay
+      setFilteredAlbums(filterAlbums(allAlbumsRef.current, query));
+    }, 300);
   }, []);
 
   // Handle keydown events for navigation and selection in the search list
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (highlightedIndex < filteredAlbums.length) {
-      if (e.key === "ArrowUp" && highlightedIndex > 0) {
-        setHighlightedIndex((prevIndex) => prevIndex - 1);
-      } else if (
-        e.key === "ArrowDown" &&
-        highlightedIndex < filteredAlbums.length - 1
-      ) {
-        setHighlightedIndex((prevIndex) => prevIndex + 1);
-      } else if (e.key === "Enter" && highlightedIndex >= 0) {
-        setSearchQuery(filteredAlbums[highlightedIndex].title);
-      }
-    } else {
-      setHighlightedIndex(-1);
-    }
+    handleKeyNavigation(e, highlightedIndex, filteredAlbums, setHighlightedIndex, setSearchQuery);
   };
 
   // Update search query and trigger debounced search
@@ -86,20 +55,12 @@ const SearchBar = ({ onButtonClick, placeholder, disabled = false }: Props) => {
     debouncedSearch(query);
   };
 
-  // Handle click on individual album suggestions
-  const handleSuggestionClick = (e: React.MouseEvent<HTMLParagraphElement>) => {
-    const target = e.target as HTMLParagraphElement;
-    console.log(target);
-    setSearchQuery(target.innerText.split("-")[0].trimEnd()); // split so only the ablum title is set as the serach query
-  };
-
   // Handle the guess button click
-  const handleSearchSubmit = () => {
+  const handleSubmit = () => {
     if (filteredAlbums.length === 0) {
       setIsVisible(true);
     } else {
       onButtonClick(filteredAlbums);
-      console.log(filteredAlbums);
     }
     setSearchQuery("");
     setFilteredAlbums([]);
@@ -146,21 +107,32 @@ const SearchBar = ({ onButtonClick, placeholder, disabled = false }: Props) => {
                   : "show"
               }`}
             >
-              {filteredAlbums.map((album, index) => (
-                <p
-                  className={`p-1 l font-medium hover:bg-gray-200 ${
-                    highlightedIndex === index ? "bg-gray-200" : ""
-                  }`}
-                  key={index}
-                  onClick={handleSuggestionClick}
-                  ref={(el) => (itemRefs.current[index] = el)} // Assign ref to each item
-                >
-                  {album.title} -{" "}
-                  <span className={`pointer-events-none	 font-normal`}>
-                    {album.artist}
-                  </span>
-                </p>
-              ))}
+{filteredAlbums.map((album, index) => (
+  <p
+    className={`p-1 l font-medium hover:bg-gray-200 ${
+      highlightedIndex === index ? "bg-gray-200" : ""
+    }`}
+    key={index}
+    onClick={(e) => {
+      // Extract the title from the clicked element
+      const target = e.target as HTMLParagraphElement;
+      const title = target.innerText.split("-")[0].trimEnd();
+      // Update the search query
+      setSearchQuery(title);
+      // Immediately find and set the exact album
+      const exactAlbum = allAlbumsRef.current.find(
+        (a) => a.title.toLowerCase() === title.toLowerCase()
+      );
+      setFilteredAlbums(exactAlbum ? [exactAlbum] : []);
+    }}
+    ref={(el) => (itemRefs.current[index] = el)}
+  >
+    {album.title} -{" "}
+    <span className={`pointer-events-none font-normal`}>
+      {album.artist}
+    </span>
+  </p>
+))}
             </div>
           </div>
         </div>
@@ -169,7 +141,7 @@ const SearchBar = ({ onButtonClick, placeholder, disabled = false }: Props) => {
           className={`border-2 border-black px-2 border-l-0 bg-lightBlue active:bg-mediumBlue h-[52px] ${
             disabled ? "opacity-50 cursor-not-allowed" : ""
           }`}
-          onClick={handleSearchSubmit}
+          onClick={handleSubmit}
           disabled={disabled}
         >
           GUESS
