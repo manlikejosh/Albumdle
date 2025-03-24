@@ -116,13 +116,15 @@ const SearchBar = ({ onButtonClick, placeholder, disabled = false }: Props) => {
     onClick={(e) => {
       // Extract the title from the clicked element
       const target = e.target as HTMLParagraphElement;
-      const title = target.innerText.split("-")[0].trimEnd();
+      let title = target.innerText.split(" - ")[0].trimEnd();
+      
       // Update the search query
       setSearchQuery(title);
       // Immediately find and set the exact album
       const exactAlbum = allAlbumsRef.current.find(
         (a) => a.title.toLowerCase() === title.toLowerCase()
       );
+      console.log(exactAlbum);
       setFilteredAlbums(exactAlbum ? [exactAlbum] : []);
     }}
     ref={(el) => (itemRefs.current[index] = el)}
