@@ -109,7 +109,7 @@ const EndScreen: React.FC<Props> = ({
             </section>
             <button
               onClick={closeModal}
-              className="mt-2 px-4 py-2 bg-black text-white rounded-md hover:bg-gray-800 transition-colors"
+              className="mt-2 px-4 py-2 bg-black text-white rounded-md"
             >
               Close
             </button>

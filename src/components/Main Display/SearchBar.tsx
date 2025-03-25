@@ -109,7 +109,7 @@ const SearchBar = ({ onButtonClick, placeholder, disabled = false }: Props) => {
             >
 {filteredAlbums.map((album, index) => (
   <p
-    className={`p-1 l font-medium hover:bg-gray-200 ${
+    className={`p-1 l font-medium ${
       highlightedIndex === index ? "bg-gray-200" : ""
     }`}
     key={index}

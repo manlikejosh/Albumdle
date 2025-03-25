@@ -121,11 +121,6 @@ const Guess: React.FC<GuessProps> = ({
       >
         <div className="break-words  hyphens-auto overflow-y-auto text-center">
           {userGuess.title}
-          <div className="max-w-[100px] hover:opacity-100 opacity-0 w-full h-full absolute  text-center -top-[28%] left-0 aaaaaaa">
-            <p className=" max-[553px]:text-xs bg-white rounded-md shadow-xl shadow-white/90">
-              Album Title
-            </p>
-          </div>
         </div>
       </div>
 
@@ -135,11 +130,6 @@ const Guess: React.FC<GuessProps> = ({
       >
         <div className="break-words hyphens-auto overflow-y-auto text-center">
           {userGuess.artist}
-          <div className="max-w-[100px] hover:opacity-100 opacity-0 w-full h-full absolute  text-center -top-[28%] left-0 aaaaaaa">
-            <p className=" max-[553px]:text-xs bg-white rounded-md shadow-xl shadow-white/90">
-              Artist Name
-            </p>
-          </div>
         </div>
       </div>
 
@@ -151,11 +141,6 @@ const Guess: React.FC<GuessProps> = ({
           className={`absolute inset-0 flex items-center justify-center z-0 ${colorsMemoized.ratingRotate}`}
         >
           <FontAwesomeIcon icon={faUpLong} className="text-white text-6xl" />
-        </div>
-        <div className="max-w-[100px] hover:opacity-100 opacity-0 w-full h-full absolute  text-center -top-[28%] left-0 aaaaaaa">
-          <p className=" max-[553px]:text-xs bg-white rounded-md shadow-xl shadow-white/90">
-            RYM Rating
-          </p>
         </div>
         <div className="relative z-10 font-bold">{userGuess.rating}</div>
       </div>
@@ -169,11 +154,6 @@ const Guess: React.FC<GuessProps> = ({
         >
           <FontAwesomeIcon icon={faUpLong} className="text-white text-6xl" />
         </div>
-        <div className="max-w-[100px] hover:opacity-100 opacity-0 w-full h-full absolute  text-center -top-[28%] left-0 aaaaaaa">
-          <p className=" max-[553px]:text-xs bg-white rounded-md shadow-xl shadow-white/90">
-            Release Year
-          </p>
-        </div>
         <div className="relative z-10 font-bold">{userGuess.date}</div>
       </div>
 
@@ -183,11 +163,6 @@ const Guess: React.FC<GuessProps> = ({
       >
         <div className="break-words hyphens-auto overflow-y-auto text-center">
           {userGuess.main_genre.join(", ")}
-          <div className="max-w-[100px] hover:opacity-100 opacity-0 w-full h-full absolute  text-center -top-[28%] left-0 aaaaaaa">
-            <p className=" max-[553px]:text-xs bg-white rounded-md shadow-xl shadow-white/90">
-              Main Genre
-            </p>
-          </div>
         </div>
       </div>
 
@@ -197,11 +172,6 @@ const Guess: React.FC<GuessProps> = ({
       >
         <div className="break-words hyphens-auto overflow-y-auto text-center">
           {userGuess.sub_genre.join(", ")}
-          <div className="max-w-[100px] hover:opacity-100 opacity-0 w-full h-full absolute  text-center -top-[28%] left-0 aaaaaaa">
-            <p className=" max-[553px]:text-xs bg-white rounded-md shadow-xl shadow-white/90">
-              Sub Genere
-            </p>
-          </div>
         </div>
       </div>
 
@@ -213,11 +183,6 @@ const Guess: React.FC<GuessProps> = ({
           className={`absolute inset-0 flex items-center justify-center z-0 ${colorsMemoized.rankingRotate}`}
         >
           <FontAwesomeIcon icon={faUpLong} className="text-white text-6xl" />
-        </div>
-        <div className="max-w-[100px] hover:opacity-100 opacity-0 w-full h-full absolute  text-center -top-[28%] left-0 aaaaaaa">
-          <p className=" max-[553px]:text-xs bg-white rounded-md shadow-xl shadow-white/90">
-            RYM Ranking
-          </p>
         </div>
         <div className="relative z-10 font-bold">{userGuess.ranking}</div>
       </div>
