@@ -14,7 +14,7 @@ const GuessList: React.FC<GuessListProps> = ({
   return (
     <div
       id="guessArea"
-      className="guess-area px-2 pt-5 w-full max-[553px]:overflow-x-auto min-[553px]:flex min-[553px]:flex-col min-[553px]:items-center"
+      className="guess-area px-2 pt-5 w-full max-[553px]:overflow-x-auto max-[553px]:overflow-y-none max-[553px]:absolute min-[553px]:flex min-[553px]:flex-col min-[553px]:items-center"
     >
       <ul className="min-w-[680px] w-[60vw] sm:p-2 gap-2 grid grid-cols-8 justify-items-center text-sm ">
         <li className="relative  w-full  max-w-[100px] flex items-center justify-center">
