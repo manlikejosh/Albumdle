@@ -47,7 +47,7 @@ const HelpModal: React.FC<{
             <p className="py-1">
               The year, rating, and ranking boxes will include arrows showing if
               your guess was too high or low. A yellow box means your guess is
-              within 10 years, 10 ranks, or 0.5 rating points of the correct
+              within 10 years, 10 ranks, or 0.2 rating points of the correct
               album.
             </p>
           </section>
