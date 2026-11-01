@@ -5,11 +5,13 @@ import Guess from "./Guess";
 interface GuessListProps {
   guessedAlbums: Album[];
   correctGuess: Album;
+  showAnswer: boolean;
 }
 
 const GuessList: React.FC<GuessListProps> = ({
   guessedAlbums,
   correctGuess,
+  showAnswer,
 }) => {
   return (
     <div
@@ -43,12 +45,24 @@ const GuessList: React.FC<GuessListProps> = ({
         </li>
       </ul>
       <div>
+        {/* Show the correct album on top if they ran out of lives */}
+        {showAnswer && (
+          <>
+            <p className="text-center font-bold mt-2">The correct album was...</p>
+            <Guess
+              userGuess={correctGuess}
+              correctGuess={correctGuess}
+              key={correctGuess.title}
+              isNew={true}
+            />
+          </>
+        )}
         {[...guessedAlbums].reverse().map((album, index) => (
           <Guess
             userGuess={album}
             correctGuess={correctGuess}
-            key={index}
-            isNew={index === guessedAlbums.length} // Only the first (newest) guess gets the fade-in effect... this shit doesn't work
+            key={album.title} // title is unique, index keys shift every guess since the list is reversed
+            isNew={index === 0} // Only the first (newest) guess gets the fade-in effect
           />
         ))}
       </div>

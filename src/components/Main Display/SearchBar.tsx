@@ -45,25 +45,49 @@ const SearchBar = ({ onButtonClick, placeholder, disabled = false }: Props) => {
 
   // Handle keydown events for navigation and selection in the search list
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    handleKeyNavigation(e, highlightedIndex, filteredAlbums, setHighlightedIndex, setSearchQuery);
+    // Enter with nothing highlighted guesses whatever is in the search bar
+    if (e.key === "Enter" && highlightedIndex < 0) {
+      handleSubmit();
+      return;
+    }
+    handleKeyNavigation(e, highlightedIndex, filteredAlbums, setHighlightedIndex, setSearchQuery, setFilteredAlbums);
   };
 
   // Update search query and trigger debounced search
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const query = e.target.value;
     setSearchQuery(query);
+    setHighlightedIndex(-1);
     debouncedSearch(query);
   };
 
   // Handle the guess button click
   const handleSubmit = () => {
-    if (filteredAlbums.length === 0) {
+    // stop a pending search from refilling the list after we clear it
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current);
+    }
+
+    // use the highlighted album, otherwise search the current text (the debounced list can be out of date)
+    const results =
+      highlightedIndex >= 0
+        ? [filteredAlbums[highlightedIndex]]
+        : filterAlbums(allAlbumsRef.current, searchQuery);
+
+    // more than one match - make them pick one instead of guessing whatever is first
+    if (results.length > 1) {
+      setFilteredAlbums(results);
+      return;
+    }
+
+    if (results.length === 0) {
       setIsVisible(true);
     } else {
-      onButtonClick(filteredAlbums);
+      onButtonClick(results);
     }
     setSearchQuery("");
     setFilteredAlbums([]);
+    setHighlightedIndex(-1);
   };
 
   // Use effect to scroll the highlighted item into view when the index changes
@@ -86,7 +110,7 @@ const SearchBar = ({ onButtonClick, placeholder, disabled = false }: Props) => {
 
   return (
     <>
-      <div className="flex text-center l font-medium mx-auto z-50 realtive">
+      <div className="flex text-center l font-medium mx-auto z-50 relative">
         <div className="w-[60vw] max-w-[530px]">
           <input
             className={`bg-white outline-none h-fit border-2 border-black px-2 py-3 w-full font-medium ${
@@ -113,19 +137,11 @@ const SearchBar = ({ onButtonClick, placeholder, disabled = false }: Props) => {
       highlightedIndex === index ? "bg-gray-200" : ""
     }`}
     key={index}
-    onClick={(e) => {
-      // Extract the title from the clicked element
-      const target = e.target as HTMLParagraphElement;
-      let title = target.innerText.split(" - ")[0].trimEnd();
-      
-      // Update the search query
-      setSearchQuery(title);
-      // Immediately find and set the exact album
-      const exactAlbum = allAlbumsRef.current.find(
-        (a) => a.title.toLowerCase() === title.toLowerCase()
-      );
-      console.log(exactAlbum);
-      setFilteredAlbums(exactAlbum ? [exactAlbum] : []);
+    onClick={() => {
+      // Update the search query and lock in the clicked album
+      setSearchQuery(album.title);
+      setFilteredAlbums([album]);
+      setHighlightedIndex(-1);
     }}
     ref={(el) => (itemRefs.current[index] = el)}
   >

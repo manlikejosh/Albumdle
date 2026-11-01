@@ -9,8 +9,11 @@ const Timer = ({ style }: { style: boolean }) => {
       const now = new Date();
       const tomorrow = new Date();
 
-      // Set the time for tomorrow to 00:00:00
-      tomorrow.setHours(24, 0, 0, 0);
+      // Next puzzle is at midnight CST (6 AM UTC), same as the backend
+      tomorrow.setUTCHours(6, 0, 0, 0);
+      if (tomorrow.getTime() <= now.getTime()) {
+        tomorrow.setUTCDate(tomorrow.getUTCDate() + 1);
+      }
 
       const timeDiff = tomorrow.getTime() - now.getTime();
       setTimeRemaining(timeDiff);

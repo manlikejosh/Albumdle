@@ -39,7 +39,8 @@ export const handleKeyNavigation = (
   highlightedIndex: number,
   filteredAlbums: Album[],
   setHighlightedIndex: (index: number) => void,
-  setSearchQuery: (query: string) => void
+  setSearchQuery: (query: string) => void,
+  setFilteredAlbums: (albums: Album[]) => void
 ): void => {
   if (highlightedIndex < filteredAlbums.length) {
     if (e.key === "ArrowUp" && highlightedIndex > 0) {
@@ -50,7 +51,11 @@ export const handleKeyNavigation = (
     ) {
       setHighlightedIndex(highlightedIndex + 1);
     } else if (e.key === "Enter" && highlightedIndex >= 0) {
-      setSearchQuery(filteredAlbums[highlightedIndex].title);
+      // lock in the highlighted album so the guess button submits that one
+      const selectedAlbum = filteredAlbums[highlightedIndex];
+      setSearchQuery(selectedAlbum.title);
+      setFilteredAlbums([selectedAlbum]);
+      setHighlightedIndex(-1);
     }
   } else {
     setHighlightedIndex(-1);

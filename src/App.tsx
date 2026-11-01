@@ -111,13 +111,13 @@ function App() {
       return;
     }
 
+    // build the new arrays out here - side effects inside state updaters run twice in StrictMode
+    const updatedGuessedAlbums = [...guessedAlbums, data[0]];
+
     if (correctGuess) {
       if (data[0].title === correctGuess.title) {
-        setGuessedAlbums((prevGuessedAlbums) => {
-          const updatedGuessedAlbums = [...prevGuessedAlbums, data[0]];
-          saveProgress(lives, updatedGuessedAlbums);
-          return updatedGuessedAlbums;
-        });
+        setGuessedAlbums(updatedGuessedAlbums);
+        saveProgress(lives, updatedGuessedAlbums);
 
         const updatedStats = handleStats(true, guessedAlbums.length + 1);
         setUserStats(updatedStats);
@@ -132,19 +132,11 @@ function App() {
       }
     }
 
-    setGuessedAlbums((prevGuessedAlbums) => {
-      const updatedGuessedAlbums = [...prevGuessedAlbums, data[0]];
-
-      setLives((prevLives) => {
-        if (prevLives.length === 0) return prevLives;
-        const updatedLives = [...prevLives];
-        updatedLives[updatedLives.length - 1] = "text-black";
-        saveProgress(updatedLives, updatedGuessedAlbums);
-        return updatedLives.slice(0, -1);
-      });
-
-      return updatedGuessedAlbums;
-    });
+    // Wrong guess, take away a life
+    const updatedLives = lives.slice(0, -1);
+    setGuessedAlbums(updatedGuessedAlbums);
+    setLives(updatedLives);
+    saveProgress(updatedLives, updatedGuessedAlbums);
 
     if (lives.length === 1) {
       const updatedStats = handleStats(false, 8);
@@ -208,6 +200,12 @@ function App() {
                   <GuessList
                     guessedAlbums={guessedAlbums}
                     correctGuess={correctGuess}
+                    showAnswer={
+                      gameOver &&
+                      !guessedAlbums.some(
+                        (album) => album.title === correctGuess.title
+                      )
+                    }
                   />
                 </div>
                 {showHelpModal && (

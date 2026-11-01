@@ -10,8 +10,9 @@ export type DailyResult = {
 };
 
 // Utility function to get today's date in YYYY-MM-DD format
+// the day flips at midnight CST (6 AM UTC) to match the backend, so shift back 6 hours
 export const getTodayDate = (): string => {
-  const date = new Date();
+  const date = new Date(Date.now() - 6 * 60 * 60 * 1000);
   return date.toISOString().split("T")[0]; // Returns 'YYYY-MM-DD'
 };
 
@@ -20,7 +21,10 @@ export const checkAndResetGameProgress = (): void => {
   const savedDate = localStorage.getItem("lastPlayedDate");
   const today = getTodayDate();
 
-  if (savedDate !== today) {
+  // for testing - run the dev server with VITE_DISABLE_SAVE=true to start fresh on every refresh
+  const saveDisabled = import.meta.env.VITE_DISABLE_SAVE === "true";
+
+  if (savedDate !== today || saveDisabled) {
     // Reset lives and guessedAlbums if it's a new day
     localStorage.setItem(
       "lives",
