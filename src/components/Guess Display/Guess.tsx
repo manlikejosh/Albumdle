@@ -1,13 +1,13 @@
 import React, { useMemo } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUpLong } from "@fortawesome/free-solid-svg-icons";
-import { compareArrays, compareNumbers } from "../../utilities/guessUtils";
+import { compareGenres, compareNumbers } from "../../utilities/guessUtils";
 import { Album } from "../../types/types";
 
 type GuessProps = {
   userGuess: Album;
   correctGuess: Album;
-  isNew?: boolean; // Optional prop to indicate a new guess... this shit don't work
+  isNew?: boolean; // Optional prop to indicate a new guess
 };
 
 const Guess: React.FC<GuessProps> = ({
@@ -37,34 +37,16 @@ const Guess: React.FC<GuessProps> = ({
       tempColors.title = "bg-red-300";
 
       // Compare genre
-
-      if (
-        userGuess.main_genre.every((el) => correctGuess.main_genre.includes(el))
-      ) {
-        tempColors.mainGenre = "bg-green-300";
-      } else {
-        const matches = compareArrays(
-          correctGuess.main_genre,
-          userGuess.main_genre
-        );
-        tempColors.mainGenre =
-          matches.length > 0 ? "bg-yellow-300" : "bg-red-300";
-      }
+      tempColors.mainGenre = compareGenres(
+        correctGuess.main_genre,
+        userGuess.main_genre
+      );
 
       // Compare sub genre
-
-      if (
-        userGuess.sub_genre.every((el) => correctGuess.sub_genre.includes(el))
-      ) {
-        tempColors.subGenre = "bg-green-300";
-      } else {
-        const matches = compareArrays(
-          correctGuess.sub_genre,
-          userGuess.sub_genre
-        );
-        tempColors.subGenre =
-          matches.length > 0 ? "bg-yellow-300" : "bg-red-300";
-      }
+      tempColors.subGenre = compareGenres(
+        correctGuess.sub_genre,
+        userGuess.sub_genre
+      );
 
       // Compare date
       const dateStyle = compareNumbers(correctGuess.date, userGuess.date, 10);
@@ -99,7 +81,7 @@ const Guess: React.FC<GuessProps> = ({
     return tempColors;
   }, [userGuess, correctGuess]);
 
-  // Only apply the fade-in animation if this is the newest guess... this shit doesn't work
+  // Only apply the fade-in animation if this is the newest guess
   const animationClasses = isNew ? "animate-appear delay-700" : "";
 
   return (
